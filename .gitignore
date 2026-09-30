@@ -1,0 +1,12 @@
+# private study material — not for redistribution
+skills/folio/library/references/*.png
+skills/folio/library/references/*.jpg
+# the user's own client work (house refs): private, never public
+skills/folio/library/references/house/
+skills/folio/library/references/web/*.jpg
+skills/folio/library/references/web/*.png
+.impeccable/
+**/.impeccable/
+**/out/
+**/harvest/
+__pycache__/

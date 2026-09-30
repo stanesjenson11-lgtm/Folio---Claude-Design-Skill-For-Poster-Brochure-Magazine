@@ -1,0 +1,47 @@
+/* Mango Inc. · portfolio · split-pop: a 1:1 replica of the user's "Portfolios" reference (16:9, 320 x 180 mm single pages).
+   Teal and orange are a touch deeper than the reference so white titles pass 3:1; small text on colour fields is ink.
+   Titles: Wayfinder CF → Familjen Grotesk 700 caps with a colour disc behind the first letter; page numbers: Aesthet Nova → Bodoni Moda 700;
+   body: Wayfinder CF → Familjen Grotesk (single landscape pages count as display, so no common faces). No shadows, no rules after titles. */
+
+:root {
+  --paper: #FFFFFF; --ink: #1B1B1F; --ink-2: #55555D; --brand: #0FA5A1; --brand-ink: #FFFFFF; --accent: #F26A00; --support: #0FA5A1;
+  --grey: #8E8E95;
+  --title: 'Wayfinder CF', 'Familjen Grotesk', sans-serif;
+  --num: 'Aesthet Nova', 'Bodoni Moda', serif;
+  --label: 'Wayfinder CF', 'Familjen Grotesk', sans-serif;
+  --body: 'Wayfinder CF', 'Familjen Grotesk', sans-serif;
+  --font-display: var(--title); --font-label: var(--label); --font-body: var(--body);
+  --fs-body: 9.5pt; --lh-body: 1.6;
+}
+p, h1, h2 { margin: 0; padding: 0; }
+.fld { position: absolute; }
+.teal { background: var(--brand); }
+.orange { background: var(--accent); }
+.ph > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.hatch, .icon, .device, .menu { position: absolute; height: auto; }
+
+/* rail: page number, year, two-bar mark, one vertical line (as in the reference) */
+.vline { position: absolute; left: 42mm; top: 11mm; height: 158mm; width: .4mm; }
+.vline.short { display: none; }
+.vline.w { background: #FFFFFF; } .vline.o { background: var(--accent); } .vline.g { background: #C9C9CE; }
+.pn { position: absolute; left: 13mm; top: 12mm; font: 700 30pt/1 var(--num); }
+.yr { position: absolute; left: 13mm; top: 84mm; font: 700 14pt/1.2 var(--label); }
+.menu { left: 13mm; top: 162mm; width: 15mm; }
+.w { color: #FFFFFF; } .o { color: var(--accent); } .g { color: var(--grey); } .k { color: var(--ink); }
+
+/* letter-disc title */
+.ttl { position: absolute; }
+.ttl .disc { position: absolute; left: -5.5mm; top: 50%; width: 21mm; height: 21mm; margin-top: -11mm; border-radius: 50%; }
+.disc.o { background: var(--accent); } .disc.t { background: var(--brand); }
+.ttl h1, .ttl h2 { position: relative; font: 700 46pt/1 var(--title); text-transform: uppercase; letter-spacing: -.01em; white-space: nowrap; }
+
+.lbl { position: absolute; font: 700 7.5pt/1 var(--label); letter-spacing: .26em; text-transform: uppercase; color: var(--ink); }
+.txt { position: absolute; font: 400 9.5pt/1.65 var(--body); color: var(--ink); }
+.txt.g { color: var(--ink-2); }
+.credits { font-size: 7.5pt; line-height: 1.45; }
+
+/* cover hero: orange disc with the cut-out robot standing in it */
+.hero-disc { position: absolute; left: 175mm; top: 24mm; width: 130mm; height: 130mm; border-radius: 50%; background: var(--accent); }
+.hero-robot { position: absolute; left: 205mm; top: 36mm; height: 116mm; width: auto; }
+.hero-robot2 { position: absolute; left: 182mm; top: 30mm; height: 124mm; width: auto; }
+.dot { position: absolute; width: 20mm; height: 20mm; border-radius: 50%; }

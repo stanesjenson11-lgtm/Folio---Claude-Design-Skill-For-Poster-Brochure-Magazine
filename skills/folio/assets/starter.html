@@ -1,0 +1,44 @@
+<!doctype html>
+<!-- folio starter · copy to your project as brochure.html
+     data-size: A4 | A4-landscape | A5 | A3 | Letter | square-210 | DL | magazine   (or style="--pw:…;--ph:…")
+     Page 1 is a recto. Every <section class="page"> is one physical page, in reading order. -->
+<html data-size="A4" lang="en">
+<head>
+<meta charset="utf-8">
+<title>CLIENT — PIECE</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="folio.css">
+<link rel="stylesheet" href="tokens.css">
+<style>
+/* page-specific styles, scoped by page class, sizes in pt / mm */
+.p-cover h1 { font-size: var(--fs-display); }
+</style>
+</head>
+<body>
+
+<!-- 01 · R · cover · <pattern> -->
+<section class="page p-cover">
+  <div class="trim">
+    <figure class="ph" style="inset: var(--b0)"><img src="img/p01-hero.jpg" alt="…"></figure>
+    <div class="live">
+      <h1 style="grid-column: 1 / 10; grid-row: 9 / 13">Title</h1>
+    </div>
+  </div>
+</section>
+
+<!-- 02 · V · spread 2–3 · <pattern> -->
+<section class="page">
+  <div class="trim">
+    <div class="live">
+      <h2 style="grid-column: 1 / 9; grid-row: 1 / 3">Section title</h2>
+      <div class="cols-2 flow" style="grid-column: 1 / 13; grid-row: 4 / 16">
+        <p class="lead">Standfirst.</p>
+        <p>Body copy…</p>
+      </div>
+    </div>
+    <footer class="furniture"><span class="run">Section</span><span class="folio-num">02</span></footer>
+  </div>
+</section>
+
+</body>
+</html>

@@ -1,0 +1,155 @@
+<!doctype html>
+<html data-size="A4" lang="en">
+<head>
+<!-- folio · direction: civic-arc (re-coloured cobalt) · dials V4 D4 VOL50 · patterns: arc-window, quote-portrait, numbered-index, full-bleed-opener, data-tint · critique P4 H4 E3 S3 R4 V4 -->
+<meta charset="utf-8">
+<title>Nilgiri Science Centre — Annual Report 2025–26</title>
+<link rel="stylesheet" href="fonts/fonts.css">
+<link rel="stylesheet" href="../../assets/folio.css">
+<style>
+:root{
+  --brand:#1b2fd6; --brand-ink:#ffffff; --brand-deep:#0c1470;
+  --ink:#0e1020; --ink-2:#3d4058; --rule:#cfd3e6; --tint:#eceefb; --accent:#ffb000;
+  --font-display:'Archivo', sans-serif; --font-body:'Source Serif 4', serif; --font-label:'Archivo', sans-serif;
+}
+/* p1 cover — arc window */
+.cover .sky{ inset: var(--b0); }
+.cover .disc{ position:absolute; width:250mm; height:250mm; border-radius:50%; background:var(--brand);
+  right:-95mm; top:-70mm; mix-blend-mode:normal; }
+.cover .title{ position:absolute; left:18mm; top:118mm; color:#fff; }
+.cover .yr{ font:400 30pt/1 var(--font-display); letter-spacing:-.01em; }
+.cover h1{ font:800 64pt/.9 var(--font-display); letter-spacing:-.035em; margin-top:3mm; }
+.cover .deck{ font:400 11pt/1.35 var(--font-body); max-width:78mm; margin-top:7mm; color:#dfe3ff; }
+.cover .base{ position:absolute; left:0; right:0; bottom:0; height:22mm; background:#fff; display:flex; align-items:center;
+  justify-content:space-between; padding:0 18mm; font:600 7pt/1 var(--font-label); letter-spacing:.04em; color:var(--ink); }
+.cover .rail{ position:absolute; left:0; bottom:22mm; height:1.2mm; width:62%; background:var(--brand); } /* real element, not ::before — pseudo-elements don't survive editable export */
+/* p2 director */
+.q{ font:600 23pt/1.12 var(--font-display); letter-spacing:-.015em; color:var(--brand); }
+.qmark{ font:800 70pt/.6 var(--font-display); color:var(--accent); }
+.sig{ font:italic 400 9pt/1.3 var(--font-body); }
+.portrait{ width:92mm; height:92mm; left:-26mm; bottom:30mm; } /* verso: outer edge is LEFT */
+/* p3 contents drench */
+.drench{ background:var(--brand); color:var(--brand-ink); }
+.toc-n{ font:800 58pt/.85 var(--font-display); letter-spacing:-.04em; color:var(--accent); }
+.toc-t{ font:600 12pt/1.15 var(--font-display); margin-top:2mm; }
+.toc-d{ font:400 8.5pt/1.35 var(--font-body); color:#d6dbff; margin-top:1.5mm; }
+.big-ghost{ position:absolute; left:10mm; bottom:-14mm; font:800 170pt/.8 var(--font-display); letter-spacing:-.05em; color:rgba(255,255,255,.07); }
+/* p4–5 spread */
+.spread-h{ position:absolute; left:18mm; bottom:30mm; color:#fff; width:120mm; }
+.spread-h .k{ font:600 8pt/1 var(--font-label); letter-spacing:.08em; text-transform:uppercase; color:var(--accent); }
+.spread-h h2{ font:800 48pt/.9 var(--font-display); letter-spacing:-.03em; margin-top:3mm; }
+.panel{ position:absolute; top:var(--b0); bottom:var(--b0); right:var(--b0); width:calc(92mm + var(--bleed)); background:#fff; }
+.page.p5 .furniture{ left:auto; width:69mm; }  /* must match specificity of folio.css recto rule */
+.panel .inner{ position:absolute; left:10mm; right:calc(13mm + var(--bleed)); top:22mm; }
+/* p6 data */
+.stat-n{ font:800 40pt/.9 var(--font-display); letter-spacing:-.03em; color:var(--brand); }
+.stat-l{ font:400 8pt/1.3 var(--font-body); color:var(--ink-2); margin-top:1.5mm; }
+.bars rect{ fill:var(--brand); } .bars .muted{ fill:#b9c0f0; }
+</style>
+</head>
+<body>
+<!-- folio worked example. Sample photos are small public-domain / CC0 files from scikit-image,
+     so preflight correctly reports them as low-resolution for print. Patterns: arc-window, quote-portrait,
+     numbered-index (drench), full-bleed-opener across the gutter + panel, stat-spread + data-tint. -->
+
+<!-- 1 · COVER · arc-window -->
+<section class="page cover">
+  <div class="trim">
+    <figure class="ph sky" style="--fx:40%"><img src="img/hubble_deep_field.jpg" alt="Hubble deep field"></figure>
+    <div class="disc"></div>
+    <div class="title">
+      <div class="yr">2025–26</div>
+      <h1>Annual<br>Report</h1>
+      <p class="deck">A year of looking further — telescopes, classrooms and 41,000 visitors under one dome.</p>
+    </div>
+    <div class="rail"></div>
+    <div class="base"><span>Nilgiri Science Centre</span><span>Ooty · Tamil Nadu</span></div>
+  </div>
+</section>
+
+<!-- 2 · DIRECTOR · quote-portrait (verso) -->
+<section class="page">
+  <div class="trim">
+    <figure class="ph mask-circle portrait" style="--fy:30%"><img src="img/astronaut.jpg" alt="Director portrait"></figure>
+    <div class="live">
+      <div style="grid-column:1/9; grid-row:1/2" class="label" >Message from the Director</div>
+      <div style="grid-column:1/10; grid-row:2/6">
+        <div class="qmark">“</div>
+        <p class="q">We did not add more exhibits this year. We added more time — for questions, for night sessions, for teachers.</p>
+      </div>
+      <div style="grid-column:6/13; grid-row:7/15" class="flow" >
+        <p>When we reopened the dome in June, attendance on weekday evenings tripled. Families came back not for a new show but for the chance to stay longer at the eyepiece. That single observation reshaped the year: we extended night sessions, trained eleven volunteer guides and rebuilt the school programme around three visits instead of one.</p>
+        <p>None of this would have happened without our partners in the district education office and the forty-two teachers who carried the programme into their classrooms.</p>
+        <p class="sig">— Dr. A. Meenakshi, Director</p>
+      </div>
+    </div>
+    <footer class="furniture"><span class="run">Director’s message</span><span class="folio-num">02</span></footer>
+  </div>
+</section>
+
+<!-- 3 · CONTENTS · drench (recto) -->
+<section class="page drench">
+  <div class="trim">
+    <div class="big-ghost" data-allow-edge data-allow-overlap>26</div>
+    <div class="live">
+      <h2 style="grid-column:1/8; grid-row:1/3; font:800 34pt/.95 var(--font-display); letter-spacing:-.02em">Inside this<br>report</h2>
+      <div style="grid-column:1/6; grid-row:4/7"><div class="toc-n">04</div><div class="toc-t">The dome, reopened</div><div class="toc-d">Night sessions, new optics and a year of clear skies.</div></div>
+      <div style="grid-column:7/12; grid-row:4/7"><div class="toc-n">06</div><div class="toc-t">Numbers that moved</div><div class="toc-d">Visitors, schools and the budget, side by side.</div></div>
+      <div style="grid-column:1/6; grid-row:8/11"><div class="toc-n">08</div><div class="toc-t">Schools programme</div><div class="toc-d">Three visits, forty-two teachers, one curriculum.</div></div>
+      <div style="grid-column:7/12; grid-row:8/11"><div class="toc-n">10</div><div class="toc-t">The year ahead</div><div class="toc-d">A second telescope and a travelling dome.</div></div>
+    </div>
+    <footer class="furniture on-dark"><span class="run">Contents</span><span class="folio-num">03</span></footer>
+  </div>
+</section>
+
+<!-- 4–5 · SPREAD · gutter-crossing photo -->
+<section class="page">
+  <div class="trim">
+    <div class="spread-img" style="--fx:50%; --fy:60%"><img src="img/rocket.jpg" alt="Launch"></div>
+    <div class="spread-h">
+      <div class="k">Chapter 01</div>
+      <h2>The dome, reopened</h2>
+    </div>
+    <footer class="furniture on-dark"><span class="run">The dome</span><span class="folio-num">04</span></footer>
+  </div>
+</section>
+<section class="page p5">
+  <div class="trim">
+    <div class="spread-img" style="--fx:50%; --fy:60%"><img src="img/rocket.jpg" alt=""></div>
+    <div class="panel"><div class="inner flow">
+      <p class="lead">Eight months, one new mirror and a roof that finally opens without a crowbar.</p>
+      <p>The refit replaced the 1987 slit mechanism with a geared drive and added a 250 mm reflector on a computerised mount. Evening sessions now run four nights a week between October and March, when the skies over the Nilgiris are at their clearest.</p>
+      <p>Visitors can book a fifteen-minute slot at the eyepiece, guided by one of our trained volunteers. Most slots sold out within a day of opening.</p>
+      <hr class="hair">
+      <p class="caption">Launch photograph courtesy SpaceX, public domain.</p>
+    </div></div>
+    <footer class="furniture"><span class="run">The dome</span><span class="folio-num">05</span></footer>
+  </div>
+</section>
+
+<!-- 6 · DATA · stat row + chart + table (verso) -->
+<section class="page" style="background:var(--tint)">
+  <div class="trim">
+    <div class="live">
+      <h2 style="grid-column:1/9; grid-row:1/3">Numbers that moved</h2>
+      <div style="grid-column:1/5; grid-row:3/5"><div class="stat-n">41,280</div><div class="stat-l">visitors, up 38% on last year</div></div>
+      <div style="grid-column:5/9; grid-row:3/5"><div class="stat-n">126</div><div class="stat-l">schools on the three-visit programme</div></div>
+      <div style="grid-column:9/13; grid-row:3/5"><div class="stat-n">₹1.9 Cr</div><div class="stat-l">operating budget, 64% self-generated</div></div>
+      <svg class="bars" style="grid-column:1/8; grid-row:6/11; width:100%; height:100%" viewBox="0 0 120 60" preserveAspectRatio="none">
+        <rect class="muted" x="4" y="30" width="10" height="30"/><rect class="muted" x="20" y="26" width="10" height="34"/>
+        <rect class="muted" x="36" y="22" width="10" height="38"/><rect x="52" y="12" width="10" height="48"/>
+      </svg>
+      <p class="caption" style="grid-column:1/8; grid-row:11/12">Annual visitors, FY 2022–23 to 2025–26.</p>
+      <table style="grid-column:1/13; grid-row:12/16">
+        <tr><th>Programme</th><th class="r">2024–25</th><th class="r">2025–26</th><th class="r">Change</th></tr>
+        <tr><td>Night sessions</td><td class="r">2,140</td><td class="r">6,870</td><td class="r">+221%</td></tr>
+        <tr><td>School visits</td><td class="r">9,400</td><td class="r">14,050</td><td class="r">+49%</td></tr>
+        <tr><td>Teacher workshops</td><td class="r">12</td><td class="r">31</td><td class="r">+158%</td></tr>
+      </table>
+    </div>
+    <footer class="furniture"><span class="run">Numbers</span><span class="folio-num">06</span></footer>
+  </div>
+</section>
+
+</body>
+</html>

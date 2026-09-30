@@ -1,0 +1,159 @@
+/* Mango Inc. · Monthly · football-blue kit: a 1:1 replica of the user's "Football" reference.
+   Royal-blue cover with a ghost word, a huge white condensed masthead broken by a cut-out figure and a "ball" cropped at the edge;
+   dense white interiors with navy panels, italic heavy titles (Barlow Condensed 800 italic), Big Shoulders numerals, Familjen text.
+   Every spread carries one element across the fold (.cross, spread coordinates 0–420 mm). */
+
+:root {
+  --paper: #FFFFFF; --ink: #0B1026; --ink-2: #3D4257; --brand: #1D3FAA; --brand-ink: #FFFFFF; --accent: #0E1F5B; --support: #FFFFFF;
+  --mast: 'Big Shoulders Display', sans-serif;
+  --cond: 'Barlow Condensed', sans-serif;
+  --sans: 'Wayfinder CF', 'Familjen Grotesk', sans-serif;
+  --font-display: var(--cond); --font-label: var(--sans); --font-body: var(--sans);
+  --fs-body: 8.5pt; --lh-body: 1.6;
+}
+p, h1, h2, h3 { margin: 0; padding: 0; font-weight: 400; }
+.ph > img, .fill > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.blue { background: #1D3FAA; } .deep { background: #0E1F5B; }
+.diag { opacity: .06; }
+.vig { background: linear-gradient(180deg, rgba(14,31,91,0) 55%, rgba(14,31,91,.7) 100%); }
+.c-earth, .c-run, .c-bar, .c-logo, .arrows, .circ, .dir, .band, .lu, .p-woman, .ad-phone, .q-robot, .b-logo, .nb-ph { position: absolute; height: auto; }
+.furniture { font-family: var(--cond); font-weight: 700; letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+.furniture.on-dark { color: #DCE3F7; }
+
+/* cover */
+.ghost { position: absolute; left: -10mm; top: 118mm; font: 900 250pt/.8 var(--mast); color: #2447BA; letter-spacing: -.01em; white-space: nowrap; }
+.ghost.back { top: 178mm; }
+.c-tag { position: absolute; left: 16mm; top: 14mm; font: 700 8pt/1 var(--cond); letter-spacing: .5em; text-transform: uppercase; color: #FFFFFF; }
+.mast { position: absolute; left: 12mm; top: 21mm; font: 900 140pt/.8 var(--mast); text-transform: uppercase; color: #FFFFFF; letter-spacing: -.005em; }
+.c-monthly { position: absolute; left: 60mm; top: 31mm; padding: .6mm 1.6mm; background: #FFFFFF; font: 800 7.5pt/1 var(--cond); letter-spacing: .08em; text-transform: uppercase; color: #1D3FAA; }
+.c-earth { right: -26mm; top: 16mm; width: 70mm; }
+.c-run { left: -10mm; top: 46mm; width: 156mm; z-index: 2; }
+.c-lines { position: absolute; z-index: 3; left: 138mm; top: 150mm; width: 60mm; color: #FFFFFF; text-align: right; }
+.cl-year { font: 900 62pt/.85 var(--mast); }
+.cl-big { font: italic 800 30pt/.95 var(--cond); text-transform: uppercase; margin-top: 2mm; }
+.cl-sub { font: 800 11pt/1.2 var(--cond); text-transform: uppercase; margin-top: 3mm; letter-spacing: .02em; }
+.cl-small { font: 600 8.5pt/1.5 var(--sans); margin-top: 1mm; }
+.cl-small:first-of-type { margin-top: 6mm; }
+.c-inside { position: absolute; z-index: 3; left: 16mm; top: 236mm; width: 110mm; color: #FFFFFF; }
+.ci-k { font: 800 8pt/1 var(--cond); letter-spacing: .22em; text-transform: uppercase; color: #BFCBF0; }
+.ci-t { font: italic 800 13pt/1.15 var(--cond); text-transform: uppercase; margin-top: 2mm; }
+.c-bar { right: 14mm; top: 244mm; width: 32mm; z-index: 3; }
+.c-logo { left: 16mm; top: 266mm; width: 14mm; z-index: 3; }
+.c-url { position: absolute; z-index: 3; right: 14mm; top: 276mm; font: 700 8pt/1 var(--cond); letter-spacing: .12em; text-transform: uppercase; color: #FFFFFF; }
+
+/* shared interiors */
+.it-title { position: absolute; font: italic 800 40pt/1 var(--cond); text-transform: uppercase; color: #1D3FAA; }
+.issue { position: absolute; font: 800 8pt/1 var(--cond); letter-spacing: .16em; text-transform: uppercase; color: var(--ink-2); }
+.arrows { width: 12mm; }
+.kicker { position: absolute; font: 800 8pt/1 var(--cond); letter-spacing: .24em; text-transform: uppercase; color: #1D3FAA; }
+.kicker.light { color: #BFCBF0; }
+.hd { position: absolute; font: italic 800 34pt/1 var(--cond); text-transform: uppercase; color: var(--ink); }
+.hd.sm { font-size: 26pt; }
+.hd.light { color: #FFFFFF; }
+.sh { position: absolute; font: 800 13pt/1.1 var(--cond); text-transform: uppercase; color: #1D3FAA; }
+.lead { position: absolute; font: 600 12pt/1.4 var(--sans); color: #1D3FAA; }
+.bt { position: absolute; font: 400 8.5pt/1.6 var(--sans); color: var(--ink-2); text-align: justify; hyphens: auto; }
+.bt p { margin-bottom: 2.6mm; break-inside: avoid; }
+.bt.two { columns: 2; column-gap: 7mm; }
+.bt.three { columns: 3; column-gap: 6mm; }
+.cap { position: absolute; font: 400 8pt/1.5 var(--sans); color: var(--ink-2); }
+.sig { position: absolute; font: italic 800 18pt/1 var(--cond); color: #1D3FAA; }
+.sig-r { position: absolute; font: 600 8pt/1 var(--sans); letter-spacing: .06em; text-transform: uppercase; color: var(--ink-2); }
+
+/* contents */
+.toc { position: absolute; left: 14mm; top: 44mm; width: 66mm; }
+.ti { display: grid; grid-template-columns: 13mm 1fr; column-gap: 2mm; margin-bottom: 5.4mm; }
+.ti-n { grid-row: span 2; font: 900 22pt/1 var(--mast); color: #1D3FAA; }
+.ti-h { font: 800 12pt/1.1 var(--cond); text-transform: uppercase; color: var(--ink); }
+.ti-t { font: 400 8.5pt/1.45 var(--sans); color: var(--ink-2); margin-top: .8mm; }
+.statbox { position: absolute; background: #1D3FAA; }
+.sb-n { position: absolute; left: 7mm; top: 6mm; font: 900 64pt/.85 var(--mast); color: #FFFFFF; }
+.sb-t { position: absolute; left: 34mm; right: 7mm; top: 9mm; font: 800 12pt/1.2 var(--cond); text-transform: uppercase; color: #FFFFFF; }
+
+/* note box across 2–3 */
+.navybox { background: #0E1F5B; }
+.nb-23 { left: 86mm; top: 236mm; width: 214mm; height: 46mm; }
+.nb-k { position: absolute; font: 800 8pt/1 var(--cond); letter-spacing: .24em; text-transform: uppercase; color: #BFCBF0; }
+.nb-t { position: absolute; font: italic 800 14pt/1.15 var(--cond); text-transform: uppercase; color: #FFFFFF; }
+
+/* stat band across 4–5 */
+.statband { left: var(--b0); width: calc(2 * var(--pw) + 2 * var(--bleed)); top: 240mm; height: 40mm; background: #0E1F5B; }
+.band-stats { position: absolute; top: 246mm; display: grid; grid-template-columns: repeat(4, 1fr); column-gap: 5mm; }
+.band-stats.three { grid-template-columns: repeat(3, 1fr); }
+.bs-n { font: 900 40pt/.9 var(--mast); color: #FFFFFF; }
+.bs-t { font: 800 8.5pt/1.2 var(--cond); letter-spacing: .06em; text-transform: uppercase; color: #BFCBF0; margin-top: 1.5mm; }
+
+/* profile panel + navy title band across 6–7 */
+.navyband { left: 118mm; width: calc(302mm + var(--bleed)); top: var(--b0); height: calc(50mm + var(--bleed)); background: #0E1F5B; }
+.p-woman { left: -6mm; bottom: var(--b0); width: 140mm; }
+.p-name { position: absolute; left: 12mm; top: 16mm; font: italic 800 72pt/.9 var(--cond); text-transform: uppercase; color: #FFFFFF; }
+.p-num { position: absolute; left: 128mm; top: 56mm; font: 900 120pt/.8 var(--mast); color: #FFFFFF; }
+.p-unit { position: absolute; left: 160mm; top: 74mm; font: italic 800 28pt/1 var(--cond); text-transform: uppercase; color: #FFFFFF; }
+.p-lbl { position: absolute; left: 128mm; top: 104mm; width: 66mm; font: 800 11pt/1.2 var(--cond); letter-spacing: .04em; text-transform: uppercase; color: #FFFFFF; }
+.facts { position: absolute; }
+.f { margin-bottom: 5mm; }
+.f-k { font: 600 8pt/1.3 var(--sans); color: #BFCBF0; }
+.f-v { font: 900 22pt/1 var(--mast); color: #FFFFFF; margin-top: 1mm; }
+.p-box { position: absolute; left: 128mm; top: 200mm; width: 68mm; padding: 5mm; background: #FFFFFF; box-sizing: border-box; }
+.p-box p { font: 500 9pt/1.5 var(--sans); color: var(--ink); }
+.incl { position: absolute; background: #1D3FAA; padding: 6mm; box-sizing: border-box; }
+.in-k { font: 800 9pt/1.2 var(--cond); letter-spacing: .12em; text-transform: uppercase; color: #BFCBF0; margin-bottom: 4mm; }
+.in-i { font: italic 800 14pt/1.35 var(--cond); text-transform: uppercase; color: #FFFFFF; }
+
+/* sidebar */
+.side { position: absolute; background: #1D3FAA; }
+.sd-name { position: absolute; font: italic 800 15pt/1.05 var(--cond); text-transform: uppercase; color: #FFFFFF; }
+.sd-role { position: absolute; font: 700 7.5pt/1 var(--cond); letter-spacing: .12em; text-transform: uppercase; color: #DCE3F7; }
+.sd-t { position: absolute; font: 400 8pt/1.5 var(--sans); color: #FFFFFF; }
+.sd-k { position: absolute; font: 800 9pt/1 var(--cond); letter-spacing: .16em; text-transform: uppercase; color: #FFFFFF; }
+
+/* line-up band across 8–9 */
+.band { left: 150mm; top: var(--b0); width: calc(270mm + var(--bleed)); height: calc(104mm + var(--bleed)); }
+.lu1 { left: 146mm; top: 18mm; width: 54mm; clip-path: inset(0 0 22% 0); }
+.lu2 { left: 30mm; top: 10mm; width: 86mm; }
+.lu3 { left: 124mm; top: 12mm; width: 62mm; clip-path: inset(0 0 4% 0); }
+.col3 { position: absolute; left: 14mm; top: 134mm; width: 182mm; display: grid; grid-template-columns: 1fr 1fr 1fr; column-gap: 7mm; }
+.c-h { font: 800 13pt/1.1 var(--cond); text-transform: uppercase; color: #1D3FAA; margin-bottom: 2.5mm; }
+.c-t { font: 400 8.5pt/1.55 var(--sans); color: var(--ink-2); margin-bottom: 2mm; }
+
+/* advert + navy band across 10–11 */
+.adband { left: var(--b0); width: calc(2 * var(--pw) + 2 * var(--bleed)); top: 246mm; bottom: var(--b0); height: calc(51mm + var(--bleed)); background: #0E1F5B; }
+.ad-k { position: absolute; left: 0; right: 0; top: 20mm; text-align: center; font: 700 9pt/1 var(--cond); letter-spacing: .4em; text-transform: uppercase; color: var(--ink-2); }
+.ad-h { position: absolute; left: 0; right: 0; top: 30mm; text-align: center; font: 800 50pt/1 var(--cond); text-transform: uppercase; color: var(--ink); }
+.ad-s { position: absolute; left: 0; right: 0; top: 56mm; text-align: center; font: 600 11pt/1 var(--sans); color: #1D3FAA; }
+.ad-phone { left: 70mm; top: 70mm; width: 70mm; }
+.ad-feat { position: absolute; }
+.af-h { font: italic 800 16pt/1 var(--cond); text-transform: uppercase; color: #1D3FAA; margin-top: 7mm; }
+.af-h:first-child { margin-top: 0; }
+.af-t { font: 400 8.5pt/1.45 var(--sans); color: var(--ink-2); margin-top: 1.5mm; }
+.ad-t { position: absolute; left: 14mm; right: 14mm; top: 258mm; text-align: center; font: italic 800 14pt/1.2 var(--cond); text-transform: uppercase; color: #FFFFFF; }
+.ab-t { position: absolute; top: 258mm; font: italic 800 13pt/1.2 var(--cond); text-transform: uppercase; color: #FFFFFF; }
+
+/* quote + robot across 12–13 */
+.qm { position: absolute; font: 900 90pt/1 var(--mast); color: #1D3FAA; }
+.qt { position: absolute; font: italic 800 26pt/1.1 var(--cond); text-transform: uppercase; color: var(--ink); }
+.qa { position: absolute; font: 700 8pt/1 var(--cond); letter-spacing: .14em; text-transform: uppercase; color: var(--ink-2); }
+.q-robot { left: 122mm; top: 146mm; width: 124mm; }
+
+/* at a glance */
+.glance { position: absolute; left: 50mm; top: 40mm; width: 96mm; }
+.g { margin-bottom: 5mm; }
+.g-h { font: 800 13pt/1.1 var(--cond); text-transform: uppercase; color: #1D3FAA; }
+.g-t { font: 400 9pt/1.45 var(--sans); color: var(--ink-2); margin-top: 1mm; }
+
+/* back */
+.b-mast { position: absolute; left: 14mm; top: 20mm; font: 900 120pt/.8 var(--mast); text-transform: uppercase; color: #FFFFFF; }
+.b-monthly { position: absolute; left: 16mm; top: 60mm; font: italic 800 16pt/1 var(--cond); text-transform: uppercase; color: #FFFFFF; }
+.contacts { position: absolute; left: 16mm; top: 80mm; width: 120mm; }
+.contacts .c { margin-bottom: 5mm; }
+.contacts .k { font: 800 7.5pt/1 var(--cond); letter-spacing: .2em; text-transform: uppercase; color: #BFCBF0; margin-bottom: 1.5mm; }
+.contacts .v { font: 500 11pt/1.35 var(--sans); color: #FFFFFF; }
+.dirs { position: absolute; left: 16mm; top: 146mm; width: 150mm; }
+.d { display: flex; align-items: center; gap: 4mm; margin-bottom: 4mm; }
+.d img { width: 20mm; height: 20mm; }
+.dn { font: italic 800 15pt/1.05 var(--cond); text-transform: uppercase; color: #FFFFFF; }
+.dr { font: 500 8.5pt/1.3 var(--sans); color: #DCE3F7; margin-top: 1mm; }
+.b-logo { right: 16mm; top: 24mm; width: 16mm; }
+.credits { position: absolute; left: 16mm; right: 16mm; bottom: 12mm; columns: 2; column-gap: 8mm; font: 400 7.5pt/1.45 var(--sans); color: #DCE3F7; }
+.bt.big { font-size: 10pt; line-height: 1.65; }
+.pull { position: absolute; font: italic 800 22pt/1.1 var(--cond); text-transform: uppercase; color: #1D3FAA; }

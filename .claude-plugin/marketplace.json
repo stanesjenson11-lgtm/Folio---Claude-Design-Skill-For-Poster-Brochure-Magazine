@@ -1,0 +1,15 @@
+{
+  "name": "folio",
+  "description": "Folio: Claude design skill and plugin for posters, brochures and magazines, with print-ready PDF and Canva-editable output.",
+  "owner": {
+    "name": "stanesjenson11-lgtm"
+  },
+  "plugins": [
+    {
+      "name": "folio",
+      "source": "./",
+      "description": "Brochure, magazine and poster design for Claude: print-ready PDF + Canva-editable file, 11 magazine styles, humanized copy.",
+      "homepage": "https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine"
+    }
+  ]
+}

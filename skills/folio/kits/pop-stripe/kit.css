@@ -1,0 +1,40 @@
+/* Mango Inc. · studio book · pop-stripe: a 1:1 replica of the user's "Pop Art" reference (16:9, 320 x 180 mm single pages).
+   Vertical stripes of grey, white and saffron; circle and rounded photos with baked mirror reflections (imagery.py reflect);
+   small orange-to-saffron card pairs; serif heads (Aesthet Nova → Bodoni Moda); labels and body in Wayfinder CF → Familjen Grotesk.
+   Burnt orange replaces white-on-yellow text for print legibility. No shadows, no rules. */
+
+:root {
+  --paper: #E4E5E9; --ink: #1D1D1F; --ink-2: #5F6068; --brand: #FFC20E; --brand-ink: #1D1D1F; --accent: #C2410C; --support: #FFFFFF;
+  --burnt: #A63A0A; --eyebrow: #55555C;
+  --head: 'Aesthet Nova', 'Bodoni Moda', serif;
+  --sans: 'Wayfinder CF', 'Familjen Grotesk', sans-serif;
+  --font-display: var(--head); --font-label: var(--sans); --font-body: var(--sans);
+  --fs-body: 8.5pt; --lh-body: 1.7;
+}
+p, h1, h2 { margin: 0; padding: 0; }
+.f { position: absolute; }
+.grey { background: #E4E5E9; } .white { background: #FFFFFF; } .yel { background: #FFC20E; }
+.ph > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.pic, .logo, .cards, .dots, .dots-v, .icon { position: absolute; height: auto; }
+.dots { width: 17mm; } .dots-v { width: 3.4mm; }
+.icon { width: 24mm; }
+
+.cover-word { position: absolute; right: calc(320mm - 145mm - 3mm); top: 74mm; display: flex; }
+.cover-word h1, .cover-word p { font: 700 76pt/1 var(--sans); letter-spacing: .07em; text-transform: uppercase; white-space: nowrap; }
+.cover-word .ink { color: var(--ink); } .cover-word .burnt { color: var(--accent); position: absolute; left: 100%; }
+.cover-sub { position: absolute; left: 62mm; top: 104mm; font: 600 8pt/1 var(--sans); letter-spacing: .42em; text-transform: uppercase; color: var(--ink-2); }
+.brand-lbl { position: absolute; font: 600 6.5pt/1 var(--sans); letter-spacing: .2em; text-transform: uppercase; color: var(--ink); }
+
+.eyebrow { position: absolute; font: 400 8.5pt/1 var(--sans); color: var(--eyebrow); }
+.eyebrow.on-white { color: var(--burnt); }
+.eyebrow.ink { color: var(--ink); }
+.head { position: absolute; font: 500 21pt/1.2 var(--head); color: var(--ink); white-space: nowrap; }
+.lbl { position: absolute; font: 700 7pt/1 var(--sans); letter-spacing: .28em; text-transform: uppercase; color: var(--ink); }
+.body { position: absolute; font: 400 8.5pt/1.75 var(--sans); color: var(--ink-2); }
+.body.ink { color: var(--ink); font-size: 10pt; }
+.credits { font-size: 7.5pt; line-height: 1.5; columns: 2; column-gap: 6mm; }
+
+.dotmark { position: absolute; width: 4mm; height: 4mm; border-radius: 50%; }
+.dotmark.y { background: #FFC20E; } .dotmark.k { background: var(--ink); }
+.bigdisc { position: absolute; border-radius: 50%; background: #FFD84A; }
+.card { position: absolute; left: 7mm; top: 7mm; width: 108mm; height: 165mm; border-radius: 17mm; background: #FFFFFF; }
