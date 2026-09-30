@@ -16,11 +16,12 @@
 - [What folio makes](#what-folio-makes)
 - [Why the designs don't look AI-generated](#why-the-designs-dont-look-ai-generated)
 - [The style catalogue: 11 ready magazine and brochure styles](#the-style-catalogue)
+- [How a job flows: guided, step by step](#how-a-job-flows)
 - [How it works](#how-it-works)
 - [How it humanizes copy](#how-it-humanizes-copy)
 - [How it learns your taste and improves itself](#how-it-learns-and-improves)
 - [Canva-editable export: every image and text box stays editable](#canva-editable-export)
-- [Install](#install) · [Quick start](#quick-start) · [Slash commands](#slash-commands) · [Scripts](#scripts)
+- [Install](#install) · [Where to use it](#where-to-use-it) · [Quick start](#quick-start) · [Slash commands](#slash-commands) · [Scripts](#scripts)
 - [FAQ](#faq) · [Credits](#credits) · [License](#license)
 
 ## What folio makes
@@ -55,7 +56,7 @@ folio ships 11 finished, user-approved styles ("kits"). Most clients bring conte
 
 | Command | Style | Looks like |
 |---|---|---|
-| `/folio:magazine` | Sport Layers Ivory | Espresso cover with a cut-out person, ivory pages, champagne note boxes that run across the fold, sage bands |
+| `/folio:ivory` | Sport Layers Ivory | Espresso cover with a cut-out person, ivory pages, champagne note boxes that run across the fold, sage bands |
 | `/folio:night` | Sport Layers Night | Dark, high-contrast sports magazine: layered cover, bold vertical words, blue gutter boxes |
 | `/folio:sports` | Sport News | Navy and acid yellow, heavy small caps, yellow panels, a vertical cover strip |
 | `/folio:football` | Football Blue | Royal-blue monthly: huge masthead broken by a cut-out, stat rows, a striped line-up band, a full-page advert |
@@ -67,13 +68,38 @@ folio ships 11 finished, user-approved styles ("kits"). Most clients bring conte
 | `/folio:popart` | Pop Stripe (16:9) | Grey, white and saffron stripes, circle photos with reflections, gradient cards |
 | `/folio:portfolio` | Split Pop (16:9) | Side rail, teal and orange splits, letter-disc titles, phone, tablet and desktop mockups |
 
-`/folio:styles` shows the gallery and asks family → style → colour → pages. `/folio:replicate` copies any reference you give it 1:1 and saves the result as a new kit with its own command, so the catalogue grows with every job.
+`/folio:styles` shows the gallery and lets you pick. `/folio:replicate` copies any reference you give it 1:1; the result joins the catalogue, with its own command, only if it beats the closest existing style.
+
+## How a job flows
+
+Say what you want and hand over whatever you have: a PDF, pasted text, your website, photos, a logo, reference images. In Claude Code you can also type `/folio:new`, `/folio:magazine`, `/folio:brochure` or `/folio:poster`. folio reads everything first and asks only what is missing, in three short rounds of one-tap questions. Every question has a recommended answer, and "you choose" is always allowed.
+
+```mermaid
+flowchart TD
+  A["You: make a magazine from this PDF<br/>(or /folio:new)"] --> B["folio reads everything: text, photos,<br/>logo, contacts, reference images"]
+  B --> C["Round 1: logo (if missing) · magazine, brochure or poster · how to write the copy"]
+  C --> D["Round 2: colour palettes suggested from your logo · kind (sports, editorial, pop, business) · photos"]
+  D --> E["Round 3: style, ranked for your content · contacts · pages"]
+  E --> F["Page plan: layout, headline and photo for every page"]
+  F -->|approve or change| G["First look: cover + first spread"]
+  G --> H["Full build, every page checked"]
+  H --> I["PDF + Canva file + a list of anything still to fill"]
+  I --> J["Your verdict is remembered; your brand is saved for next time"]
+```
+
+- **Colours from your logo.** folio reads the logo's colours and suggests three print-safe palettes on a swatch sheet. Each comes with a reason ("gold fails as text on white, so headings use deep navy and gold stays on numbers") and the styles it suits.
+- **Styles ranked for your content.** The top three styles in the kind you pick are ranked by your subject, your photos, the length of your text and your palette. The first one says why it fits. You can also mix two styles, taking the layout of one and the colours and type of the other.
+- **Photos placed where you want.** The page plan shows which of your photos goes where ("team-02.jpg → cover, cut out") and fills gaps with free stock from your industry. Say "put photo 3 on page 5" and it moves.
+- **A first look before the full build**, so a wrong direction costs one spread, not twenty pages.
+- **A still-to-fill list at the end.** Every placeholder left (a LOGO box, an empty photo frame, a missing phone number) is listed with its page and how to finish it in Canva.
+- **Your brand, remembered.** Logo, colours, contacts and fonts are saved per client, so the next job starts with "Use Mango Inc.'s saved brand?".
+- **Reference images.** Copied 1:1 for your job. They join the style catalogue only if they clearly beat the closest existing style, so the catalogue stays small and good.
 
 ## How it works
 
 ```mermaid
 flowchart LR
-  A[Your content, website,<br/>logo, photos or references] --> B[Intake: one round of questions<br/>type, style, colour, pages]
+  A[Your content, website,<br/>logo, photos or references] --> B[Guided questions<br/>logo, colours, style, photos, page plan]
   B --> C[Kit or flatplan<br/>+ locked art direction]
   C --> D[Premium copy from your facts<br/>run through the humanizer]
   D --> E[Imagery from your world<br/>grade, cut-outs, mockups, logos, sketches]
@@ -85,7 +111,7 @@ flowchart LR
   I --> J[TASTE.md, LESSONS.md,<br/>kits: the next design starts smarter]
 ```
 
-1. **Intake.** folio reads what you already have (logo colours, photos, old brochures, your website), states its read of the job in one line, shows a palette swatch sheet, and asks once: brochure type (bi-fold to booklet), style, theme colour, pages. Every question has a recommended answer.
+1. **Guided intake.** folio reads what you already have (text, logo, photos, contacts, old brochures, your website) and asks the rest in three short rounds (see [How a job flows](#how-a-job-flows)), then shows a page plan to approve.
 2. **Build.** It starts from a kit (`kit.py new`) or plans a flatplan, writes the copy from your facts, and makes the images: photo grading and duotones, background removal for magazine cut-outs, screenshots of your site framed in device mockups, single-colour technology logos, coloured-pencil sketches, flowing colour bands, hatched shapes.
 3. **Check.** `render.py` makes the PDF, PNGs, a contact sheet and the Canva file; Claude looks at every page and runs `preflight.py` until it reports 0 errors and 0 warnings.
 4. **Deliver and learn.** You say what works and what doesn't; folio records it and starts from it next time.
@@ -108,7 +134,7 @@ folio gets better for you in four ways:
 | **Taste memory** | Every verdict ("love this", "no rotated headlines", "magazines should be darker") is logged with the concrete traits and turned into defaults the next design follows | `skills/folio/library/TASTE.md`, `reference/taste.md` |
 | **Memory across sessions** | With the [claude-mem](https://github.com/thedotmack/claude-mem) plugin installed, verdicts and client facts are recalled automatically in later sessions | `reference/memory.md` |
 | **Self-repair** | Any defect that would happen again on another document (a clipped word, a wrong export, a misleading rule) is patched into the skill itself as symptom → cause → fix | `LESSONS.md`, `CHANGELOG.md` |
-| **A growing library** | References you share become layout pattern cards and direction cards; pages you approve become kits with their own slash command; `/folio:learn` studies professional work in the lanes you like | `library/`, `kits/`, `commands/` |
+| **A growing library** | References you share become layout pattern cards and direction cards; references that beat the closest style become kits with their own slash command; `/folio:learn` studies professional work in the lanes you like | `library/`, `kits/`, `commands/` |
 
 ## Canva-editable export
 
@@ -131,9 +157,9 @@ or from a terminal:
 claude plugin marketplace add stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine
 claude plugin install folio@folio
 ```
-Restart the session if the `/folio:` commands don't appear straight away. To update later: `claude plugin marketplace update folio` then `claude plugin update folio@folio`.
+Run `/folio:setup` once so plain `/folio` starts the guided flow (plugin commands are otherwise always prefixed, as in `/folio:new`). Restart the session if the `/folio:` commands don't appear straight away. To update later: `claude plugin marketplace update folio` then `claude plugin update folio@folio`.
 
-**Claude.ai / Claude desktop app (skill only):** download `folio.skill` from the [latest release](https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine/releases/latest) and upload it under *Settings → Capabilities → Skills*.
+**Claude.ai / Claude desktop app (skill only):** download `folio.skill` from the [latest release](https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine/releases/latest) and upload it under *Settings → Capabilities → Skills*. Then just ask ("make a magazine from this PDF"); there are no slash commands there.
 
 **From a clone:**
 ```bash
@@ -150,6 +176,17 @@ playwright install chromium
 ```
 `rembg` is only needed for cut-outs (its model downloads once). `npm` fetches fonts from Fontsource, with Google Fonts as the fallback.
 
+### Where to use it
+
+| | Claude Code (terminal, VS Code / JetBrains, desktop app's Code tab) | claude.ai website |
+|---|---|---|
+| Start | `/folio:new` (or plain `/folio` after running `/folio:setup` once), `/folio:magazine`, a style command, or plain words | Plain words, or "/folio make a magazine from this PDF" |
+| Questions and page plan | One-tap questions; the plan opens in plan mode for approval | One-tap questions; the plan is approved in chat |
+| Fonts and stock photos | Work out of the box | Turn on code-execution network access for all domains (*Settings → Capabilities*), or upload your own photos |
+| Styles you save, taste, client brands | Kept across chats and plugin updates | Nothing persists between chats: folio hands them back as downloads to re-upload or keep in a Project |
+
+**Recommended:** Claude Code for the full experience; claude.ai works for the guided flow with the notes above.
+
 ## Quick start
 
 Just ask; the skill triggers on brochure, magazine, poster and report work:
@@ -162,14 +199,14 @@ Just ask; the skill triggers on brochure, magazine, poster and report work:
 
 > Make four poster variants for our Thursday prayer service, Tamil and English.
 
-Or call a style directly: `/folio:night our website is example.com`.
+Or start the guided flow with `/folio:new make a magazine from brochure.pdf`, or call a style directly: `/folio:night our website is example.com`.
 
 ## How this repository is laid out
 
 ```text
 .claude-plugin/plugin.json        plugin manifest (name, version, keywords)
 .claude-plugin/marketplace.json   makes this repo installable with /plugin marketplace add
-commands/                         slash commands: /folio:styles, /folio:magazine, /folio:night …
+commands/                         slash commands: /folio:new, /folio:magazine, /folio:ivory, /folio:night …
 skills/folio/SKILL.md             the skill Claude loads for brochure, magazine and poster work
 skills/folio/scripts/             render, preflight, Canva export, kits, imagery, palette, fonts
 skills/folio/kits/                the 11 ready styles (pages, CSS, vector assets, previews)
@@ -182,9 +219,12 @@ docs/                             README images
 
 | Command | Does |
 |---|---|
-| `/folio:styles` | Show the style gallery, ask family → style → colour → pages, build it |
-| `/folio:magazine` `/folio:night` `/folio:sports` `/folio:football` `/folio:skate` `/folio:winter` `/folio:ebook` `/folio:newsletter` `/folio:profile` `/folio:popart` `/folio:portfolio` | Build a piece in that style from any content |
-| `/folio:replicate` | Copy reference pages 1:1 with your content, then save the style as a new kit |
+| `/folio:setup` | One-time: makes plain `/folio` start the guided flow |
+| `/folio:new` (or `/folio` after setup) | The guided flow for any new piece: logo, colours from your logo, style, photos and where they go, contacts, a page plan, a first look |
+| `/folio:magazine` `/folio:brochure` | The guided flow with the type already chosen |
+| `/folio:styles` | Show the style gallery and pick, then the guided flow |
+| `/folio:ivory` `/folio:night` `/folio:sports` `/folio:football` `/folio:skate` `/folio:winter` `/folio:ebook` `/folio:newsletter` `/folio:profile` `/folio:popart` `/folio:portfolio` | Build a piece in that style from any content (the other questions still come) |
+| `/folio:replicate` | Copy reference pages 1:1 with your content; saved as a new style only if it beats the closest one |
 | `/folio:poster` | Four unique poster variants in your taste (PNG + Canva file) |
 | `/folio:stock` | Find free, on-topic stock photos for a subject, with a contact sheet and credits |
 | `/folio:taste` | Record what you liked or rejected |
@@ -195,7 +235,7 @@ Inside the skill there are also `brief`, `direction`, `craft`, `copy`, `critique
 ## Scripts
 
 ```bash
-python skills/folio/scripts/kit.py list | new <kit> <project> [--brand #hex --accent #hex] | save <project> <kit> | gallery
+python skills/folio/scripts/kit.py list | new <kit> <project> [--brand #hex --accent #hex] | save <project> <kit> [--builtin] | gallery | home
 python skills/folio/scripts/render.py brochure.html [--bleed 3] [--single] [--png-only] [--max-mb 8]
 python skills/folio/scripts/editable.py brochure.html [--max-mb 8]      # Canva-editable HTML on its own
 python skills/folio/scripts/preflight.py brochure.html [--copy copy.md] [--source source.md]

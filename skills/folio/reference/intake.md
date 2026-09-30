@@ -1,8 +1,8 @@
 # intake — the slash-command gate (theme, palette, how bold)
 
-Runs when the user starts a new piece: `/folio` with content, `/folio craft | brief | direction`, or any build request where no `DIRECTION.md` exists yet. Skip it when `DIRECTION.md` already exists (the direction is locked — follow it), for `critique`, `polish`, `preflight`, `extract`, `export`, `promo`, and when the user has already named both theme and palette (then just confirm them in the Design Read).
+**Magazines, brochures, company books and posters use the guided flow instead: `reference/wizard.md`** (scan, then up to three short rounds, because later questions depend on earlier answers: the palettes need the logo, the style list needs the kind). This gate runs for the other new pieces: `/folio craft | brief | direction`, flyers, panels and backdrops, or any build request outside the catalogue where no `DIRECTION.md` exists yet. Skip it when `DIRECTION.md` already exists (the direction is locked — follow it), for `critique`, `polish`, `preflight`, `extract`, `export`, `promo`, and when the user has already named both theme and palette (then just confirm them in the Design Read).
 
-The gate asks **once**. Never ladder follow-up questions; unanswered items are inferred and stated.
+The gate asks **once**. Never ladder follow-up questions; unanswered items are inferred and stated. (The guided flow's rounds are the one exception, and they never re-ask an answered item.)
 
 ## 1. Pre-flight scan (before asking anything)
 Read the folder and attachments first — asking for something the user already supplied wastes their time.
@@ -41,8 +41,8 @@ Mark the best fit for register + industry + the user's references as *recommende
 ## 3b. Brochure type and style (brochures only)
 Ask these in the same round when the piece is a brochure and the brief doesn't say (list the full set in the question text; offer the likeliest three as options, the rest via "Other"):
 - **Type:** Bi-Fold, Tri-Fold, Z-Fold, Accordion, Gate, Double Gate, Roll, French, Double Parallel, Booklet (`reference/formats.md`).
-- **Magazine styles (kits, `kits/INDEX.md`, `/folio:styles` or a named style command):** ask the family first (Sport & action · Editorial & minimal · Pop & colour · Business & news), then the kit in that family, then theme colour (kit colours / brand colour / you choose) and pages (8 / 12 / 16). Show `kits/GALLERY.png` first.
-- **Style:** Corporate, Minimalist, Editorial / Magazine (`sport-layers` **Ivory**, the user's loved magazine look, or **Night**, dark and high-contrast; `pop-culture`), Neomorphism, Brutalist, Retro / Vintage, **Old-money classic book** (`old-money-book`, the user's loved book look), or "Replicate my reference 1:1" when reference pages were supplied.
+- **Magazine styles:** only the kits (`kits/INDEX.md`, the user's signed-off styles plus any they saved) or a mix of two, chosen through the guided flow (`reference/wizard.md`: kind → style ranked with a reason). Show `kits/GALLERY.png` first.
+- **Style (brochures outside the catalogue formats):** a kit's look carried to the fold (`reference/wizard.md` round 3), or "Replicate my reference 1:1" when reference pages were supplied.
 
 ## 4. Ask once
 Use the platform's question tool so the user can tap: claude.ai → `ask_user_input_v0` (max 3 questions, 2–4 options each); Claude Code → `AskUserQuestion`; otherwise one message with numbered options. Always include a "You choose" / "Go ahead" path.

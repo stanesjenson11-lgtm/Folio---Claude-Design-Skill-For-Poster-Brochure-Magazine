@@ -2,6 +2,7 @@
 id: sport-ivory
 name: Sport Layers Ivory
 family: sport & action
+best_for: studios, agencies, consultancies, premium services; a warm, confident magazine; one cut-out person, photos that turn into pencil sketches, technology or partner logos; 12 pages
 size: A4 (210 x 297 mm)
 pages: 12
 render: --bleed 3

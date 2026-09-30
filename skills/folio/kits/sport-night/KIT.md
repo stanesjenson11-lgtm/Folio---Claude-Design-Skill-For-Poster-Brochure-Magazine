@@ -2,6 +2,7 @@
 id: sport-night
 name: Sport Layers Night
 family: sport & action
+best_for: tech, gaming, sport, launches, events; dark and high-energy; one cut-out person (4000 px+ source), a hero device or object, 8+ photos; 12 pages
 size: A4 (210 x 297 mm)
 pages: 12
 render: --bleed 3

@@ -2,6 +2,7 @@
 id: minimal-ebook
 name: Minimal E-book
 family: editorial & minimal
+best_for: guides, e-books, courses, personal brands, creative portfolios; minimal and airy; 6+ vivid or neon photos of people; 8 single pages
 size: A4 (210 x 297 mm), single pages
 pages: 8
 render: --single

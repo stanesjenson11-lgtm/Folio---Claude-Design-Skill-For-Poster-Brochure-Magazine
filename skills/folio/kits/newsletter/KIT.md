@@ -2,6 +2,7 @@
 id: newsletter
 name: Business Newsletter
 family: business & news
+best_for: company newsletters, internal news, NGOs, schools, updates; newsy and trustworthy; black-and-white team and office photos, portraits; 8 pages
 size: A4 (210 x 297 mm)
 pages: 8
 render: --bleed 3

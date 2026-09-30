@@ -2,6 +2,7 @@
 id: pop-stripe
 name: Pop Stripe (Pop Art)
 family: pop & colour
+best_for: product brands, tech studios, startups, gadget or lifestyle catalogues; bright and friendly; object and people photos that tint to one colour, circle crops; 10 landscape pages
 size: 16:9 (320 x 180 mm)
 pages: 10
 render: --single

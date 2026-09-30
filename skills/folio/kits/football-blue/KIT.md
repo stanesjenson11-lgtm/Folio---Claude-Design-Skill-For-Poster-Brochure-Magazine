@@ -2,6 +2,7 @@
 id: football-blue
 name: Football Blue
 family: sport & action
+best_for: sport clubs, academies, events, companies that want a bold monthly; bold and sporty; a cut-out figure in motion, a round hero object, team and event photos, three cut-outs for the line-up band; 14 pages
 size: A4 (210 x 297 mm)
 pages: 14
 render: --bleed 3

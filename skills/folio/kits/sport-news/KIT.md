@@ -2,6 +2,7 @@
 id: sport-news
 name: Sport News
 family: sport & action
+best_for: sport, gaming, tech news, youth brands, events; a punchy news magazine; 8+ dramatic photos of people, one full-bleed cover photo; 14 pages
 size: A4 (210 x 297 mm)
 pages: 14
 render: --bleed 3
