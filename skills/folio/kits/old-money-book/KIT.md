@@ -2,6 +2,7 @@
 id: old-money-book
 name: Old-money Classic Book
 family: editorial & minimal
+best_for: company profiles, law, finance, real estate, schools, heritage brands; quiet and expensive; few photos (they become pencil sketches), portrait placeholders; 8 pages
 size: A4 (210 x 297 mm)
 pages: 8
 render: --bleed 3

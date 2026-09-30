@@ -2,6 +2,7 @@
 id: split-pop
 name: Split Pop (Portfolios)
 family: pop & colour
+best_for: creative studios, agencies, tech and product portfolios; bold and playful; 8–12 photos of objects or devices that sit on colour, device mockups; 10 landscape pages
 size: 16:9 (320 x 180 mm)
 pages: 10
 render: --single

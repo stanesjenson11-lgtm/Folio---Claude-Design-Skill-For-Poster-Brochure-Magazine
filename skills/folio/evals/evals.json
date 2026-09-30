@@ -70,6 +70,27 @@
       "prompt": "the canva html for my 20 page magazine is 60 MB and canva won't take it, make it under 8 MB without losing anything",
       "expected_output": "re-runs editable.py (or render.py) with --max-mb 8; reports the encoding level used (photo ppi, palette cut-outs) and the per-page fidelity; confirms every element is still present; if a page falls below 97% shows editable-diff.png and explains the cause; never removes elements, fonts or styles to hit the budget",
       "files": []
+    },
+    {
+      "id": 11,
+      "name": "guided-magazine-from-pdf-no-logo",
+      "prompt": "/folio:new make a magazine from this company profile pdf (company-profile.pdf, 6 photos inside, no logo attached)",
+      "expected_output": "enters plan mode (Claude Code); reads the PDF first and reports what it found (words, photos, email/phone/web) without asking for any of it; round 1 asks for the logo (attach / LOGO placeholder / text wordmark) and how to write the copy, and skips What (magazine); after the logo arrives, round 2 shows palette/swatches.png and offers palettes from the logo, each with a one-line reason and the styles it suits, plus kind and photos; round 3 ranks three styles with a reason, confirms the found contacts, pages; presents a page plan with every PDF photo assigned; after approval shows a first look (cover + first spread) before the rest; delivers PDF + Canva file + a still-to-fill list; asks for a verdict and offers to save the brand",
+      "files": []
+    },
+    {
+      "id": 12,
+      "name": "reference-learn-gate-not-added",
+      "prompt": "copy this brochure reference 1:1 for our bakery (a plain template page: centred title, three icon cards, a stock photo in a rounded box)",
+      "expected_output": "builds the 1:1 copy for this job (deviating only for contrast or the user's bans, and saying so); after delivery runs the learn gate: scores it against the closest kit on the six points, finds it does not beat it (and uses banned web-card devices), and says in one line that it was not added to the catalogue and why; no kit.py save, no new command",
+      "files": []
+    },
+    {
+      "id": 13,
+      "name": "claude-ai-guided-flow",
+      "prompt": "(claude.ai, skill uploaded, no slash commands) here's our about-us text [pasted], make us a brochure. logo attached.",
+      "expected_output": "the skill triggers from plain words; uses ask_user_input_v0 with at most 3 questions per round; reads logo colours with palette.py --from-image and copies swatches.png to /mnt/user-data/outputs before the colour question; shows the page plan as a table and waits for 'go ahead'; shows the first look from outputs; delivers into /mnt/user-data/outputs; if fonts or stock photos fail to download, tells the user once how to enable network access or to upload photos; offers the saved brand as a folio-brand-<slug>.zip download",
+      "files": []
     }
   ]
 }

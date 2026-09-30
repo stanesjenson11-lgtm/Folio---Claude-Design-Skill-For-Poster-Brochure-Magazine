@@ -2,6 +2,7 @@
 id: skate-culture
 name: Skate Culture
 family: sport & action
+best_for: youth, street, sport, music and creative culture, events; loud and rebellious; one cut-out person in action, 6+ photos including black and white; 8 pages
 size: A4 (210 x 297 mm)
 pages: 8
 render: --bleed 3

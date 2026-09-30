@@ -10,16 +10,24 @@ folio kits — the style catalogue: finished, signed-off pieces saved as reusabl
   save <project> <id> [--name "Pop Stripe"] [--family pop] [--html x.html]
                                 turn a finished build into a kit: pages + css + svg assets (photos become slot frames),
                                 preview.jpg from out/contact.png, KIT.md skeleton, INDEX.md row
-  gallery                       rebuild kits/GALLERY.png from every preview
+  gallery                       rebuild GALLERY.png from every preview
+  home                          print the folio home (user kits, TASTE.md, saved client brands in clients/<slug>/)
+
+Where kits live: the shipped catalogue is <skill>/kits. Kits a user saves go to their folio home (FOLIO_HOME, else the
+plugin's data folder $CLAUDE_PLUGIN_DATA, else ~/.folio) so plugin updates never wipe them; their commands go to
+~/.claude/commands/folio-<name>.md. Working from the git checkout (the maintainer), or with --builtin, save writes into
+<skill>/kits and <plugin>/commands instead, so the public plugin learns the style.
 
 A kit is kits/<id>/: KIT.md (front matter: id, name, family, size, pages, render, fonts, theme), kit.html, kit.css,
 assets/*.svg (+ small textures), preview.jpg. No client photos ship with a kit.
 """
-import argparse, re, shutil, subprocess, sys
+import argparse, os, re, shutil, subprocess, sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
 KITS = ROOT / "kits"
+HOME = Path(os.environ.get("FOLIO_HOME") or os.environ.get("CLAUDE_PLUGIN_DATA") or Path.home() / ".folio")
+USER_KITS = HOME / "kits"
 SCRIPTS = ROOT / "scripts"
 TEXT_TAGS = "p|h1|h2|h3|h4|h5|h6|li|span|figcaption|a|td|th|blockquote|dt|dd"
 # ponytail: the Simple Icons slugs folio has used; a kit with other logos lists them in KIT.md
@@ -81,13 +89,30 @@ def parse_theme(s):
     return dict(p.split() for p in s.split(";") if p.strip())
 
 
+def save_home(builtin=False, root=ROOT):
+    """Where `save` writes: the shipped kits/ from the git checkout or with --builtin, else the user's folio home.
+    >>> import tempfile; r = Path(tempfile.mkdtemp()) / "skills" / "folio"
+    >>> save_home(False, r) == USER_KITS, save_home(True, r) == r / "kits"
+    (True, True)
+    >>> (r.parent.parent / ".git").mkdir(parents=True); save_home(False, r) == r / "kits"
+    True
+    """
+    return root / "kits" if builtin or (root.parent.parent / ".git").exists() else USER_KITS
+
+
+def find_kit(kid):
+    """A kit by id: the shipped catalogue first, then the user's own saved kits."""
+    return next((b / kid for b in (KITS, USER_KITS) if (b / kid / "KIT.md").exists()), None)
+
+
 def cmd_list(a):
-    print((KITS / "INDEX.md").read_text(encoding="utf-8"))
+    for idx in (KITS / "INDEX.md", USER_KITS / "INDEX.md"):
+        if idx.exists(): print(idx.read_text(encoding="utf-8"))
 
 
 def cmd_new(a):
-    kit = KITS / a.id
-    if not kit.exists(): sys.exit(f"no kit '{a.id}' — run: kit.py list")
+    kit = find_kit(a.id)
+    if not kit: sys.exit(f"no kit '{a.id}' — run: kit.py list")
     m = meta(kit); dest = Path(a.project); dest.mkdir(parents=True, exist_ok=True); name = a.name or a.id
     theme = parse_theme(m.get("theme", "")); new = {k: v for k, v in (("brand", a.brand), ("accent", a.accent)) if v}
     shutil.copytree(kit / "assets", dest / "assets", dirs_exist_ok=True)
@@ -121,7 +146,7 @@ def cmd_new(a):
 
 
 def cmd_save(a):
-    src = Path(a.project); kit = KITS / a.id; (kit / "assets").mkdir(parents=True, exist_ok=True)
+    base = save_home(a.builtin); src = Path(a.project); kit = base / a.id; (kit / "assets").mkdir(parents=True, exist_ok=True)
     page = Path(a.html) if a.html else next(p for p in src.glob("*.html") if p.parent == src)
     html = page.read_text(encoding="utf-8")
     css_href = re.search(r'<link rel="stylesheet" href="((?!fonts/|folio\.css)[^"]+\.css)"', html).group(1)
@@ -150,25 +175,29 @@ def cmd_save(a):
         im = Image.open(src / "out" / "contact.png"); im.thumbnail((1400, 1400)); im.convert("RGB").save(kit / "preview.jpg", quality=82, optimize=True)
     fonts = sorted(set(re.findall(r"font-family: '([^']+)'", (src / "fonts" / "fonts.css").read_text(encoding="utf-8")))) if (src / "fonts" / "fonts.css").exists() else []
     if not (kit / "KIT.md").exists():
-        (kit / "KIT.md").write_text(f"---\nid: {a.id}\nname: {a.name or a.id}\nfamily: {a.family or 'magazine'}\nsize: A4\npages: {html.count('class=\"page')}\n"
+        (kit / "KIT.md").write_text(f"---\nid: {a.id}\nname: {a.name or a.id}\nfamily: {a.family or 'magazine'}\nbest_for: …\nsize: A4\npages: {html.count('class=\"page')}\n"
                                     f"render: --bleed 3\nfonts: {'; '.join(f + ':400,700' for f in fonts)}\ntheme: brand #000000; accent #000000\n---\n"
                                     f"# {a.name or a.id}\n\n**Looks like:** …\n\n**Page archetypes:** …\n\n**Image slots:** …\n\n**Deviations from the reference:** …\n", encoding="utf-8")
-    idx = KITS / "INDEX.md"
+    idx = base / "INDEX.md"
     rows = idx.read_text(encoding="utf-8") if idx.exists() else "# Kits\n\n| id | Name | Family | Pages | Looks like |\n|---|---|---|---|---|\n"
     if f"| `{a.id}` |" not in rows:
         idx.write_text(rows + f"| `{a.id}` | {a.name or a.id} | {a.family or 'magazine'} | {html.count('class=\"page')} | see kits/{a.id}/KIT.md |\n", encoding="utf-8")
-    cmd = ROOT.parent.parent / "commands" / f"{a.slash or a.id}.md"   # every kit gets its own /folio:<name> command
+    # every kit gets its own command: /folio:<name> in the plugin (builtin), /folio-<name> as a personal command (user kits)
+    cmd = ROOT.parent.parent / "commands" / f"{a.slash or a.id}.md" if base == KITS else Path.home() / ".claude" / "commands" / f"folio-{a.slash or a.id}.md"
+    if base != KITS: cmd.parent.mkdir(parents=True, exist_ok=True)
     taken = cmd.parent.exists() and any(f"Kit: `{a.id}`" in c.read_text(encoding="utf-8") for c in cmd.parent.glob("*.md"))
     if cmd.parent.exists() and not cmd.exists() and not taken:   # re-saving a kit keeps its existing command
         cmd.write_text(f"---\ndescription: Make a piece in the {a.id} style ({a.name or a.id}) from any content\nargument-hint: \"[content / website / brief]\"\n---\n"
                        f"Use the folio skill to make a {a.name or a.id} piece from: $ARGUMENTS\n\nKit: `{a.id}`. Follow `reference/kit-flow.md` step by step with this kit.\n", encoding="utf-8")
-    note = f"new command /folio:{a.slash or a.id}" if not taken and cmd.exists() else "existing command kept"
+    slash = f"/folio:{a.slash or a.id}" if base == KITS else f"/folio-{a.slash or a.id}"
+    note = f"new command {slash}" if not taken and cmd.exists() else "existing command kept"
     print(f"saved kit {a.id} → {kit}  (edit KIT.md: looks, archetypes, image slots, theme colours; {note})")
 
 
 def cmd_gallery(a):
     from PIL import Image, ImageDraw
-    kits = [k for k in sorted(KITS.iterdir()) if (k / "preview.jpg").exists()]
+    out = save_home(a.builtin)   # the shipped gallery shows only shipped kits; a user's gallery shows both
+    kits = [k for b in ((KITS,) if out == KITS else (KITS, USER_KITS)) if b.exists() for k in sorted(b.iterdir()) if (k / "preview.jpg").exists()]
     W, T, cols = 700, 60, 3; tiles = []
     for k in kits:
         im = Image.open(k / "preview.jpg").convert("RGB"); im.thumbnail((W - 20, 420)); tiles.append((meta(k).get("name", k.name), meta(k).get("family", ""), im))
@@ -177,7 +206,7 @@ def cmd_gallery(a):
     for i, (name, fam, im) in enumerate(tiles):
         x, y = (i % cols) * W, (i // cols) * H
         sheet.paste(im, (x + (W - im.width) // 2, y + 10)); d.text((x + 16, y + H - T + 12), f"{i + 1}. {name}  ·  {fam}", fill=(20, 20, 24))
-    sheet.save(KITS / "GALLERY.png", optimize=True); print(f"gallery → {KITS / 'GALLERY.png'} ({len(tiles)} kits)")
+    out.mkdir(parents=True, exist_ok=True); sheet.save(out / "GALLERY.png", optimize=True); print(f"gallery → {out / 'GALLERY.png'} ({len(tiles)} kits)")
 
 
 def main():
@@ -187,9 +216,11 @@ def main():
     n = sub.add_parser("new"); n.add_argument("id"); n.add_argument("project"); n.add_argument("--brand"); n.add_argument("--accent"); n.add_argument("--name")
     s = sub.add_parser("save"); s.add_argument("project"); s.add_argument("id"); s.add_argument("--name"); s.add_argument("--family"); s.add_argument("--html")
     s.add_argument("--cmd", dest="slash", help="slash-command name, default: the kit id")
-    sub.add_parser("gallery")
+    s.add_argument("--builtin", action="store_true", help="save into the shipped catalogue (maintainers; automatic in the git checkout)")
+    g = sub.add_parser("gallery"); g.add_argument("--builtin", action="store_true")
+    sub.add_parser("home")   # the folio home: user kits, TASTE.md, clients/<slug>/ brands
     a = ap.parse_args()
-    {"list": cmd_list, "new": cmd_new, "save": cmd_save, "gallery": cmd_gallery}[a.cmd](a)
+    {"list": cmd_list, "new": cmd_new, "save": cmd_save, "gallery": cmd_gallery, "home": lambda a: print(HOME)}[a.cmd](a)
 
 
 if __name__ == "__main__":

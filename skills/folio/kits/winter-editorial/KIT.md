@@ -2,6 +2,7 @@
 id: winter-editorial
 name: Winter Editorial
 family: editorial & minimal
+best_for: editorial, travel, fashion, architecture, premium company magazines; minimal and photo-led; 15+ strong photos including landscapes for full-bleed spreads; 20 pages
 size: A4 (210 x 297 mm)
 pages: 20
 render: --bleed 3

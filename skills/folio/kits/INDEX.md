@@ -2,7 +2,7 @@
 
 Finished, user-approved pieces saved as reusable styles. Start one with `kit.py new <id> <project>`; see each `KIT.md`. `GALLERY.png` shows them all.
 
-Slash commands: `/folio:styles` (pick from the gallery) · `/folio:magazine` (sport-ivory) · `/folio:night` (sport-night) · `/folio:popart` (pop-stripe) · `/folio:portfolio` (split-pop) · `/folio:profile` (old-money-book) · `/folio:ebook` (minimal-ebook) · `/folio:sports` (sport-news) · `/folio:skate` (skate-culture) · `/folio:newsletter` (newsletter) · `/folio:football` (football-blue) · `/folio:winter` (winter-editorial) · `/folio:stock` (on-topic photos). Every new kit gets its own command.
+Slash commands: `/folio:new` (guided: logo, colours from the logo, style, photos, contacts, page plan) · `/folio:magazine` · `/folio:brochure` · `/folio:poster` · `/folio:styles` (pick from the gallery) · `/folio:ivory` (sport-ivory) · `/folio:night` (sport-night) · `/folio:popart` (pop-stripe) · `/folio:portfolio` (split-pop) · `/folio:profile` (old-money-book) · `/folio:ebook` (minimal-ebook) · `/folio:sports` (sport-news) · `/folio:skate` (skate-culture) · `/folio:newsletter` (newsletter) · `/folio:football` (football-blue) · `/folio:winter` (winter-editorial) · `/folio:stock` (on-topic photos). Styles a user saves live in their folio home (`kit.py home`) with a personal `/folio-<name>` command.
 
 | id | Name | Family | Size | Pages | Looks like |
 |---|---|---|---|---|---|
@@ -17,3 +17,17 @@ Slash commands: `/folio:styles` (pick from the gallery) · `/folio:magazine` (sp
 | `newsletter` | Business Newsletter | business & news | A4 (210 x 297 mm) | 8 | A newspaper-style company newsletter: serif masthead, green blocks overlapping black-and-white team photos, quote boxes with circle portraits, black boxes, a Thank You back. |
 | `football-blue` | Football Blue | sport & action | A4 (210 x 297 mm) | 14 | A royal-blue sports monthly: a cover with a ghost word, a huge white condensed masthead broken by a cut-out figure in full stride, a round hero object cropped at the edge, a year and cover lines, a barcode; white interiors with italic heavy titles, a contents list with arrows, a profile page on a blue panel with a giant number, a blue sidebar with a person placeholder, a band with diagonal white stripes and a cut-out line-up, a full-page advert, a quote with a cut-out, and a blue back cover. |
 | `winter-editorial` | Winter Editorial | editorial & minimal | A4 (210 x 297 mm) | 20 | A minimal white editorial magazine: a cover with a heavy condensed black masthead ending in a full stop over a big cool-toned photo, tiny cover lines in the corners, a spaced MAGAZINE line and a barcode; inside, heavy condensed heads ending in a full stop, single drop-cap letters above narrow text columns, big photos and stacked photo columns, full-page photos with white titles, a panorama across a spread, a full-bleed spread photo, three-column grids with tall photo rows. |
+
+## Best for (the wizard ranks styles with this; `best_for:` in each KIT.md)
+
+- `split-pop`: creative studios, agencies, tech and product portfolios; bold and playful; 8–12 photos of objects or devices that sit on colour, device mockups; 10 landscape pages
+- `pop-stripe`: product brands, tech studios, startups, gadget or lifestyle catalogues; bright and friendly; object and people photos that tint to one colour, circle crops; 10 landscape pages
+- `sport-night`: tech, gaming, sport, launches, events; dark and high-energy; one cut-out person (4000 px+ source), a hero device or object, 8+ photos; 12 pages
+- `sport-ivory`: studios, agencies, consultancies, premium services; a warm, confident magazine; one cut-out person, photos that turn into pencil sketches, technology or partner logos; 12 pages
+- `old-money-book`: company profiles, law, finance, real estate, schools, heritage brands; quiet and expensive; few photos (they become pencil sketches), portrait placeholders; 8 pages
+- `sport-news`: sport, gaming, tech news, youth brands, events; a punchy news magazine; 8+ dramatic photos of people, one full-bleed cover photo; 14 pages
+- `minimal-ebook`: guides, e-books, courses, personal brands, creative portfolios; minimal and airy; 6+ vivid or neon photos of people; 8 single pages
+- `skate-culture`: youth, street, sport, music and creative culture, events; loud and rebellious; one cut-out person in action, 6+ photos including black and white; 8 pages
+- `newsletter`: company newsletters, internal news, NGOs, schools, updates; newsy and trustworthy; black-and-white team and office photos, portraits; 8 pages
+- `football-blue`: sport clubs, academies, events, companies that want a bold monthly; bold and sporty; a cut-out figure in motion, a round hero object, team and event photos, three cut-outs for the line-up band; 14 pages
+- `winter-editorial`: editorial, travel, fashion, architecture, premium company magazines; minimal and photo-led; 15+ strong photos including landscapes for full-bleed spreads; 20 pages
