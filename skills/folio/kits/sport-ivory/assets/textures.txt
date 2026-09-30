@@ -1,0 +1,2 @@
+grain-espresso.png grain #F6F1E7
+paper-ivory.png paper #2B1D16

@@ -1,0 +1,90 @@
+/* Mango Inc. · Code culture magazine · skate-culture kit: a 1:1 replica of the user's "SKATEboard" reference.
+   Condensed bold masthead with a case switch (Barlow Condensed), graffiti words (Sedgwick Ave Display), extended bold italic
+   (Barlow 800i), grotesk text (Familjen). Sky blue cover, lime and red accents, black and white spreads. */
+
+:root {
+  --paper: #FFFFFF; --ink: #111111; --ink-2: #4A4A4A; --brand: #C8DD4A; --brand-ink: #111111; --accent: #E2493C; --support: #111111;
+  --cond: 'Barlow Condensed', sans-serif;
+  --ext: 'Barlow', sans-serif;
+  --graf: 'Sedgwick Ave Display', cursive;
+  --sans: 'Wayfinder CF', 'Familjen Grotesk', sans-serif;
+  --font-display: var(--cond); --font-label: var(--sans); --font-body: var(--sans);
+  --fs-body: 8pt; --lh-body: 1.55;
+}
+p, h1, h2 { margin: 0; padding: 0; }
+.ph > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.black { background: #111111; } .coal { background: #1A1818; } .white { background: #FFFFFF; }
+.base { background: linear-gradient(180deg, rgba(11,23,48,0) 62%, rgba(11,23,48,.75) 100%); }
+.shade { background: linear-gradient(180deg, rgba(0,0,0,.35) 0%, rgba(0,0,0,0) 30%, rgba(0,0,0,0) 70%, rgba(0,0,0,.6) 100%); }
+.c-man, .c-bar, .b-bar { position: absolute; height: auto; }
+.furniture { font-family: var(--cond); font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
+
+/* cover */
+.c-kicker { position: absolute; right: 14mm; top: 9mm; font: 500 14pt/1 var(--cond); text-transform: uppercase; color: #C8DD4A; letter-spacing: .01em; }
+.c-kicker b { font-weight: 800; }
+.mast { position: absolute; left: 6mm; top: 12mm; font: 800 158pt/.86 var(--cond); color: #C8DD4A; letter-spacing: -.02em; white-space: nowrap; }
+.c-mag { position: absolute; right: 14mm; top: 68mm; font: 800 26pt/1 var(--cond); text-transform: uppercase; color: #FFFFFF; letter-spacing: .02em; }
+.c-issue { position: absolute; right: 14mm; top: 78mm; font: 700 8pt/1 var(--cond); text-transform: uppercase; color: #FFFFFF; letter-spacing: .06em; }
+.c-man { left: 60mm; top: 54mm; height: 232mm; width: auto; }
+.c-left { position: absolute; left: 13mm; top: 116mm; width: 46mm; }
+.cl-h { font: 800 21pt/.98 var(--cond); text-transform: uppercase; color: #C8DD4A; }
+.cl-t { font: 500 8pt/1.5 var(--sans); color: #FFFFFF; margin-top: 3mm; }
+.c-badge { position: absolute; left: 150mm; top: 112mm; width: 40mm; height: 40mm; border-radius: 50%; background: #111111; }
+.bd-n { position: absolute; left: 0; right: 0; top: 11mm; text-align: center; font: 800 20pt/.95 var(--cond); text-transform: uppercase; color: #FFFFFF; }
+.bd-t { position: absolute; left: 0; right: 0; top: 27mm; text-align: center; font: 700 7pt/1 var(--cond); text-transform: uppercase; letter-spacing: .08em; color: #FFFFFF; }
+.c-right { position: absolute; left: 132mm; top: 166mm; width: 64mm; text-align: right; }
+.cr-h { font: 800 italic 34pt/1 var(--ext); color: #C8DD4A; letter-spacing: -.01em; }
+.cr-t { font: 500 8pt/1.5 var(--sans); color: #FFFFFF; margin-top: 2mm; }
+.c-band { position: absolute; left: var(--b0); width: calc(214mm + 2 * var(--bleed)); top: 214mm; height: 11mm; background: #C8DD4A; transform: rotate(-5deg); transform-origin: 0 0; z-index: 2; }
+.c-band p { position: absolute; left: 22mm; top: 2.6mm; font: 800 12.5pt/1 var(--cond); text-transform: uppercase; letter-spacing: .01em; color: #111111; white-space: nowrap; }
+.c-graf { position: absolute; z-index: 3; left: 20mm; top: 223mm; font: 400 150pt/.9 var(--graf); color: #FFFFFF; }
+.c-bar { left: 13mm; top: 268mm; width: 34mm; z-index: 3; }
+
+/* shared interiors */
+.hero { left: 76mm; width: calc(344mm + var(--bleed)); top: var(--b0); height: calc(133mm + var(--bleed)); position: absolute; }
+.chap { position: absolute; font: 800 11pt/1 var(--cond); text-transform: uppercase; letter-spacing: .04em; color: #FFFFFF; }
+.chap.dk { color: #111111; }
+.graf { position: absolute; font: 400 84pt/.9 var(--graf); color: #FFFFFF; white-space: nowrap; }
+.cols { position: absolute; column-gap: 6mm; font: 400 8pt/1.55 var(--sans); color: #333333; }
+.cols p { margin-bottom: 2.6mm; break-inside: avoid; }
+.cols.light { color: #E8E8E8; }
+.cols.on-red { color: #111111; }
+.cols .pull { font: 700 14pt/1.25 var(--sans); color: #FFFFFF; }
+.note { position: absolute; font: 400 8pt/1.5 var(--sans); color: #333333; }
+.note.light { color: #E8E8E8; }
+.tiny { position: absolute; font: 500 7pt/1.3 var(--sans); }
+.tiny.light { color: #FFFFFF; }
+.panel { position: absolute; background: #F4F4F2; }
+.lime { position: absolute; background: #C8DD4A; }
+.red { position: absolute; background: #E2493C; }
+.lime-h { position: absolute; font: 800 13pt/1.05 var(--cond); text-transform: uppercase; color: #111111; }
+.lime-t { position: absolute; font: 500 8pt/1.5 var(--sans); color: #111111; }
+.mini-h { position: absolute; font: 800 9pt/1 var(--cond); text-transform: uppercase; letter-spacing: .06em; color: #C8DD4A; }
+
+/* word repeated in red */
+.reps { position: absolute; left: var(--b0); right: var(--b0); top: 0; bottom: 0; overflow: hidden; }
+.rep { position: absolute; left: -3mm; font: 400 178pt/.8 var(--graf); color: #E2493C; white-space: nowrap; letter-spacing: -.01em; }
+.r5 { right: auto; width: calc(90mm + var(--bleed)); }
+.r5 .rep { left: -110mm; }
+
+/* contents column */
+.logo { position: absolute; font: 800 40pt/.9 var(--cond); color: #869A10; letter-spacing: -.02em; }
+.logo.w { color: #FFFFFF; font-size: 58pt; }
+.toc { position: absolute; left: 101mm; top: 40mm; width: 58mm; }
+.ti { margin-bottom: 6mm; }
+.ti-h { font: 800 9.5pt/1.1 var(--cond); text-transform: uppercase; letter-spacing: .04em; color: #111111; }
+.ti-t { font: 400 7.5pt/1.45 var(--sans); color: #444444; margin-top: 1.5mm; }
+.side { position: absolute; left: 165mm; top: 40mm; width: 35mm; }
+.sd-h { font: 800 9.5pt/1.1 var(--cond); text-transform: uppercase; letter-spacing: .04em; color: #111111; margin: 0 0 2mm; }
+.sd-t { font: 400 7.5pt/1.45 var(--sans); color: #444444; margin-bottom: 7mm; }
+.blackbox { position: absolute; background: #111111; }
+.bb-h { position: absolute; font: 800 10pt/1 var(--cond); text-transform: uppercase; letter-spacing: .06em; color: #C8DD4A; }
+.bb-t { position: absolute; font: 500 7.5pt/1.55 var(--sans); color: #FFFFFF; }
+
+/* spotlight */
+.spot { position: absolute; width: 58mm; font: 500 25pt/1.02 var(--sans); color: #D63A2D; letter-spacing: -.01em; }
+
+/* back */
+.b-contact { position: absolute; left: 14mm; right: 14mm; top: 44mm; font: 600 8.5pt/1.6 var(--sans); color: #FFFFFF; }
+.credits { position: absolute; left: 14mm; width: 140mm; columns: 2; column-gap: 6mm; bottom: 12mm; font: 400 7.5pt/1.45 var(--sans); color: #FFFFFF; }
+.b-bar { right: 13mm; bottom: 12mm; width: 34mm; }

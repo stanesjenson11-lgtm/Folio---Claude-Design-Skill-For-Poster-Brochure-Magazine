@@ -1,0 +1,75 @@
+{
+  "skill_name": "folio",
+  "evals": [
+    {
+      "id": 1,
+      "name": "school-report-from-content-and-sketch",
+      "prompt": "here's the content for our school's annual report 2025-26 (docx attached) plus 14 photos from events and a pencil sketch of how i want the cover and the principal's message page. A4, 12 pages, printed at a local digital press. school colours are maroon and gold. make it look like those pinterest annual reports, not a word template",
+      "expected_output": "BRIEF.md + FLATPLAN.md (12 pages, multiple of 4, loud/quiet rhythm), cover and message page following the sketch's structure, maroon Committed strategy, real photos bleeding, folios on interiors, print PDF with 3mm bleed, contact sheet, preflight with zero errors",
+      "files": []
+    },
+    {
+      "id": 2,
+      "name": "pipe-fittings-catalog-redesign",
+      "prompt": "redesign our old product catalog pdf (attached, 20 pages, made in word years ago). same products, same specs and prices, but it should feel like a proper industrial catalog - each product family should have its own opener. also give me a version i can edit in canva",
+      "expected_output": "harvest run with crops QA'd, copy preserved verbatim, catalog register, band-stack or split-panel openers per family, spec tables in data-tint style, Canva-import HTML plus PDF",
+      "files": []
+    },
+    {
+      "id": 3,
+      "name": "turf-academy-magazine",
+      "prompt": "make an 8 page magazine style brochure for a football turf + coaching academy in springfield. i have 6 action photos and some text about coaching programmes, timings and fees. black and neon green brand. it should look like a sports magazine not a flyer",
+      "expected_output": "magazine register, night-court or signal-yellow lane re-coloured to black + neon green, cut-out or full-bleed opener, two-tone headlines, fees in a clean table, no invented stats, preflight clean",
+      "files": []
+    },
+    {
+      "id": 4,
+      "name": "slash-intake-with-logo",
+      "prompt": "/folio here's our logo and the text for a 4 page welfare society brochure. not sure about colours or style",
+      "expected_output": "pre-flight block naming the logo colours; one-line Design Read; swatches.png shown; ONE question round (theme from 3 different schools with a recommended option, palette A/B/C + keep my colours, how bold or format); after answer a one-line better-alternative check; DIRECTION.md + tokens.css written; build proceeds",
+      "files": []
+    },
+    {
+      "id": 5,
+      "name": "industrial-trifold",
+      "prompt": "need a trifold brochure for our lamination company (automotive textiles, tier-2 supplier to toyota and maruti, since 1995). A4, printed both sides. here's the logo, 8 photos of the factory and products and our old trifold pdf",
+      "expected_output": "extract on the old PDF; formats.md trifold: outside [tuck flap | back cover with contact + QR | front cover], panels 97/100/100mm outside and 100/100/97 inside; cover = logo + one headline + one image; OEM proof as a sentence naming the customers with their logos under it; 1995 as a proof numeral; no icon-in-circle lists; copy passes copy.md; preflight clean",
+      "files": []
+    },
+    {
+      "id": 6,
+      "name": "bilingual-weekly-poster-series",
+      "prompt": "we run a thursday prayer service every week. make a poster series i can reuse - A3 for the notice board plus an instagram square. tamil and english. the speaker photo changes every week. here are canva links to last month's 4 posters",
+      "expected_output": "reads library/TASTE.md; 4 variants inside the arc-stage family (one per week), each with its own display font, header position (always horizontal), ground and headline colour, texture and info block; plain rectangular speaker photos; bilingual-lockup with Unicode Tamil; render.py --png-only; no decorative rules and 3+ visible colours; preflight clean with no variant-clash, rotated-heading, rule-heavy or palette-thin; editable fidelity >= 97%; ends by asking which variants work and recording the verdict",
+      "files": []
+    },
+    {
+      "id": 7,
+      "name": "studio-magazine-with-continuity",
+      "prompt": "make a 12 page magazine style brochure for our software studio, sports magazine feel - faded shaded background, a person cut out popping off the cover, images layered not a collage. things should flow across the pages. take the facts from our website mango.inc",
+      "expected_output": "reads library/TASTE.md; direction sport-layers with the user's palette showing 3-4 colours; facts read from the site into source.md, anything invented marked data-sample; cover built with cutout-layers (imagery.py cutout --person keeps held props, shaded duotone ground marked data-texture, masthead behind the head, face clear of type); every spread continues across the fold with a gutter-box (one .cross ground, text 9mm+ from the fold) or a coloured-pencil sketch (imagery.py sketch, no straight edges); light spreads share one ground photo across both pages; no decorative rules, no rotated headlines, no shadows; stock person credited and never captioned as the team; preflight 0 errors 0 warnings (no rule-heavy, palette-thin); editable fidelity >= 97%; ends by asking for a verdict and recording it",
+      "files": []
+    },
+    {
+      "id": 8,
+      "name": "reference-replica-1to1",
+      "prompt": "here are two brochure reference images (landscape template pages, one teal and orange with phone and desktop mockups, one yellow and grey with circle photos). make an exact 1:1 brochure of each for our software company, content from mango.inc",
+      "expected_output": "asks which reference(s) and the page size once; matches the references' page ratio (16:9 single pages), rails, colour splits, title devices, photo crops and mockups; uses the client's own site screenshots in device mockups and on-topic tech photos; keeps the user's bans (no decorative rules) and fixes contrast with deeper fields or ink text, naming each deviation; premium copy from the site facts; preflight 0 errors 0 warnings; editable fidelity >= 97%; ends by asking for a verdict",
+      "files": []
+    },
+    {
+      "id": 9,
+      "name": "magazine-from-content-only",
+      "prompt": "/folio:styles make a 12 page magazine for our bakery chain from our website example-bakery.in, we have no reference images",
+      "expected_output": "shows kits/GALLERY.png and asks family -> style -> theme colour -> pages once; starts with kit.py new <kit> --brand <hex>; replaces every data-kit-sample element (preflight kit-sample clear) with premium copy built from the site's facts, inferred lines marked data-sample; photos from the bakery's world (ovens, bread, hands, shops), never tech or lifestyle filler; preflight 0 errors 0 warnings; editable HTML under 8 MB with fidelity >= 97%; asks for a verdict",
+      "files": []
+    },
+    {
+      "id": 10,
+      "name": "canva-editable-size-budget",
+      "prompt": "the canva html for my 20 page magazine is 60 MB and canva won't take it, make it under 8 MB without losing anything",
+      "expected_output": "re-runs editable.py (or render.py) with --max-mb 8; reports the encoding level used (photo ppi, palette cut-outs) and the per-page fidelity; confirms every element is still present; if a page falls below 97% shows editable-diff.png and explains the cause; never removes elements, fonts or styles to hit the budget",
+      "files": []
+    }
+  ]
+}

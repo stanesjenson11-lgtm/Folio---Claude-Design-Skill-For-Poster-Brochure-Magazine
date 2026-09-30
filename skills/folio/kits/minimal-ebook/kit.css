@@ -1,0 +1,50 @@
+/* Mango Inc. · studio e-book · minimal-ebook kit: a 1:1 replica of the user's "Minimal E-book" reference.
+   White pages, neon orange photographs, Didone serif caps (Aesthet Nova → Bodoni Moda), huge condensed numerals (Big Shoulders),
+   bold grotesk labels and small body (Wayfinder CF → Familjen Grotesk), a script word on the cover (Pinyon Script).
+   No heavy rules; vertical heads read top to bottom. */
+
+:root {
+  --paper: #FFFFFF; --ink: #111114; --ink-2: #4A4A52; --brand: #FF6A00; --brand-ink: #FFFFFF; --accent: #111114; --support: #FFD9AE;
+  --serif: 'Aesthet Nova', 'Bodoni Moda', serif;
+  --num: 'Big Shoulders Display', sans-serif;
+  --sans: 'Wayfinder CF', 'Familjen Grotesk', sans-serif;
+  --script: 'Pinyon Script', cursive;
+  --font-display: var(--serif); --font-label: var(--sans); --font-body: var(--sans);
+  --fs-body: 8pt; --lh-body: 1.65;
+}
+p, h1, h2 { margin: 0; padding: 0; }
+.ph > img { width: 100%; height: 100%; object-fit: cover; display: block; }
+.frame, .nb-star { position: absolute; height: auto; }
+
+/* cover */
+.quote { position: absolute; left: 20mm; right: 20mm; top: 30mm; text-align: center; font: 800 13pt/1.25 var(--num); text-transform: uppercase; letter-spacing: .02em; color: var(--ink); }
+.c-by, .c-year { position: absolute; top: 80mm; font: 800 14pt/1.2 var(--num); text-transform: uppercase; color: #FFFFFF; }
+.c-by { left: 29mm; } .c-year { right: 29mm; text-align: right; }
+.c-script { position: absolute; left: 0; right: 0; top: 214mm; text-align: center; font: 400 42pt/1 var(--script); color: #FFFFFF; }
+.c-title { position: absolute; left: 0; right: 0; top: 232mm; text-align: center; font: 600 88pt/1 var(--serif); text-transform: uppercase; color: #FFFFFF; letter-spacing: .01em; }
+
+/* welcome */
+.welcome { position: absolute; left: 26mm; top: 146mm; font: 600 64pt/1 var(--serif); text-transform: uppercase; color: var(--ink); letter-spacing: .01em; }
+.caps-lead { position: absolute; font: 700 8.5pt/1.45 var(--serif); text-transform: uppercase; color: var(--ink); }
+.note-box { position: absolute; border: .9mm solid var(--ink); }
+.nb-t { position: absolute; left: 5mm; top: 5mm; width: 58mm; font: 600 8pt/1.4 var(--serif); text-transform: uppercase; color: var(--ink); }
+.nb-star { right: 12mm; top: 13mm; width: 5mm; }
+.nb-year { position: absolute; right: 3mm; top: 6mm; writing-mode: vertical-rl; font: 600 10pt/1 var(--serif); color: var(--ink); }
+
+/* shared */
+.lbl { position: absolute; font: 700 7.5pt/1.45 var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--ink); }
+.body { position: absolute; font: 400 8pt/1.65 var(--sans); color: var(--ink-2); }
+.body.center { text-align: center; }
+.head { position: absolute; font: 600 26pt/1.15 var(--serif); text-transform: uppercase; color: var(--ink); white-space: nowrap; }
+.head.sm { font-size: 20pt; }
+.head.over { z-index: 2; }
+.chap { position: absolute; font: 600 26pt/1 var(--serif); text-transform: uppercase; color: var(--ink); }
+.chap.sm { font-size: 16pt; font-weight: 500; }
+.num { position: absolute; font: 900 120pt/.8 var(--num); color: #D9480F; }
+.vhead { position: absolute; writing-mode: vertical-rl; font: 600 24pt/1.15 var(--serif); text-transform: uppercase; color: var(--ink); white-space: nowrap; }
+
+/* thanks */
+.t-by, .t-year { position: absolute; top: 36mm; font: 800 13pt/1.2 var(--num); text-transform: uppercase; color: var(--ink); }
+.t-by { left: 38mm; } .t-year { right: 33mm; text-align: right; }
+.thanks { position: absolute; left: 0; right: 0; top: 198mm; text-align: center; font: 600 64pt/1 var(--serif); text-transform: uppercase; color: var(--ink); letter-spacing: .01em; }
+.credits { position: absolute; left: 30mm; right: 30mm; bottom: 12mm; text-align: center; font: 400 7.5pt/1.45 var(--sans); color: var(--ink-2); }
