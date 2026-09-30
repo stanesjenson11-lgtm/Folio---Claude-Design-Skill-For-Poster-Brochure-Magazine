@@ -157,7 +157,7 @@ or from a terminal:
 claude plugin marketplace add stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine
 claude plugin install folio@folio
 ```
-Run `/folio:setup` once so plain `/folio` starts the guided flow (plugin commands are otherwise always prefixed, as in `/folio:new`). Restart the session if the `/folio:` commands don't appear straight away. To update later: `claude plugin marketplace update folio` then `claude plugin update folio@folio`.
+Run `/folio:setup` once so plain `/folio` starts the guided flow (plugin commands are otherwise always prefixed, as in `/folio:new`). Restart the session if the `/folio:` commands don't appear straight away. folio has no fixed version number, so every new commit counts as an update: turn on auto-update once (`/plugin` → **Marketplaces** → folio → **Enable auto-update**, or `"autoUpdate": true` on its `extraKnownMarketplaces` entry) and new commits arrive within minutes of starting a session. To update by hand: `claude plugin marketplace update folio` then `claude plugin update folio@folio`.
 
 **Claude.ai / Claude desktop app (skill only):** download `folio.skill` from the [latest release](https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine/releases/latest) and upload it under *Settings → Capabilities → Skills*. Then just ask ("make a magazine from this PDF"); there are no slash commands there.
 
