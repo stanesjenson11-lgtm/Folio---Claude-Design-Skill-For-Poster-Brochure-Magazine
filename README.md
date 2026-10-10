@@ -16,12 +16,13 @@
 - [What folio makes](#what-folio-makes)
 - [Why the designs don't look AI-generated](#why-the-designs-dont-look-ai-generated)
 - [The style catalogue: 11 ready magazine and brochure styles](#the-style-catalogue)
+- [Posters: church, verse, sports and events](#posters-church-verse-sports-and-events)
 - [How a job flows: guided, step by step](#how-a-job-flows)
 - [How it works](#how-it-works)
 - [How it humanizes copy](#how-it-humanizes-copy)
 - [How it learns your taste and improves itself](#how-it-learns-and-improves)
 - [Canva-editable export: every image and text box stays editable](#canva-editable-export)
-- [Install](#install) · [Where to use it](#where-to-use-it) · [Quick start](#quick-start) · [Slash commands](#slash-commands) · [Scripts](#scripts)
+- [Install](#install) · [Where to use it](#where-to-use-it) · [ChatGPT or Gemini](#using-folio-in-chatgpt-or-gemini) · [Quick start](#quick-start) · [Slash commands](#slash-commands) · [Scripts](#scripts)
 - [FAQ](#faq) · [Credits](#credits) · [License](#license)
 
 ## What folio makes
@@ -30,7 +31,8 @@
 |---|---|
 | Magazines and magazine-style brochures (8–20+ pages) | Print PDF with bleed, page PNGs, spread contact sheet, Canva-editable HTML |
 | Company profiles, studio books, annual reports, catalogs, quotation brochures | Same, plus client-copy verification |
-| Posters and weekly poster series (4 unique variants per request) | PNG at print resolution + Canva-editable HTML |
+| Posters, flyers and stream thumbnails for church services, Bible verses, sports and events, portrait or 16:9 (4 unique variants per request) | PNG at print or screen resolution + Canva-editable HTML |
+| Old flat posters (a PNG or JPG) made editable | A clean background plate, the person as a cut-out, logos as layers, every word live text |
 | Flyers, trifolds (imposed in fold order), trade-show panels, stage backdrops | Print PDF + editable HTML |
 | Replicas of reference pages you like ("make it 1:1 like this") | The same grid, colour blocking and devices, filled with your content, then saved as a reusable style |
 
@@ -69,6 +71,20 @@ folio ships 11 finished, user-approved styles ("kits"). Most clients bring conte
 | `/folio:portfolio` | Split Pop (16:9) | Side rail, teal and orange splits, letter-disc titles, phone, tablet and desktop mockups |
 
 `/folio:styles` shows the gallery and lets you pick. `/folio:replicate` copies any reference you give it 1:1; the result joins the catalogue, with its own command, only if it beats the closest existing style.
+
+## Posters: church, verse, sports and events
+
+folio's poster language (`skills/folio/reference/posters.md`) was learned from a studio's 246 real posters (weekly church services, anointing days and worship nights, Bible-study stream thumbnails, bilingual Bible-verse posters, cricket and football leagues, national days), studied one by one and rebuilt 1:1 as editable posters. It covers the layer stack (textured ground → big symbol or venue → atmosphere → glow → speaker cut-out → headline → info modules → paper devices → series rails), ten headline treatments (script caps, nested condensed caps, gold 3D serif, outline stacks, ghost words, bilingual lockups…), info blocks, series identity and the rule that scripture is quoted exactly from a named translation, never paraphrased.
+
+| Command | Makes |
+|---|---|
+| `/folio:poster` | Asks the topic, then the guided poster flow |
+| `/folio:poster-church` | Service and event posters and 16:9 Bible-study thumbnails: speaker cut-out, headline behind the head, date-time block, series rails |
+| `/folio:poster-verse` | Bible-verse and theme posters: emotive full-bleed photo, bilingual lockup, the verse quoted exactly |
+| `/folio:poster-sports` | Leagues, matches and tournaments: marker titles, player cut-outs, rules ribbons, entry and prize badges |
+| `/folio:poster-event` | National days, greetings, fellowships, launches and school events |
+
+Every request gives four unique variants (from different poster-kit templates where the topic has a kit) (portrait, landscape or both), as PNG plus a Canva-editable HTML where the photo, the cut-out and every word are separate layers. Hand it an old flat poster and `/folio:replicate` makes it editable: `imagery.py fontmatch` names the fonts, `fit` snaps live text onto the original, `plate` paints the old words out of a clean background and cuts the person out, `compare` shows the original, the rebuild and the difference side by side.
 
 ## How a job flows
 
@@ -187,6 +203,15 @@ playwright install chromium
 
 **Recommended:** Claude Code for the full experience; claude.ai works for the guided flow with the notes above.
 
+### Using folio in ChatGPT or Gemini
+
+folio is written for Claude, but its design knowledge is plain Markdown and its pages are plain HTML/CSS, so other assistants can use it in a lighter form (no slash commands, plan mode or automatic rendering):
+
+1. Download the repository as a ZIP and unzip it.
+2. **ChatGPT:** *Explore GPTs → Create → Configure*. Instructions: "You are folio, a print art director. Follow SKILL.md and the reference files in your knowledge; ask my questions in short rounds; write every piece as paged HTML on folio.css." Knowledge (up to 20 files): `skills/folio/SKILL.md`, `reference/wizard.md`, `posters.md`, `formats.md`, `copy.md`, `humanizer.md`, `typography.md`, `library/TASTE.md`, `assets/folio.css`, `assets/starter.html`. Turn on Code Interpreter.
+   **Gemini:** *Gems manager → New Gem*, the same instructions, and up to 10 of those files (start with SKILL.md, wizard.md, posters.md, formats.md, copy.md, folio.css).
+3. Ask in plain words ("make four church poster variants for our Thursday service"). Download the HTML it writes, keep `folio.css` beside it, and open it in Chrome (*Print → Save as PDF*). For the PNGs and the Canva-editable file, run folio's scripts on your own computer: `pip install playwright pypdfium2 pillow opencv-python && playwright install chromium`, then `python skills/folio/scripts/render.py poster.html --png-only`.
+
 ## Quick start
 
 Just ask; the skill triggers on brochure, magazine, poster and report work:
@@ -225,7 +250,7 @@ docs/                             README images
 | `/folio:styles` | Show the style gallery and pick, then the guided flow |
 | `/folio:ivory` `/folio:night` `/folio:sports` `/folio:football` `/folio:skate` `/folio:winter` `/folio:ebook` `/folio:newsletter` `/folio:profile` `/folio:popart` `/folio:portfolio` | Build a piece in that style from any content (the other questions still come) |
 | `/folio:replicate` | Copy reference pages 1:1 with your content; saved as a new style only if it beats the closest one |
-| `/folio:poster` | Four unique poster variants in your taste (PNG + Canva file) |
+| `/folio:poster` `/folio:poster-church` `/folio:poster-verse` `/folio:poster-sports` `/folio:poster-event` | The guided poster flow: topic, portrait or 16:9, four unique variants from the poster templates (PNG + Canva file) |
 | `/folio:stock` | Find free, on-topic stock photos for a subject, with a contact sheet and credits |
 | `/folio:taste` | Record what you liked or rejected |
 | `/folio:learn` | Study professional references in the lanes you like and fold the best moves into the library |
@@ -240,7 +265,8 @@ python skills/folio/scripts/render.py brochure.html [--bleed 3] [--single] [--pn
 python skills/folio/scripts/editable.py brochure.html [--max-mb 8]      # Canva-editable HTML on its own
 python skills/folio/scripts/preflight.py brochure.html [--copy copy.md] [--source source.md]
 python skills/folio/scripts/palette.py --brand "#8B1E3F" [--from-image logo.png] --out palette
-python skills/folio/scripts/imagery.py grade | motif | cutout [--person] | sketch | screenshot | mockup | logos | hatch | divide | reflect | texture | mask | prompt
+python skills/folio/scripts/imagery.py grade | motif | cutout [--person] | sketch | screenshot | mockup | logos | hatch | divide | device | reflect | texture | mask | prompt
+python skills/folio/scripts/imagery.py fontmatch crop.png "WORDS" | fit old.png poster.html --apply | plate old.png --html poster.html --person | compare old.png new.png
 python skills/folio/scripts/fonts.py "Big Shoulders Display:800,900" "Familjen Grotesk:400,700" --out fonts
 python skills/folio/scripts/promo.py out --format square|vertical|landscape      # mockups, social stills, page-flip reel
 python skills/folio/scripts/harvest.py old.pdf --out harvest                     # mine an old PDF for photos, copy, colours

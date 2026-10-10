@@ -55,3 +55,10 @@ Only when the user agrees and the licence allows print use (the Adobe connector 
 - `imagery.py divide --edge top|bottom|both`: colour fields with a flowing edge for areas that cross a spread (`flow-divide`).
 - `imagery.py reflect photo.jpg --shape circle|rounded --size WxH`: pop-stripe crops with a faded mirror reflection baked in (Canva keeps it).
 - Rotations: bake them into the file; the editable export does not reproduce CSS-rotated images.
+
+## Posters: devices and flat-poster tools (v0.10)
+- `device --kind torn|tape|brush|ribbon|stamp|rays --w <mm> --h <mm> --color <hex>`: the paper devices of `posters.md` §2 as vector SVG (a torn-paper strip with a lighter tear, translucent masking tape, a dry-brush swoosh, a notched ribbon, a worn stamp ring, sun rays). Words go on top as live text; tilt with `transform: rotate()`.
+- `fontmatch <crop> "<words>" --fonts fonts/fonts.css [--ink light|dark] [--only regex] --out fm.png`: ranks every face in the project's fonts against a tight crop of one line of type (blurred shape correlation, stroke weight, aspect). Scores above .5 are strong; confirm the top three by eye in `fm.png`.
+- `fit <ref> <html> [--apply]`: for every live text block, template-matches its own glyphs against the reference around its drafted position and reports (or writes, in mm) the corrected left, top, font size and letter-spacing. Run twice; weak matches are flagged for a look.
+- `plate <ref> --html <html> --out img/<id> [--person --region x0,y0,x1,y1] [--key name:x0,y0,x1,y1[:dark]] [--grow 0.5]`: a clean background plate (every live element of the HTML painted out, plus the reference's own strokes beside each block, inpainted at low resolution with the grain added back), `person.png` (rembg u2net ∪ human-seg, old lettering on the figure painted out) and keyed logo or signature PNGs with true colours unmixed from the ground; positions in `plate.json`. `data-mask="box"` on an element erases its whole box.
+- `compare <ref> <ours> --out compare.jpg`: reference | rebuild | difference with a similarity score. While the plate is still the reference, doubled letters mean misplaced text.

@@ -3,7 +3,7 @@
 folio kits — the style catalogue: finished, signed-off pieces saved as reusable magazine/brochure styles.
 
   list                          print the catalogue (kits/INDEX.md)
-  new <id> <project> [--brand #hex] [--accent #hex] [--name mag]
+  new <id> <project> [--brand #hex] [--accent #hex] [--name mag] [--pages t03,t07]
                                 start a piece from a kit: copies the pages, styles and vector assets, fetches the fonts,
                                 swaps the kit's theme colours for the client's, marks every sample text and photo
                                 data-kit-sample (preflight ERRORs until each is replaced) and writes SLOTS.md
@@ -18,7 +18,7 @@ plugin's data folder $CLAUDE_PLUGIN_DATA, else ~/.folio) so plugin updates never
 ~/.claude/commands/folio-<name>.md. Working from the git checkout (the maintainer), or with --builtin, save writes into
 <skill>/kits and <plugin>/commands instead, so the public plugin learns the style.
 
-A kit is kits/<id>/: KIT.md (front matter: id, name, family, size, pages, render, fonts, theme), kit.html, kit.css,
+A kit is kits/<id>/: KIT.md (front matter: id, name, family, size, pages, render, fonts, theme, optional subsets), kit.html, kit.css,
 assets/*.svg (+ small textures), preview.jpg. No client photos ship with a kit.
 """
 import argparse, os, re, shutil, subprocess, sys
@@ -56,6 +56,20 @@ def mark(html):
     html = re.sub(rf"<({TEXT_TAGS})(\s[^>]*)?>(?=\s*[^<\s])", lambda m: m.group(0)[:-1] + " data-kit-sample>", html)
     # slot photos, the logo placeholder and the client's technology logos are sample content too
     return re.sub(rf'<img([^>]*src="assets/(?:slot-photo|logo-placeholder-[wk]|{LOGOS})\.svg"[^>]*)>', r"<img\1 data-kit-sample>", html)
+
+
+def pick(html, ids):
+    """Keep only the template pages whose data-template is listed, in the order asked (poster kits hold many templates).
+    >>> h = '<body><section class="page" data-template="t01">A</section> <section class="page" data-template="t02">B</section></body>'
+    >>> pick(h, ["t02", "t01"]).replace(chr(10), " ")
+    '<body><section class="page" data-template="t02">B</section> <section class="page" data-template="t01">A</section></body>'
+    """
+    pages = re.findall(r'<section class="page[^"]*"[^>]*data-template="([^"]+)"[^>]*>.*?</section>', html, re.S)
+    blocks = dict(zip(pages, re.findall(r'<section class="page[^"]*"[^>]*data-template="[^"]+"[^>]*>.*?</section>', html, re.S)))
+    miss = [i for i in ids if i not in blocks]
+    if miss: sys.exit(f"no template {', '.join(miss)} in this kit (it has {', '.join(pages)})")
+    first = html.index(blocks[pages[0]]); last = html.index(blocks[pages[-1]]) + len(blocks[pages[-1]])
+    return html[:first] + "\n".join(blocks[i] for i in ids) + html[last:]
 
 
 def is_texture(name):
@@ -118,6 +132,7 @@ def cmd_new(a):
     shutil.copytree(kit / "assets", dest / "assets", dirs_exist_ok=True)
     shutil.copy(ROOT / "assets" / "folio.css", dest / "folio.css")
     html = (kit / "kit.html").read_text(encoding="utf-8").replace('href="kit.css"', f'href="{name}.css"')
+    if a.pages: html = pick(html, [p.strip() for p in a.pages.split(",")])
     css = (kit / "kit.css").read_text(encoding="utf-8")
     if new:
         html, css = swap(html, theme, new), swap(css, theme, new)
@@ -136,8 +151,13 @@ def cmd_new(a):
     for line in (recipe.read_text(encoding="utf-8").splitlines() if recipe.exists() else []):
         tname, kind, tone = line.split()
         subprocess.run([sys.executable, str(SCRIPTS / "imagery.py"), "texture", "--kind", kind, "--tone", tone, "--out", str(dest / "assets" / tname)], check=False)
-    if m.get("fonts"):
-        subprocess.run([sys.executable, str(SCRIPTS / "fonts.py"), *[f.strip() for f in m["fonts"].split(";")], "--out", str(dest / "fonts")], check=False)
+    fonts = m.get("fonts", "")
+    if a.pages:   # poster kits: only the faces the picked templates use (each section lists its own in data-fonts)
+        own = re.findall(r'<section[^>]*data-template="[^"]+"[^>]*data-fonts="([^"]+)"', html)
+        if own: fonts = ";".join(sorted({f.strip() for fl in own for f in fl.split(";") if f.strip()}))
+    if fonts:
+        subprocess.run([sys.executable, str(SCRIPTS / "fonts.py"), *[f.strip() for f in fonts.split(";")], "--out", str(dest / "fonts"),
+                        "--subsets", m.get("subsets", "latin,latin-ext")], check=False)   # Tamil kits: subsets: latin,latin-ext,tamil
     if new:
         from palette import roles, audit
         r = roles(new.get("brand", theme.get("brand")), new.get("accent")); issues = [i for i in audit(r) if i["level"] == "fix"]
@@ -214,6 +234,7 @@ def main():
     sub = ap.add_subparsers(dest="cmd", required=True)
     sub.add_parser("list")
     n = sub.add_parser("new"); n.add_argument("id"); n.add_argument("project"); n.add_argument("--brand"); n.add_argument("--accent"); n.add_argument("--name")
+    n.add_argument("--pages", help="poster kits: the templates to keep, in order, e.g. t03,t07,t11,t15")
     s = sub.add_parser("save"); s.add_argument("project"); s.add_argument("id"); s.add_argument("--name"); s.add_argument("--family"); s.add_argument("--html")
     s.add_argument("--cmd", dest="slash", help="slash-command name, default: the kit id")
     s.add_argument("--builtin", action="store_true", help="save into the shipped catalogue (maintainers; automatic in the git checkout)")

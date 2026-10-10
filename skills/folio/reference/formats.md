@@ -4,9 +4,10 @@ Folio's print rules assume a bound book. Posters, flyers, folded leaflets and la
 
 ## Sizes
 `<html data-size="…">` in folio.css: `A4`, `A4-landscape`, `A5`, `A3`, `A2`, `Letter`, `Letter-landscape`, `DL`, `square-210`, `magazine`. Anything else: `<html data-size="custom" style="--pw:600mm;--ph:900mm">`. Render with `render.py --single` for a contact sheet of single pages.
+Poster presets: portrait print A4 / A3 / A2 (one ratio, scale the render), 40 × 60 cm (2:3), social 4:5 (1080 × 1350) and 9:16 stories; landscape 16:9 thumbnails and screens at 1920 × 1080 or 2240 × 1260 (pixels = mm ÷ 25.4 × dpi).
 
 ## Poster variants (the default for any poster request)
-Make **4 designs, each unique on every axis**, not one design in four colours, and build them **inside the user's preferred family** from `library/TASTE.md` (currently `arc-stage`): the family sets the grammar, the variants vary it. Build them from 4 layout archetypes × 4 token sets, one each:
+Make **4 designs, each unique on every axis**, not one design in four colours. Since 0.10 they come from the **poster kits** when the topic has one (`kits/poster-church`, `poster-church-wide`, `poster-verse`, `poster-sports`, `poster-event`): templates rebuilt 1:1 from the studio's own posters, chosen in the guided poster flow (`wizard.md` §3b) and filled with the client's content. The grammar behind them is `reference/posters.md`. The Arc family (`arc-stage`, loved in TASTE.md) stays one option; when it is chosen, build 4 variations inside it from 4 layout archetypes × 4 token sets, one each:
 
 | Axis | Must differ between every pair of variants |
 |---|---|

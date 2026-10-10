@@ -48,9 +48,14 @@ JS = r"""
 
   // --- text helpers ------------------------------------------------------------------
   const TEXT_PROPS = ['font-family','font-size','font-weight','font-style','font-stretch','color','letter-spacing',
-                      'text-transform','text-decoration-line','font-variant-caps','font-variant-numeric','font-feature-settings','-webkit-text-stroke'];
+                      'text-transform','text-decoration-line','font-variant-caps','font-variant-numeric','font-feature-settings',
+                      '-webkit-text-stroke-width','-webkit-text-stroke-color','text-shadow'];
+  // poster effects travel with the text: outlines, shadows and glows, and gradient-filled type (background-clip: text)
   const styleOf = (el, props) => { const cs = getComputedStyle(el);
-    return props.map(p => `${p}:${cs.getPropertyValue(p).replace(/"/g, "'")}`).join(';'); };
+    let s = props.map(p => `${p}:${cs.getPropertyValue(p).replace(/"/g, "'")}`).join(';');
+    if ((cs.webkitBackgroundClip || cs.backgroundClip) === 'text' && cs.backgroundImage !== 'none')
+      s += `;background-image:${cs.backgroundImage.replace(/"/g, "'")};-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent`;
+    return s; };
   // serialise inline content with computed styles baked in (whitespace collapsed like the browser does)
   const serial = (node) => {
     let html = '';
@@ -137,6 +142,8 @@ JS = r"""
 
       if (tag === 'img') {
         if (!el.naturalWidth) { warn.push(`p${pi + 1}: image failed to load ${el.getAttribute('src')}`); return; }
+        if (cs.filter !== 'none' || cs.maskImage && cs.maskImage !== 'none' || cs.webkitMaskImage && cs.webkitMaskImage !== 'none')
+          warn.push(`p${pi + 1}: ${el.getAttribute('src')} uses a CSS filter or mask, which the editable file drops — bake it into the image (imagery.py grade, PNG alpha)`);
         const holder = el.parentElement;
         const hcs = getComputedStyle(holder);
         const vis = inter(clip, r);
@@ -473,8 +480,20 @@ def _covers(face, chars):
     return False
 
 
-def embedded_fonts(html_path, chars=None):
-    """Inline the project's local @font-face files (from fonts.css) as base64 — only the unicode subsets the text uses."""
+def _used_face(block, faces):
+    """Is this @font-face one the page actually loaded? faces = {"Family|400|normal", …} from document.fonts.
+    >>> _used_face("font-family: 'Anton'; font-style: normal; font-weight: 400; src: url(a.woff2)", {"Anton|400|normal"})
+    True
+    >>> _used_face("font-family: 'Lato'; font-style: normal; font-weight: 700; src: url(b.woff2)", {"Anton|400|normal"})
+    False
+    """
+    g = lambda k: (re.search(rf"font-{k}:\s*['\"]?([^;'\"]+)", block) or [None, ""])[1].strip()
+    return f"{g('family')}|{g('weight') or '400'}|{g('style') or 'normal'}" in faces
+
+
+def embedded_fonts(html_path, chars=None, faces=None):
+    """Inline the project's local @font-face files (from fonts.css) as base64 — only the faces the page loaded
+    (a shared fonts.css may declare hundreds) and only the unicode subsets the text uses."""
     base = html_path.parent
     css_out = []
     for link in re.findall(r'<link[^>]+href=["\']([^"\']+\.css)["\']', html_path.read_text(encoding="utf-8")):
@@ -493,6 +512,8 @@ def embedded_fonts(html_path, chars=None):
         css = re.sub(r"/\*.*?\*/", "", css, flags=re.S)
         if chars is not None:   # drop subsets (vietnamese, cyrillic…) the document never uses
             css = re.sub(r"@font-face\s*\{[^}]*\}", lambda m: m.group(0) if _covers(m.group(0), chars) else "", css)
+        if faces is not None:
+            css = re.sub(r"@font-face\s*\{[^}]*\}", lambda m: m.group(0) if _used_face(m.group(0), faces) else "", css)
         css_out.append(re.sub(r"url\((['\"]?)([^)'\"]+)\1\)", rep, css))
     return "\n".join(css_out)
 
@@ -512,7 +533,7 @@ def build(pages, html_path, fonts_mode="both", q=None):
              "@media print{body{background:none;padding:0}.page{margin:0;box-shadow:none;break-after:page}}"]
     if fonts_mode in ("embed", "both"):
         used = {ord(c) for p in pages for e in p["els"] if e.get("kind") == "text" for c in re.sub("<[^>]+>", "", e["html"])} | set(range(32, 127))
-        style.append(embedded_fonts(html_path, used))
+        style.append(embedded_fonts(html_path, used, {f for p in pages for f in p["fonts"]}))
     body = []
     stats = {"text": 0, "shape": 0, "img": 0, "svg": 0}
     for pi, p in enumerate(pages):
@@ -583,14 +604,25 @@ def fidelity(original_html, editable_path, out_dir, dpi=60):
         shots = {}
         for label, path, sel in (("orig", original_html, ".page .trim"), ("edit", editable_path, ".page")):
             pg = b.new_page(device_scale_factor=dpi / 96)
-            pg.goto(Path(path).resolve().as_uri(), wait_until="load")
+            pg.goto(Path(path).resolve().as_uri(), wait_until="load", timeout=120000)   # big embedded posters load slowly when several renders run at once
             pg.evaluate("document.fonts.ready.then(() => true)")
             pg.add_style_tag(content=".page{box-shadow:none!important}")
-            shots[label] = [Image.open(io.BytesIO(el.screenshot())).convert("L") for el in pg.query_selector_all(sel)]
+            # clip each page to whole device pixels inside its box: pages sit on fractional pixels, and a plain element
+            # screenshot rounds outwards and picks up a row of the grey preview background (~1% on a light page)
+            sc, shots[label] = dpi / 96, []
+            for el in pg.query_selector_all(sel):
+                bb = el.bounding_box()
+                x0, y0 = math.ceil(bb["x"] * sc) / sc, math.ceil(bb["y"] * sc) / sc
+                x1, y1 = math.floor((bb["x"] + bb["width"]) * sc) / sc, math.floor((bb["y"] + bb["height"]) * sc) / sc
+                png = pg.screenshot(clip={"x": x0, "y": y0, "width": x1 - x0, "height": y1 - y0}, full_page=True)
+                shots[label].append(Image.open(io.BytesIO(png)).convert("L"))
         b.close()
     for i, (a, e) in enumerate(zip(shots["orig"], shots["edit"])):
         from PIL import ImageFilter
-        e = e.resize(a.size)
+        # both are clipped inside their pages, so they differ by at most a pixel: crop to the common size (stretching
+        # one by a pixel would shift everything further down the page)
+        cw, ch = min(a.width, e.width), min(a.height, e.height)
+        a, e = a.crop((0, 0, cw, ch)), e.crop((0, 0, cw, ch))
         # blur first so sub-pixel anti-aliasing and JPEG noise don't count as layout differences, and compare at the
         # best alignment within one device pixel: the original's pages sit on fractional device pixels, the editable's on whole ones
         A = a.resize((a.width * 2, a.height * 2), Image.BILINEAR).filter(ImageFilter.GaussianBlur(3))
@@ -627,7 +659,7 @@ def main():
     with sync_playwright() as pw:
         b = pw.chromium.launch()
         p = b.new_page(viewport={"width": 1600, "height": 1800})
-        p.goto(html.as_uri(), wait_until="load")
+        p.goto(html.as_uri(), wait_until="load", timeout=120000)
         p.evaluate("document.fonts.ready.then(() => true)")
         p.wait_for_function("Array.from(document.images).every(i => i.complete)", timeout=60000)
         p.add_style_tag(content=":root{--bleed:0mm!important}")

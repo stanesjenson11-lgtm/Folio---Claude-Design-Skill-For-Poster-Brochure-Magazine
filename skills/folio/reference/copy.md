@@ -46,6 +46,16 @@ When the client gives little (a website, a card), the copy still has to read lik
 - The same "built for X, A over B" sentence shape opening every section
 - Literal translation in bilingual work: English back-translated word for word from Tamil ("to hear the noise" for the voice). Quote scripture and statutes from a published English version; otherwise ask the client for the English.
 
+## Poster tells (church, verse, sports, events)
+A poster has a dozen words; each one shows. Write them the way the studio's own posters do (`reference/posters.md` §8):
+- **Labels are the client's:** "God's Word by", "Message by", "Worship by", "Praise & Worship by", "Special speaker", "Chief guest", "Dinner sponsored by", "Come and Be Blessed !", "All are welcome", "Free entry". Keep the house's exact phrase and punctuation across a series; don't invent a fresh one each week.
+- **Banned on posters:** "Join us for an unforgettable evening of…", "A night to remember", "Experience the power of…", "Don't miss out!", "Get ready to…", "Elevate your faith", "A divine encounter awaits", "Let's come together as one", and a stacked triad of virtues ("Faith. Hope. Love.") unless it is the series' own tagline or a quote.
+- **The headline is the event's name** ("Thursday Service", "Worship Night", "Anointing Day", "Cricket League"), not a mood line. A theme or sermon title goes in its own slot, verbatim from the client.
+- **Theme words for verse posters** are short and concrete, the series' own refrain ("Have Wisdom", "To Be Armed", "நோக்கம் வேண்டும்"), never a motivational paraphrase of the verse.
+- **Scripture is quoted, never written:** exact words of the named translation, with the reference; no "inspired by", no shortening inside the quote.
+- **Dates and times** in one format per series, with the weekday checked against the date ("Thursday, 16 July 2026 · 7 PM onwards").
+- **Sport copy** is rules and facts (players per team, ball, overs, entry fee, deadline, prizes), numbered, in short imperative lines; one hype line at most ("Hurry up! Register before 26.08.2025").
+
 Micro-rules (after taste-skill): pull quotes three lines at most, attributed with name and role; captions say what and where, never a fake archive label ("Plate 03"); section labels name the content ("Programmes and fees"), not a mood; "Step 1 / Phase 01" only for a real sequence.
 
 Replace each with the specific thing the copy knows: what they make, where, since when, for whom, how many, what it costs, how to reach them.

@@ -1,6 +1,6 @@
 # wizard: the guided flow for a new piece
 
-Used by `/folio:new`, `/folio:magazine`, `/folio:brochure`, `/folio:poster` (type already answered), every style command (style already answered), `/folio:styles`, and on claude.ai by plain words ("make a magazine from this PDF", "turn this text into a brochure"). It reads everything first, asks only what is missing in three short rounds, shows a page plan for approval, shows a first look, then builds.
+Used by `/folio:new`, `/folio:magazine`, `/folio:brochure`, `/folio:poster` and `/folio:poster-<topic>` (type already answered), every style command (style already answered), `/folio:styles`, and on claude.ai by plain words ("make a magazine from this PDF", "turn this text into a brochure"). It reads everything first, asks only what is missing in three short rounds, shows a page plan for approval, shows a first look, then builds.
 
 This is folio's **default** for anything new: `/folio` alone or with content starts it, with no `/plan` and no sub-command needed. Rules: never ask what the user already stated in the request (take it and say so); facts found in the content are confirmed, not re-asked; at most three questions per round; every question has a recommended option (first, marked "(Recommended)" with a one-line reason) and accepts "You choose". "You choose everything" in round 1 skips to the plan with the recommended answers. Styles come only from the kit catalogue (`kit.py list`: the shipped kits plus the user's own) or a mix of two kits; nothing is invented outside it.
 
@@ -46,8 +46,25 @@ Saved brand: none.
 - **Kind:** open `kits/GALLERY.png` (plus the user's own gallery at `<home>/kits/GALLERY.png` when it exists) before asking.
   - Magazine: Sports & action · Editorial & minimal · Pop & colour · Business & news, recommending the family whose top kit ranks best.
   - Brochure: the format first: Booklet or company book (Recommended for 8+ pages of content) · Tri-fold · Bi-fold · (Other: Z-fold, gate…; `formats.md`). The kind follows in round 3.
-  - Poster: follow `formats.md` → Poster variants and `library/TASTE.md` (4 variants in the loved family). Skip Kind and Style; round 3 asks the event details and size.
+  - Poster: go to §3b (the poster branch replaces rounds 2–4 and the plan).
 - **Photos:** Use mine · Free stock photos from my industry (the `/folio:stock` steps) · Mix: mine for people and products, stock for the rest · Empty frames to fill in Canva. Recommend "Use mine" when there are enough strong photos for the page count (about one per page), "Mix" when some, stock when none.
+
+## 3b. Posters
+Used by `/folio:poster`, `/folio:poster-church`, `/folio:poster-verse`, `/folio:poster-sports`, `/folio:poster-event` and plain words ("make a poster / flyer / thumbnail for…"). Read `library/TASTE.md`, `reference/posters.md` (the design language) and `formats.md` → Poster variants first. Round 1 (logo, words) is §2; then:
+- **Round 2**
+  - **Colour:** palettes from the logo as in §3. For a photo-led verse poster add "Colours from the photo (Recommended)".
+  - **Topic** (skip when the command names it): Church service or event · Bible verse or theme · Sports · Other event (national day, greeting, fellowship, launch, school).
+  - **Photos:** Use mine (Recommended when the speaker, player or subject photo is supplied; cut-outs are made from it) · Free stock for the background and mood · Empty frames to fill in Canva. Church and sports posters: ask for the speaker or player photo by name.
+- **Round 3**
+  - **Format:** Portrait (A4 / A3 print, 4:5 social) · Landscape 16:9 (stream thumbnail, screen, banner) · Both. Recommend portrait for print and WhatsApp, landscape for YouTube or Facebook Live.
+  - **Templates:** open the topic kit's `preview.jpg` (`kits/poster-<topic>/`, plus the user's own poster kits; no kit for the topic yet → offer four variants built from `posters.md` §3's headline treatments, plus the Arc family) and offer: 4 variants from 4 different templates, picked for this content (Recommended) · I'll pick (up to 4, by number from the preview) · The Arc family (the loved Thursday-service look, `library/directions/arc-stage.md`).
+  - **Details:** confirm what the scan found: event name, date with weekday (check they agree), time, venue, speaker with title exactly as written, worship leaders, sponsor, contact; for a verse poster the exact verse text, translation and reference. "Use what I found (Recommended) · I'll correct them".
+- **Ranking templates:** every row of a poster kit's Templates table has `fits` (genre, headline treatment, photo need: cut-out · full-bleed · none, text load: light · medium · heavy). Match the photo need to the supply (a cut-out template needs a person photo; a full-bleed template needs a 3000 px+ photo), match the text load to the facts, and spread the four across different headline treatments and colour moods (preflight `variant-clash`). Templates the user loved (TASTE.md log) rank higher.
+- **Plan:** one row per variant: template · headline treatment · photo and treatment (cut-out, black-and-white, glow, fade) · info block · colours · fonts; then size, outputs and anything missing. Approve as in §7.
+- **Build:** `kit.py new poster-<topic> <project> --pages t03,t07,t11,t15 [--brand #hex --accent #hex] --name poster`. Fill every `data-kit-sample`: humanized copy (`copy.md`), facts exactly as given, scripture exactly as quoted. Speakers and players: `imagery.py cutout --person`, graded to the template's mood. Background: the template's plate recipe (its KIT.md row) from the user's photos or `/folio:stock`, plus `imagery.py texture` and `motif --type glow`. "Both" formats: build each variant's sibling from the wide kit (`poster-church-wide`).
+- **Render:** portrait templates are A4 wide (210 mm): `render.py poster.html --png-only --dpi 300` for print (A3 is the same ratio: scale up), `--dpi 131` for a 1080 px social post. Landscape templates are 224 mm wide: `--dpi 218` → 1920 × 1080, `--dpi 254` → 2240 × 1260.
+- **First look:** variant 1 alone, then the rest. **Deliver** the PNGs + the Canva-editable HTML + the still-to-fill list, ask which variants work and record the verdict (which templates, headline treatments and colours) in TASTE.md.
+- An old flat poster to update or make editable: `/folio:replicate` (the plate pipeline, `posters.md` §9).
 
 ## 4. Round 3
 - **Style:** the top 3 kits for the chosen kind, ranked (below), each "name — one-line look — why it fits", plus "Mix two styles". For a brochure fold, offer the kits whose look carries to that format (palette, type, devices adapted to the fold grid in `formats.md`).

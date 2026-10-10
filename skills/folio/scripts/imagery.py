@@ -28,11 +28,22 @@ folio imagery — make visuals from the project's own context.
             python imagery.py mockup --device phone --screen img/site-phone.png --out img/phone.png
   hatch   hatched circle / rounded square / bracket / half-disc / triangle, or chevrons, as SVG
   divide  a colour field with one flowing edge for colour areas that cross a spread
+  device  poster paper devices as vector SVG: torn-paper strip, masking tape, brush swoosh, ribbon, stamp ring, sun rays
+            python imagery.py device --kind torn --w 80 --h 22 --color "#F4A64C" --out img/torn.svg
   reflect circle / rounded / rect photo crop with a faded mirror reflection
+  plate   flat poster -> editable layers: person cut-out + clean background plate with the rebuilt
+          HTML's live text and shapes painted out (1:1 replicas, "make my old poster editable")
+            python imagery.py plate old.png --html poster.html --person --key logo:0.66,0.03,0.99,0.11 --out img/p01
+  fit     snap the rebuilt poster's live text onto the reference (position + size per block, --apply)
+            python imagery.py fit old.png poster.html --apply
+  fontmatch which of the project's fonts is the type in this crop? ranks every face in fonts.css
+            python imagery.py fontmatch crop.png "THURSDAY" --fonts fonts/fonts.css --out fm.png
+  compare reference | rebuild | difference, side by side, with a similarity score
+            python imagery.py compare old.png out/pages/p-001.png --out out/compare.jpg
   logos   single-colour technology logos from Simple Icons (only tools the client really uses)
             python imagery.py logos react,nextdotjs,flutter,docker --color "#2B1D16" --out img/logos
 """
-import argparse, math, random, re, sys
+import argparse, html, io, json, math, random, re, sys
 from pathlib import Path
 
 
@@ -545,6 +556,49 @@ def divide(a):
     print(f"divide → {a.out}")
 
 
+def device(a):
+    """Poster paper devices as vector SVG (Canva keeps them editable): a torn-paper strip, masking tape, a brush
+    swoosh, a ribbon with notched ends, a rubber-stamp ring, sun rays. Words go on top as live HTML text.
+    >>> class A: pass
+    >>> import os, tempfile; a = A(); a.kind, a.w, a.h, a.color, a.seed, a.rough = "torn", 120, 30, "#F4A64C", 3, 1.0
+    >>> a.out = os.path.join(tempfile.mkdtemp(), "t.svg"); device(a); open(a.out).read().count("<polygon")  # doctest: +ELLIPSIS
+    device → ...
+    3
+    """
+    rnd = random.Random(a.seed); W, H = a.w, a.h; c = a.color; r = a.rough
+    jag = lambda n, amp: [rnd.uniform(-amp, amp) for _ in range(n)]
+    if a.kind == "torn":   # paper strip, torn top and bottom, fibres lighter at the tear
+        n = max(12, round(W / 2.2)); t, b = jag(n + 1, H * .07 * r), jag(n + 1, H * .09 * r)
+        top = " ".join(f"{W * i / n:.2f},{H * .08 + t[i]:.2f}" for i in range(n + 1))
+        bot = " ".join(f"{W * i / n:.2f},{H * .92 + b[i]:.2f}" for i in range(n, -1, -1))
+        body = (f'<defs><filter id="g" x="0" y="0" width="1" height="1"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" seed="{a.seed}"/>'
+                f'<feColorMatrix values="0 0 0 0 1  0 0 0 0 1  0 0 0 0 1  0 0 0 .18 0"/><feComposite in2="SourceGraphic" operator="in"/></filter></defs>'
+                f'<polygon points="{top} {bot}" fill="#fff" opacity=".55" transform="translate(0 {H * .02:.2f})"/>'
+                f'<polygon points="{top} {bot}" fill="{c}"/><polygon points="{top} {bot}" fill="{c}" filter="url(#g)"/>')
+    elif a.kind == "tape":   # translucent masking tape, serrated ends
+        n = 9; l = [(rnd.uniform(0, W * .03), H * i / n) for i in range(n + 1)]; rr = [(W - rnd.uniform(0, W * .03), H * i / n) for i in range(n, -1, -1)]
+        pts = " ".join(f"{x:.2f},{y:.2f}" for x, y in l + rr)
+        body = f'<polygon points="{pts}" fill="{c}" opacity=".82"/>'
+    elif a.kind == "brush":   # a dry-brush swoosh: one band with ragged edges and a few bristle streaks
+        n = 40; up, dn = jag(n + 1, H * .06 * r), jag(n + 1, H * .06 * r)
+        taper = lambda i: min(1, (i / n) * 3.5) ** .5   # pressed down at the left, dragged off ragged at the right
+        pts = [(W * i / n, H / 2 - H * .42 * taper(i) + up[i]) for i in range(n + 1)] + [(W * i / n, H / 2 + H * .42 * taper(i) + dn[i]) for i in range(n, -1, -1)]
+        streaks = "".join(f'<rect x="{rnd.uniform(0, W * .8):.1f}" y="{rnd.uniform(H * .15, H * .85):.1f}" width="{rnd.uniform(W * .05, W * .25):.1f}" height="{H * .012:.2f}" fill="#000" opacity=".12"/>' for _ in range(12))
+        body = f'<polygon points="{" ".join(f"{x:.2f},{y:.2f}" for x, y in pts)}" fill="{c}"/>{streaks}'
+    elif a.kind == "ribbon":   # banner with notched ends
+        k = H * .35; body = f'<polygon points="0,0 {W},0 {W - k:.2f},{H / 2:.2f} {W},{H} 0,{H} {k:.2f},{H / 2:.2f}" fill="{c}"/>'
+    elif a.kind == "stamp":   # rubber-stamp ring: double ring, worn ink
+        R = min(W, H) / 2
+        body = (f'<defs><filter id="w"><feTurbulence type="fractalNoise" baseFrequency="1.4" seed="{a.seed}"/><feColorMatrix values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 -1.1 1.35"/>'
+                f'<feComposite in="SourceGraphic" operator="in"/></filter></defs><g filter="url(#w)" fill="none" stroke="{c}">'
+                f'<circle cx="{W / 2}" cy="{H / 2}" r="{R * .94:.2f}" stroke-width="{R * .07:.2f}"/><circle cx="{W / 2}" cy="{H / 2}" r="{R * .72:.2f}" stroke-width="{R * .025:.2f}"/></g>')
+    else:   # rays: a sunburst behind a title or a figure
+        n = 24; body = "".join(f'<polygon points="{W / 2},{H / 2} {W / 2 + W * math.cos(2 * math.pi * i / n):.1f},{H / 2 + W * math.sin(2 * math.pi * i / n):.1f} '
+                               f'{W / 2 + W * math.cos(2 * math.pi * (i + .5) / n):.1f},{H / 2 + W * math.sin(2 * math.pi * (i + .5) / n):.1f}" fill="{c}"/>' for i in range(n))
+    Path(a.out).write_text(f'<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 {W} {H}" preserveAspectRatio="none" overflow="hidden">{body}</svg>', encoding="utf-8")
+    print(f"device → {a.out}")
+
+
 def reflect(a):
     """Crop a photo to a rectangle, rounded square or circle and add a faded mirror reflection below (Pop Stripe)."""
     from PIL import Image, ImageDraw, ImageOps, ImageChops
@@ -561,6 +615,263 @@ def reflect(a):
         fade = Image.linear_gradient("L").resize((W, rh)).point(lambda v: int((255 - v) * a.strength))
         fl.putalpha(ImageChops.multiply(fl.getchannel("A"), fade)); out.alpha_composite(fl, (0, H + a.gap))
     out.save(a.out); print(f"reflect → {a.out}")
+
+
+# ------------------------------------------------------------------ flat poster → editable layers
+MASK_JS = r"""(front) => {   // everything the HTML draws live (text, shapes, vector art) turns white; [data-plate] layers and the ground go
+  // front = true: only what sits in front of the person layer (later in the page, or data-over), to clean the cut-out itself
+  const person = document.querySelector('.page [data-person], .page img[data-plate][src*="person"]');
+  const outline = [...document.querySelectorAll('.page *')].filter(el => { const cs = getComputedStyle(el);   // hollow type: mask the stroke only
+    return parseFloat(cs.webkitTextStrokeWidth) > 0 && /rgba\(\d+, \d+, \d+, 0\)|transparent/.test(cs.webkitTextFillColor) && cs.backgroundClip !== 'text' && cs.webkitBackgroundClip !== 'text'; });
+  const st = document.createElement('style');
+  st.textContent = `html, body { background:#000 !important; } .page { background:#000 !important; box-shadow:none !important; }
+    .page, .page * { color:#fff !important; -webkit-text-fill-color:#fff !important; -webkit-text-stroke-color:#fff !important;
+      text-shadow:none !important; box-shadow:none !important; filter:none !important; mix-blend-mode:normal !important; border-color:#fff !important; }
+    [data-plate] { visibility:hidden !important; } .page img:not([data-plate]), .page svg { filter:brightness(0) invert(1) !important; }
+    .page [data-mask="box"] { background:#fff !important; box-shadow:0 0 0 1.2mm #fff !important; }
+    .page [data-mask="halo"] { -webkit-text-stroke:.16em #fff !important; text-shadow:0 0 .1em #fff, 0 .06em .14em #fff, 0 -.04em .1em #fff !important; }`;   /* box: the whole box; halo: thick glyphs, for 3D, bevel and glow type */
+  document.head.appendChild(st);
+  for (const el of outline) el.style.setProperty('-webkit-text-fill-color', 'transparent', 'important');
+  for (const el of document.querySelectorAll('.page *')) {
+    const cs = getComputedStyle(el);
+    if (front && person && !el.contains(person) && !el.closest('[data-over]') && (el.closest('[data-under]') || (el.compareDocumentPosition(person) & Node.DOCUMENT_POSITION_FOLLOWING)))
+      { el.style.setProperty('visibility', 'hidden', 'important'); continue; }   // behind the person: never paint it out of the cut-out
+    if (el.matches('[data-plate], [data-plate] *') || cs.backgroundClip === 'text' || cs.webkitBackgroundClip === 'text') continue;
+    if (cs.backgroundImage !== 'none' || !/^(transparent|rgba\(\d+, \d+, \d+, 0\))$/.test(cs.backgroundColor)) el.style.setProperty('background', '#fff', 'important');
+  }
+  const r = document.querySelector('.page').getBoundingClientRect(); return [r.width, r.height];
+}"""
+
+
+def plate(a):
+    """Split a flat poster (a Canva PNG, an old JPG) into editable layers: the person as a cut-out and a clean
+    background plate with every live element of the rebuilt HTML (text, shapes, vector art) painted out.
+    Align the live layer first (copy the reference to plate.jpg, render, `compare`: doubled letters = misplaced
+    text), because the mask is the HTML's own glyphs; data-mask="halo" erases thick glyphs (3D, bevelled, glowing type),
+    data-mask="box" an element's whole box."""
+    import cv2, numpy as np
+    from PIL import Image, ImageChops, ImageFilter
+    src = open_srgb(a.src).convert("RGB"); W, H = src.size; out = Path(a.out); out.mkdir(parents=True, exist_ok=True)
+    mask = Image.new("L", (W, H), 0); info = {"size": [W, H]}; front = None
+    if a.html:   # the rebuilt poster's own live layer is the mask, so the plate and the HTML always agree
+        from playwright.sync_api import sync_playwright
+        with sync_playwright() as p:
+            b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1400, "height": 1400})
+            pg.goto(Path(a.html).resolve().as_uri()); pg.wait_for_load_state("networkidle"); pg.evaluate("document.fonts.ready")
+            w, _ = pg.evaluate(MASK_JS, False); b.close()
+            def shoot(front):
+                b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1400, "height": 1400}, device_scale_factor=W / w)
+                pg.goto(Path(a.html).resolve().as_uri()); pg.wait_for_load_state("networkidle"); pg.evaluate("document.fonts.ready")
+                P = pg.evaluate("() => { const r = document.querySelector('.page').getBoundingClientRect(); return [r.left, r.top]; }")
+                leaves = pg.evaluate(FIT_JS, -1) if a.ink_tol > 0 and not front else []   # true text colours, before the mask paints them white
+                pg.evaluate(MASK_JS, front); shot = pg.locator(".page").first.screenshot(); b.close()
+                return Image.open(io.BytesIO(shot)).convert("L").resize((W, H)).point(lambda v: 255 * (v > 24)), P, leaves
+            mask, P, leaves = shoot(False)
+            front = shoot(True)[0] if a.person else None   # what may be painted out of the cut-out: only the layers in front of it
+        ref = np.asarray(src, np.float32); ink_m = np.zeros((H, W), np.uint8); k = W / w   # css px → reference px
+        glyph = np.asarray(mask)
+        for lf in leaves:   # ink-aware: the reference's own letters near each block (a descender, a swash) go too
+            vals = [float(v) for v in re.findall(r"[\d.]+", lf["color"])]
+            x, y, bw, bh = lf["box"]; e = .45 * bh
+            x0, y0, x1, y1 = (max(0, round((x - P[0] - e) * k)), max(0, round((y - P[1] - e) * k)), min(W, round((x - P[0] + bw + e) * k)), min(H, round((y - P[1] + bh + e) * k)))
+            if x1 - x0 < 3 or y1 - y0 < 3: continue
+            L = ref[y0:y1, x0:x1].mean(2); kk = min(61, max(3, round(.6 * bh * k))) | 1   # capped: big shapes behind a headline are not its letters
+            light = (sum(vals[:3]) / 3 > np.median(L)) if not (len(vals) > 3 and vals[3] < .1) else True   # gradient type: assume light
+            ground = cv2.GaussianBlur(cv2.morphologyEx(L, cv2.MORPH_OPEN if light else cv2.MORPH_CLOSE, cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kk, kk))), (0, 0), kk / 6)
+            near = cv2.dilate(glyph[y0:y1, x0:x1], cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (min(41, max(3, round(.36 * bh * k))) | 1,) * 2))   # only close to our own letters
+            ink_m[y0:y1, x0:x1] |= ((((L - ground) if light else (ground - L)) > a.ink_tol) & (near > 0)).astype(np.uint8) * 255   # strokes that stand off their local ground
+        mask = ImageChops.lighter(mask, Image.fromarray(ink_m))
+    img = np.asarray(src).copy()
+    for spec in a.key or []:   # logos and signatures: lift light (or :dark) marks off their ground as RGBA, true colours unmixed
+        name, box, *mode = spec.split(":"); dark = mode == ["dark"]
+        x0, y0, x1, y1 = (round(float(v) * (W if i % 2 == 0 else H)) for i, v in enumerate(box.split(",")))
+        crop = img[y0:y1, x0:x1].astype(np.float32); kk = min(151, max(3, min(crop.shape[:2]) // 2)) | 1
+        ground = cv2.GaussianBlur(cv2.morphologyEx(crop, cv2.MORPH_CLOSE if dark else cv2.MORPH_OPEN,
+                                                   cv2.getStructuringElement(cv2.MORPH_ELLIPSE, (kk, kk))), (0, 0), kk / 4)
+        d = np.sqrt(((crop - ground) ** 2).sum(2)); top = max(40.0, float(np.percentile(d, 99.5)))   # colour distance: any mark on any ground
+        al = np.clip(d / top / 0.75 - 0.15, 0, 1); al[al < 0.2] = 0   # -0.15 drops ground texture; faint pixels stay only in the plate
+        col = np.clip((crop - (1 - al[..., None]) * ground) / np.maximum(al[..., None], 1e-3), 0, 255)
+        Image.fromarray(np.dstack([col, al * 255]).astype(np.uint8)).save(out / f"{name}.png")
+        info[name] = {"left": f"{x0 / W:.3%}", "top": f"{y0 / H:.3%}", "width": f"{(x1 - x0) / W:.3%}", "height": f"{(y1 - y0) / H:.3%}"}
+        km = Image.new("L", (W, H), 0); km.paste(Image.fromarray((al > 0.2).astype(np.uint8) * 255), (x0, y0)); mask = ImageChops.lighter(mask, km)
+    g = max(1, round(a.grow / 100 * W))   # grow the mask past glows, strokes and anti-aliasing
+    grow = lambda mk: mk.filter(ImageFilter.MaxFilter(2 * (g // 2) + 1))
+
+    def paint_out(im, mk):   # inpaint at low resolution (fast and smooth for big areas), then add back the reference's grain
+        m = np.asarray(mk)
+        if not m.any(): return im
+        s = min(1, 720 / max(W, H)); sw, sh = max(8, round(W * s)), max(8, round(H * s))
+        small = cv2.inpaint(cv2.resize(im, (sw, sh), interpolation=cv2.INTER_AREA), cv2.dilate((cv2.resize(m, (sw, sh)) > 0).astype(np.uint8) * 255, np.ones((3, 3), np.uint8)), 5, cv2.INPAINT_TELEA)
+        fill = cv2.GaussianBlur(cv2.resize(small, (W, H), interpolation=cv2.INTER_CUBIC), (0, 0), max(1, 2 / s))
+        hp = im.astype(np.float32) - cv2.GaussianBlur(im, (0, 0), 2).astype(np.float32)
+        grain = np.random.default_rng(7).normal(0, float(hp[m == 0].std()) if (m == 0).any() else 2, im.shape)
+        kf = cv2.GaussianBlur(m.astype(np.float32) / 255, (0, 0), g / 2 + 1)[..., None]
+        return (im * (1 - kf) + np.clip(fill + grain, 0, 255) * kf).astype(np.uint8)
+
+    if a.person:
+        from rembg import remove, new_session
+        cut = remove(src, session=new_session("u2net"))
+        cut.putalpha(ImageChops.lighter(cut.getchannel("A"), remove(src, session=new_session("u2net_human_seg")).getchannel("A")))
+        if a.region:   # keep only the figure inside this box (x0,y0,x1,y1 as fractions): drops logos and text the model kept
+            x0, y0, x1, y1 = a.region; keep = Image.new("L", (W, H), 0); keep.paste(255, (int(x0 * W), int(y0 * H), int(x1 * W), int(y1 * H)))
+            cut.putalpha(ImageChops.multiply(cut.getchannel("A"), keep))
+        box = cut.getchannel("A").point(lambda v: 255 * (v > 16)).getbbox()
+        if box:   # the figure's own pixels, with any old lettering that crossed in front of it painted out
+            clean = Image.fromarray(paint_out(img, grow(front if front is not None else mask))).convert("RGBA"); clean.putalpha(cut.getchannel("A"))
+            clean.crop(box).save(out / "person.png")
+            l, t, r, btm = box; info["person"] = {"left": f"{l / W:.3%}", "top": f"{t / H:.3%}", "width": f"{(r - l) / W:.3%}", "height": f"{(btm - t) / H:.3%}"}
+            if not a.keep_person: mask = ImageChops.lighter(mask, cut.getchannel("A").point(lambda v: 255 * (v > 40)))
+    mask = grow(mask); mask.save(out / "mask.png"); m = np.asarray(mask)
+    Image.fromarray(paint_out(img, mask)).save(out / "plate.jpg", quality=92)
+    (out / "plate.json").write_text(json.dumps(info, indent=1), encoding="utf-8")
+    print(f"plate → {out / 'plate.jpg'} ({m.mean() / 2.55:.0f}% painted out)" + (f"; person → {out / 'person.png'} at {info['person']}" if "person" in info else ""))
+
+
+FIT_JS = r"""(i) => {   // i < 0: list the live text leaves; else show only leaf i, white on black
+  const leaves = [...document.querySelectorAll('.page *')].filter(el => !el.closest('[data-plate]') && el.tagName !== 'BR'
+    && [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()) && !el.parentElement.closest('p,h1,h2,h3,h4,h5,h6,li'));
+  if (i < 0) return leaves.map(el => { const r = el.getBoundingClientRect(), cs = getComputedStyle(el);
+    return {box: [r.left, r.top, r.width, r.height], color: cs.color, tf: cs.transform !== 'none', text: el.textContent.trim().slice(0, 28),
+            stops: (cs.backgroundImage.match(/rgba?\([^)]*\)/g) || []),
+            full: el.textContent.trim(), left: parseFloat(cs.left), top: parseFloat(cs.top), fs: parseFloat(cs.fontSize), ls: parseFloat(cs.letterSpacing) || 0}; });
+  if (!document.getElementById('fitcss')) { const st = document.createElement('style'); st.id = 'fitcss';
+    st.textContent = `html, body, .page { background:#000 !important; } .page * { visibility:hidden !important; } .fit-on, .fit-on * { visibility:visible !important;
+      color:#fff !important; -webkit-text-fill-color:#fff !important; text-shadow:none !important; background:none !important; -webkit-text-stroke-color:#fff !important; }`;
+    document.head.appendChild(st); }
+  document.querySelectorAll('.fit-on').forEach(e => e.classList.remove('fit-on')); leaves[i].classList.add('fit-on');
+}"""
+
+
+def fit(a):
+    """Snap the rebuilt poster's live text onto the reference: for every text block (rotated ones too; run twice), search position and size
+    (template match of its own glyphs against the reference) and report, or --apply, the correction in mm."""
+    import cv2, numpy as np
+    from PIL import Image
+    from playwright.sync_api import sync_playwright
+    ref = np.asarray(open_srgb(a.ref).convert("RGB")).astype(np.float32); H, W = ref.shape[:2]; page = Path(a.html).resolve()
+    with sync_playwright() as p:
+        b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1400, "height": 1400})
+        pg.goto(page.as_uri()); pg.wait_for_load_state("networkidle")
+        w, hh = pg.evaluate("[document.querySelector('.page').getBoundingClientRect().width, document.querySelector('.page').getBoundingClientRect().bottom]"); b.close()
+        k = W / w; b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1400, "height": max(1400, math.ceil(hh) + 60)}, device_scale_factor=k)   # tall pages: every block on screen
+        pg.goto(page.as_uri()); pg.wait_for_load_state("networkidle"); pg.evaluate("document.fonts.ready")
+        P = pg.evaluate("() => { const r = document.querySelector('.page').getBoundingClientRect(); return [r.left, r.top]; }")
+        leaves = pg.evaluate(FIT_JS, -1); fixes = []
+        for i, lf in enumerate(leaves):
+            x, y, bw, bh = lf["box"]; x -= P[0]; y -= P[1]
+            if bw < 2 or bh < 2: continue
+            pad = max(bw, bh) * a.reach + 6
+            cx0, cy0 = max(0, x - pad), max(0, y - pad); cx1, cy1 = min(w, x + bw + pad), min(H / k, y + bh + pad)
+            pg.evaluate(FIT_JS, i)
+            shot = np.asarray(Image.open(io.BytesIO(pg.screenshot(clip={"x": P[0] + x, "y": P[1] + y, "width": bw, "height": bh}))).convert("L"), np.float32) / 255
+            if shot.max() < .2: continue
+            win = ref[round(cy0 * k):round(cy1 * k), round(cx0 * k):round(cx1 * k)]
+            col = np.array([float(v) for v in re.findall(r"[\d.]+", lf["color"])[:3]], np.float32)
+            transparent = lf["color"].startswith("rgba") and float(re.findall(r"[\d.]+", lf["color"])[3]) < .1
+            stops = [np.array([float(v) for v in re.findall(r"[\d.]+", c)[:3]], np.float32) for c in lf.get("stops", [])]
+            if transparent and stops:   # gradient-filled (gold, chrome) type: near any of its gradient colours
+                M = np.max([np.exp(-((win - c) ** 2).sum(2) / (2 * 55.0 ** 2)) for c in stops], axis=0)
+            else:
+                M = (win.mean(2) / 255) if transparent else np.exp(-((win - col) ** 2).sum(2) / (2 * 45.0 ** 2))
+            ws = min(1, 120 / max(1, bh * k), 900 / max(1, bw * k))   # match at a working scale: fast, and forgiving of glyph detail
+            M = cv2.resize(M.astype(np.float32), (max(2, round(M.shape[1] * ws)), max(2, round(M.shape[0] * ws))), interpolation=cv2.INTER_AREA)
+            shot = cv2.resize(shot, (max(2, round(shot.shape[1] * ws)), max(2, round(shot.shape[0] * ws))), interpolation=cv2.INTER_AREA)
+            best = (-1, 0, 0, 1, 1); sig = max(1, shot.shape[0] / 60); kw = k * ws
+            M = cv2.GaussianBlur(M, (0, 0), sig); M2 = M * M
+            for s in np.arange(1 - a.scale, 1 + a.scale + 1e-6, .02):
+                for sx in (np.arange(.86, 1.141, .035) if a.width else [1.0]):   # width: letter-spacing absorbs a wider or narrower font
+                    th, tw_ = round(shot.shape[0] * s), round(shot.shape[1] * s * sx)
+                    if th < 3 or tw_ < 3 or th >= M.shape[0] or tw_ >= M.shape[1]: continue
+                    T = cv2.GaussianBlur(cv2.resize(shot, (tw_, th), interpolation=cv2.INTER_AREA), (0, 0), sig)
+                    r = cv2.matchTemplate(M, T, cv2.TM_CCOEFF_NORMED); n = th * tw_; one = np.ones((th, tw_), np.float32)
+                    m1 = cv2.matchTemplate(M, one, cv2.TM_CCORR) / n; sd = np.sqrt(np.maximum(cv2.matchTemplate(M2, one, cv2.TM_CCORR) / n - m1 ** 2, 0))
+                    r[(sd < .06) | ~np.isfinite(r)] = 0   # flat ground: the normalised score is meaningless there
+                    oy, ox = np.mgrid[0:r.shape[0], 0:r.shape[1]]; sg = (.12 * max(bw, bh) + 12) * kw   # prior: the draft is roughly right
+                    r = r * np.exp(-((ox - (x - cx0) * kw) ** 2 + (oy - (y - cy0) * kw) ** 2) / (2 * sg * sg) - ((s - 1) / .1) ** 2 / 2 - ((sx - 1) / .12) ** 2 / 2)
+                    _, mx, _, loc = cv2.minMaxLoc(r)
+                    if mx > best[0]: best = (mx, loc[0], loc[1], s, sx)
+            sc, lx, ly, s, sx = best; mm = 25.4 / 96   # css px → mm
+            dx, dy = (cx0 + lx / kw - x) * mm, (cy0 + ly / kw - y) * mm
+            dls = (sx - 1) * bw * s * mm / max(1, len(lf["full"]))   # extra letter-spacing per character, mm
+            fixes.append((i, lf, sc, dx, dy, s, dls))
+            flag = "" if sc >= a.min else "  (weak match, check by eye)"
+            if abs(dx) > .15 or abs(dy) > .15 or abs(s - 1) > .015 or abs(dls) > .02 or flag:
+                print(f"{lf['text']!r:32} move {dx:+.1f} mm, {dy:+.1f} mm  size x{s:.2f}" + (f"  tracking {dls:+.2f} mm" if abs(dls) > .02 else "") + f"  match {sc:.2f}{flag}")
+        if a.apply:   # rewrite left/top/font-size inline, in mm, for confident matches on untransformed blocks
+            todo = [(i, (lf["left"] * 25.4 / 96 + dx), (lf["top"] * 25.4 / 96 + dy), lf["fs"] * s * 25.4 / 96, lf["ls"] * s * 25.4 / 96 + dls)
+                    for i, lf, sc, dx, dy, s, dls in fixes if sc >= a.min and (abs(dx) > .15 or abs(dy) > .15 or abs(s - 1) > .015 or abs(dls) > .02)]
+            pg.goto(page.as_uri()); pg.wait_for_load_state("networkidle")
+            out = pg.evaluate("""(todo) => { const leaves = [...document.querySelectorAll('.page *')].filter(el => !el.closest('[data-plate]') && el.tagName !== 'BR'
+                && [...el.childNodes].some(n => n.nodeType === 3 && n.textContent.trim()) && !el.parentElement.closest('p,h1,h2,h3,h4,h5,h6,li'));
+              for (const [i, l, t, f, ls] of todo) { const el = leaves[i]; el.style.left = l.toFixed(2) + 'mm'; el.style.top = t.toFixed(2) + 'mm';
+                el.style.fontSize = f.toFixed(2) + 'mm'; el.style.letterSpacing = ls.toFixed(2) + 'mm'; }
+              return '<!doctype html>\\n' + document.documentElement.outerHTML; }""", todo)
+            page.write_text(out, encoding="utf-8"); print(f"fit: applied {len(todo)} corrections to {page.name}")
+        b.close()
+
+
+def ink(im, light=None):
+    """Binary ink mask of a crop of type (Otsu); the ink is the minority class unless light=True/False says which.
+    >>> from PIL import Image; im = Image.new("L", (40, 20), 255); im.paste(0, (5, 5, 15, 15)); ink(im).getbbox()
+    (5, 5, 15, 15)"""
+    import cv2, numpy as np
+    from PIL import Image
+    g = np.asarray(im.convert("L")); _, b = cv2.threshold(g, 0, 255, cv2.THRESH_BINARY + cv2.THRESH_OTSU)
+    on = b > 0 if light is True else b == 0 if light is False else (b > 0 if (b > 0).mean() < .5 else b == 0)
+    return Image.fromarray(on.astype(np.uint8) * 255)
+
+
+def fontmatch(a):
+    """Which of the project's fonts is this? Renders the crop's words in every face in fonts.css and ranks them."""
+    import numpy as np
+    from PIL import Image, ImageDraw
+    from playwright.sync_api import sync_playwright
+    Image.MAX_IMAGE_PIXELS = None   # one tall probe page holding every face is big by design
+    css = Path(a.fonts); faces = sorted(set(re.findall(r"font-family: '([^']+)'; font-style: (\w+); font-weight: (\d+)", css.read_text(encoding="utf-8"))))
+    if a.only: faces = [f for f in faces if re.search(a.only, f[0], re.I)]
+    t = ink(open_srgb(a.crop), {"light": True, "dark": False}.get(a.ink)); t = t.crop(t.getbbox()); TH = 96; tw = max(8, round(t.width * TH / t.height))
+    import cv2   # shapes compared blurred (forgives a stroke's offset), weighted by ink density (stroke weight) and aspect
+    soft = lambda im: cv2.GaussianBlur(np.asarray(im.resize((tw, TH), Image.BILINEAR), np.float32) / 255, (0, 0), 2.5)
+    T = soft(t); Tn = (T - T.mean()) / (T.std() + 1e-6); dT = T.mean()
+    rows = "".join(f'<div style="font-family:\'{f}\';font-style:{s};font-weight:{w};font-size:72px;line-height:1.5;white-space:nowrap;'
+                   f'padding:0 30px;width:max-content{";text-transform:uppercase" if a.upper else ""}">{html.escape(a.text)}</div>' for f, s, w in faces)
+    import os, uuid   # beside fonts.css (a file page may load file fonts, about:blank may not); unique, so parallel runs don't collide
+    probe = css.parent / f"_fontmatch-{os.getpid()}-{uuid.uuid4().hex[:6]}.html"
+    probe.write_text(f'<html><head><meta charset="utf-8"><link rel="stylesheet" href="{css.name}"></head>'
+                     f'<body style="margin:0;background:#fff;color:#000">{rows}</body></html>', encoding="utf-8")
+    with sync_playwright() as p:
+        b = p.chromium.launch(); pg = b.new_page(viewport={"width": 1600, "height": 900})
+        pg.goto(probe.resolve().as_uri()); pg.wait_for_load_state("networkidle"); pg.evaluate("document.fonts.ready"); probe.unlink()
+        boxes = pg.evaluate("() => [...document.body.children].map(d => { const r = d.getBoundingClientRect(); return [r.x, r.y, r.width, r.height]; })")
+        shot = Image.open(io.BytesIO(pg.screenshot(full_page=True))).convert("L"); b.close()
+    res = []
+    for (f, s, w), (x, y, bw, bh) in zip(faces, boxes):
+        c = ink(shot.crop((int(x), int(y), int(x + bw), int(y + bh))), False); bb = c.getbbox()
+        if not bb: continue
+        c = c.crop(bb); asp = (c.width / c.height) / (t.width / t.height)
+        C = soft(c); corr = float((Tn * (C - C.mean()) / (C.std() + 1e-6)).mean())
+        res.append((max(0, corr) * math.exp(-1.5 * abs(math.log(asp)) - abs(math.log((C.mean() + 1e-3) / (dT + 1e-3)))), f, s, w, c))
+    res.sort(key=lambda r: -r[0]); top = res[:a.top]
+    for sc, f, s, w, _ in top: print(f"{sc:.3f}  {f} {w}{' italic' if s == 'italic' else ''}")
+    if a.out:   # the crop and the best candidates, stacked, to confirm by eye
+        tiles = [t.convert("RGB").resize((tw, TH))] + [c.convert("RGB").resize((tw, TH)) for *_, c in top]
+        sheet = Image.new("RGB", (tw + 260, (TH + 12) * len(tiles)), "#fff"); d = ImageDraw.Draw(sheet)
+        for i, im in enumerate(tiles):
+            sheet.paste(im, (250, i * (TH + 12))); d.text((6, i * (TH + 12) + TH // 2), "reference" if i == 0 else f"{top[i - 1][1]} {top[i - 1][3]}", fill="#000")
+        sheet.save(a.out)
+
+
+def compare(a):
+    """Reference | rebuild | difference, side by side, with a similarity score: the 1:1 check for replicas."""
+    from PIL import Image, ImageChops, ImageFilter, ImageOps
+    ref = open_srgb(a.ref).convert("RGB"); ours = Image.open(a.ours).convert("RGB").resize(ref.size, Image.LANCZOS)
+    s = 480 / max(ref.size); small = lambda im: im.resize((max(1, round(im.width * s)), max(1, round(im.height * s))), Image.BOX).filter(ImageFilter.GaussianBlur(1))
+    d = ImageChops.difference(small(ref), small(ours)).convert("L"); score = 100 - sum(i * n for i, n in enumerate(d.histogram())) / (d.width * d.height) / 2.55
+    h = min(1400, ref.height); r = lambda im: im.resize((round(im.width * h / im.height), h), Image.LANCZOS)
+    heat = ImageOps.colorize(ImageOps.autocontrast(ImageChops.difference(ref, ours).convert("L")), "#000000", "#ff3b30")
+    tiles = [r(ref), r(ours), r(heat)]; sheet = Image.new("RGB", (sum(t.width for t in tiles) + 40, h), "#ffffff"); x = 0
+    for t in tiles: sheet.paste(t, (x, 0)); x += t.width + 20
+    sheet.save(a.out, quality=88); print(f"compare → {a.out}  similarity {score:.1f}%")
 
 
 def logos(a):
@@ -617,15 +928,36 @@ def main():
     dv = sub.add_parser("divide"); dv.add_argument("--w", type=float, default=420); dv.add_argument("--h", type=float, default=90)
     dv.add_argument("--color", required=True); dv.add_argument("--edge", choices=["top", "bottom", "both"], default="top")
     dv.add_argument("--amp", type=float, default=.07); dv.add_argument("--waves", type=float, default=1.2); dv.add_argument("--seed", type=int, default=7); dv.add_argument("--out", required=True)
+    de = sub.add_parser("device"); de.add_argument("--kind", choices=["torn", "tape", "brush", "ribbon", "stamp", "rays"], required=True)
+    de.add_argument("--w", type=float, default=120, help="mm"); de.add_argument("--h", type=float, default=30, help="mm"); de.add_argument("--color", default="#F4A64C")
+    de.add_argument("--rough", type=float, default=1.0, help="torn / brush edge roughness"); de.add_argument("--seed", type=int, default=7); de.add_argument("--out", required=True)
     rf = sub.add_parser("reflect"); rf.add_argument("src"); rf.add_argument("--out", required=True)
     rf.add_argument("--shape", choices=["rect", "rounded", "circle"], default="rounded"); rf.add_argument("--radius", type=float, default=.14)
     rf.add_argument("--size", type=lambda v: [int(x) for x in v.split("x")], help="WxH px crop"); rf.add_argument("--depth", type=float, default=.3)
     rf.add_argument("--strength", type=float, default=.35); rf.add_argument("--gap", type=int, default=6)
     lg = sub.add_parser("logos"); lg.add_argument("slugs", help="comma list of Simple Icons slugs, e.g. react,nextdotjs,flutter")
     lg.add_argument("--color", default="#2B1D16"); lg.add_argument("--out", default="img/logos")
+    pl = sub.add_parser("plate"); pl.add_argument("src"); pl.add_argument("--out", required=True)
+    pl.add_argument("--html", help="the rebuilt poster: its live text and shapes are painted out of the plate")
+    pl.add_argument("--person", action="store_true", help="also cut the person out (person.png + position in plate.json)")
+    pl.add_argument("--region", type=lambda v: [float(x) for x in v.split(",")], help="person: x0,y0,x1,y1 fractions to keep")
+    pl.add_argument("--keep-person", action="store_true", help="leave the person in the plate too")
+    pl.add_argument("--key", action="append", help="name:x0,y0,x1,y1[:dark] lift a logo or signature in that box (fractions) to name.png (:dark = a mark darker than its ground)")
+    pl.add_argument("--grow", type=float, default=0.35, help="mask growth, %% of width")
+    pl.add_argument("--ink-tol", type=float, default=30, help="ink-aware mask: how far (0-255) a stroke near a text block must stand off its local ground to be erased (0 = off)")
+    ft = sub.add_parser("fit"); ft.add_argument("ref"); ft.add_argument("html"); ft.add_argument("--apply", action="store_true", help="write the corrections into the HTML")
+    ft.add_argument("--reach", type=float, default=.35, help="search window around each block, share of its size"); ft.add_argument("--scale", type=float, default=.2, help="size search ±")
+    ft.add_argument("--min", type=float, default=.45, help="match score needed to apply")
+    ft.add_argument("--no-width", dest="width", action="store_false", help="keep letter-spacing (default: also fit each block's width)")
+    fm = sub.add_parser("fontmatch"); fm.add_argument("crop", help="a tight crop of one line of type from the reference"); fm.add_argument("text", help="the words in the crop")
+    fm.add_argument("--fonts", default="fonts/fonts.css"); fm.add_argument("--only", help="regex on family names"); fm.add_argument("--top", type=int, default=8)
+    fm.add_argument("--ink", choices=["light", "dark"], help="type lighter or darker than its ground (default: the minority)")
+    fm.add_argument("--upper", action="store_true", help="render in capitals"); fm.add_argument("--out", help="contact image of the best matches")
+    cp = sub.add_parser("compare"); cp.add_argument("ref"); cp.add_argument("ours"); cp.add_argument("--out", required=True)
     a = ap.parse_args()
     {"grade": grade, "motif": motif, "prompt": prompt, "cutout": cutout, "texture": texture, "sketch": sketch, "mask": lambda a: print(mask(a)),
-     "screenshot": screenshot, "mockup": mockup, "hatch": hatch, "divide": divide, "reflect": reflect, "logos": logos}[a.cmd](a)
+     "screenshot": screenshot, "mockup": mockup, "hatch": hatch, "divide": divide, "device": device, "reflect": reflect, "logos": logos,
+     "plate": plate, "fit": fit, "fontmatch": fontmatch, "compare": compare}[a.cmd](a)
 
 
 if __name__ == "__main__":

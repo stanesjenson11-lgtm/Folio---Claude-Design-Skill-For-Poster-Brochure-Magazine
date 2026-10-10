@@ -73,7 +73,7 @@ Read this index and `HOUSE.md` (the studio's own house style, distilled from its
 - **gallery:** mosaic, photo-strip
 - **profile:** circle-portraits
 - **closer:** back-cover
-- **poster (single sheets and series):** speaker-poster, series-rail, numeral-window, bilingual-lockup (see `reference/formats.md`)
+- **poster (single sheets and series):** speaker-poster, series-rail, numeral-window, bilingual-lockup (see `reference/posters.md` for the studio's poster language and `reference/formats.md`); templates in the poster kits (`kits/poster-*`)
 - **catalog data:** product-cell-grid, spec-sheet-frame, layer-section
 - **quotation:** quote-cover, estimate-sheet
 

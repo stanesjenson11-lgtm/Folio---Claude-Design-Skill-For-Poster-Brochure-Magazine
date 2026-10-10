@@ -430,7 +430,9 @@ def norm(t):
 GENERIC = (r"\b(unleash\w*|elevate[sd]?|elevating|revolutioni[sz]\w*|next[- ]gen|seamless(?:ly)?|cutting[- ]edge|world[- ]class"
            r"|synerg\w+|state[- ]of[- ]the[- ]art|best[- ]in[- ]class|game[- ]changer|empower\w*|unlock\w*|redefin\w+|holistic"
            r"|one[- ]stop|tailored solutions?|trusted partner|committed to excellence|delve\w*|tapestry|testament|pivotal|vibrant"
-           r"|nestled|in the heart of|showcas\w+|meticulous\w*|breathtaking|renowned|where \w+(?: \w+)? meets \w+)\b")
+           r"|nestled|in the heart of|showcas\w+|meticulous\w*|breathtaking|renowned|where \w+(?: \w+)? meets \w+"
+           r"|unforgettable (?:evening|night|experience)|a night to remember|don.t miss (?:out|it)|get ready to|a divine encounter awaits"
+           r"|experience the power of|come together as one)\b")   # last two lines: poster tells (reference/copy.md)
 TELLS = [
     ("WARN", "ai-contrast", r"(?i:\b(?:not (?:just|only|merely|simply)|more than just)\b[^.!?\n]*|\bit'?s not\b[^.!?\n]{1,60}?[,;—–]\s*it'?s\b[^.!?\n]*)",
      "not-X-but-Y contrast (humanizer §1) — state the point directly"),
