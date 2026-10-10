@@ -2,13 +2,13 @@
 
 [![Claude Code plugin](https://img.shields.io/badge/Claude%20Code-plugin-D97757)](https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine#install) [![Claude skill](https://img.shields.io/badge/Claude-skill-8A63D2)](https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine/releases) [![Version](https://img.shields.io/github/v/release/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine?label=version)](https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine/releases) [![License: Apache-2.0](https://img.shields.io/badge/license-Apache--2.0-blue)](LICENSE) [![Stars](https://img.shields.io/github/stars/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine?style=social)](https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine)
 
-**Design print-ready brochures, magazines, posters, company profiles, catalogs and annual reports with Claude — and get a Canva-editable version of every page, automatically.** folio is an open-source [Claude Code](https://claude.com/claude-code) plugin and Claude skill that makes Claude work like a print art director: real page layouts, a library of 11 signed-off magazine and brochure styles, AI-free copy through a built-in humanizer, automated print checks, and a taste memory that improves with every design you approve or reject.
+**Design print-ready brochures, magazines, company profiles, catalogs, annual reports and posters (church services, Bible verses, sports, events and stream thumbnails) with Claude — and get a Canva-editable version of every page, automatically.** folio is an open-source [Claude Code](https://claude.com/claude-code) plugin and Claude skill that makes Claude work like a print art director: real page layouts, a library of 11 signed-off magazine and brochure styles, AI-free copy through a built-in humanizer, automated print checks, and a taste memory that improves with every design you approve or reject.
 
 ![Eleven cover designs made with folio: sports magazines, a tech news magazine, a skate-culture magazine, a minimal e-book, a business newsletter, a classic company book, and two landscape portfolio books](docs/covers.jpg)
 
 > Every cover above was made by folio from one company's website facts (the sample client is Mango Inc., a made-up software studio: every company name, person, phone number, email and logo in the samples is a placeholder). No template was filled in by hand.
 
-**Keywords:** Claude skill · Claude Code plugin · AI brochure design · AI magazine layout · AI poster generator · Canva editable HTML · print-ready PDF · InDesign alternative · company profile design · annual report design · catalog design · editorial design · humanize AI text · agent skills
+**Keywords:** Claude skill · Claude Code plugin · AI brochure design · AI magazine layout · AI poster generator · church poster design · Bible verse poster · sports poster · event flyer · YouTube thumbnail · Canva editable HTML · print-ready PDF · InDesign alternative · company profile design · annual report design · catalog design · editorial design · humanize AI text · agent skills
 
 ---
 
@@ -73,6 +73,8 @@ folio ships 11 finished, user-approved styles ("kits"). Most clients bring conte
 `/folio:styles` shows the gallery and lets you pick. `/folio:replicate` copies any reference you give it 1:1; the result joins the catalogue, with its own command, only if it beats the closest existing style.
 
 ## Posters: church, verse, sports and events
+
+![Four folio sample posters: a Thursday service, a bilingual verse poster, a cricket league and a 16:9 Bible-study thumbnail (fictional names, stock photos)](docs/posters.jpg)
 
 folio's poster language (`skills/folio/reference/posters.md`) was learned from a studio's 246 real posters (weekly church services, anointing days and worship nights, Bible-study stream thumbnails, bilingual Bible-verse posters, cricket and football leagues, national days), studied one by one and rebuilt 1:1 as editable posters. It covers the layer stack (textured ground → big symbol or venue → atmosphere → glow → speaker cut-out → headline → info modules → paper devices → series rails), ten headline treatments (script caps, nested condensed caps, gold 3D serif, outline stacks, ghost words, bilingual lockups…), info blocks, series identity and the rule that scripture is quoted exactly from a named translation, never paraphrased.
 

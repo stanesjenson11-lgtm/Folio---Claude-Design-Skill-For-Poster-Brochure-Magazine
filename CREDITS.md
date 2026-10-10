@@ -18,3 +18,11 @@ Folio adapts ideas — and in one case an approach to code — from these open-s
 | [nexu-io/html-anything](https://github.com/nexu-io/html-anything) | Apache-2.0 | a working example per template |
 
 Reference boards in `skills/folio/library/references/` are other designers' work, kept as private study material; they are excluded from public repos by `.gitignore`.
+
+## Photos in the README poster samples (`docs/posters.jpg`)
+Free photos from [Unsplash](https://unsplash.com/license), used as illustrations; the churches, club and names on the samples are fictional.
+- Worship crowd with raised hands: [Mic Narra](https://unsplash.com/photos/RA3f0b26qwE)
+- Cross on a hill at dusk: [Christian Lue](https://unsplash.com/photos/nKZg-YfYh8w)
+- Cricket stadium under a red sky: [Aditya Chandegara](https://unsplash.com/photos/K3cI9zl79Bg)
+- View over an old city: [David Holifield](https://unsplash.com/photos/Kltv_Kh0j7g)
+
