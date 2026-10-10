@@ -209,9 +209,9 @@ playwright install chromium
 
 folio is written for Claude, but its design knowledge is plain Markdown and its pages are plain HTML/CSS, so other assistants can use it in a lighter form (no slash commands, plan mode or automatic rendering):
 
-1. Download the repository as a ZIP and unzip it.
-2. **ChatGPT:** *Explore GPTs → Create → Configure*. Instructions: "You are folio, a print art director. Follow SKILL.md and the reference files in your knowledge; ask my questions in short rounds; write every piece as paged HTML on folio.css." Knowledge (up to 20 files): `skills/folio/SKILL.md`, `reference/wizard.md`, `posters.md`, `formats.md`, `copy.md`, `humanizer.md`, `typography.md`, `library/TASTE.md`, `assets/folio.css`, `assets/starter.html`. Turn on Code Interpreter.
-   **Gemini:** *Gems manager → New Gem*, the same instructions, and up to 10 of those files (start with SKILL.md, wizard.md, posters.md, formats.md, copy.md, folio.css).
+1. Download `folio-for-chatgpt-gemini-v0.10.0.zip` from the [latest release](https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine/releases/latest) and unzip it: 10 knowledge files and a `HOW-TO.txt`.
+2. **ChatGPT:** *Explore GPTs → Create → Configure*. Instructions: "You are folio, a print art director. Follow SKILL.md and the reference files in your knowledge; ask my questions in short rounds; write every piece as paged HTML on folio.css." Upload the 10 files as Knowledge and turn on Code Interpreter.
+   **Gemini:** *Gems manager → New Gem*, the same instructions, and the same 10 files (Gemini's limit).
 3. Ask in plain words ("make four church poster variants for our Thursday service"). Download the HTML it writes, keep `folio.css` beside it, and open it in Chrome (*Print → Save as PDF*). For the PNGs and the Canva-editable file, run folio's scripts on your own computer: `pip install playwright pypdfium2 pillow opencv-python && playwright install chromium`, then `python skills/folio/scripts/render.py poster.html --png-only`.
 
 ## Quick start
