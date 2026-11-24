@@ -53,7 +53,7 @@ Saved brand: none.
 Used by `/folio:poster`, `/folio:poster-church`, `/folio:poster-verse`, `/folio:poster-sports`, `/folio:poster-youth`, `/folio:poster-event` and plain words ("make a poster / flyer / thumbnail for…"). Read `library/TASTE.md`, `reference/posters.md` (the design language) and `formats.md` → Poster variants first. Round 1 (logo, words) is §2; then:
 - **Round 2**
   - **Colour:** palettes from the logo as in §3. For a photo-led verse poster add "Colours from the photo (Recommended)".
-  - **Topic** (skip when the command names it): Church service or event · Bible verse or theme · Sports · Youth night, connect group or youth service (kit `poster-youth`, 9:16 story first) · Other event or ad (national day, greeting, fellowship, launch, school, product or offer).
+  - **Topic** (skip when the command names it): Church service or event · Bible verse or theme · Sports · Youth night, connect group or youth service (kits `poster-youth` for 9:16 stories and `poster-youth-post` for letter-ratio posts and flyers) · Other event or ad (national day, greeting, fellowship, launch, school, product or offer).
   - **Photos:** Use mine (Recommended when the speaker, player or subject photo is supplied; cut-outs are made from it) · Free stock for the background and mood · Empty frames to fill in Canva. Church and sports posters: ask for the speaker or player photo by name.
 - **Round 3**
   - **Format:** Portrait (A4 / A3 print, 4:5 social) · Story 9:16 (Instagram / WhatsApp status, 1080 × 1920) · Landscape 16:9 (stream thumbnail, screen, banner) · Both. Recommend 9:16 for youth, portrait for print and WhatsApp groups, landscape for YouTube or Facebook Live.

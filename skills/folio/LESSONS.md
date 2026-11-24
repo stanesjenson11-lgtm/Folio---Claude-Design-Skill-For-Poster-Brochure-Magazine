@@ -71,3 +71,8 @@ Defects this skill has already hit. Read before building; add to it whenever the
 - **A lifted brush stroke comes out dull or yellowish, or carries bits of a digit beside it** → the key's colour unmixing against an estimated ground desaturates, and the box held other marks → keep only the mark's hue (chroma key) and recolour it to its flat colour.
 - **Every line of a script file shows as changed after an edit on Windows** → Python's `write_text` writes CRLF there → edit repo files with `write_bytes(s.encode())` or `newline='
 '`; the repo is LF (`.gitattributes`).
+- **`place` picks too big a size and asks for negative tracking on glowing type** → the glow widened every ink box by a few pixels → measure glowing text on its near-white core (threshold ≥ 235); the right face then fits at near-zero tracking.
+- **A block lands 30–50 px off** → its coordinates were read from a gridded screenshot that was scaled for display → measure blocks from the reference's pixels with a colour mask.
+- **Outline letters come out filled grey** → a text-shadow on hollow type paints the whole glyph → bake the glow with `imagery.py shadow --dx 0 --dy 0 --color "#FFFFFF"` (it follows the stroke) and drop the CSS filter.
+- **A tilted line fitted with `data-fit="box"` drifts sideways** → the stretch was anchored at the line's centre while the unstretched glyphs started at the box's left edge → place centres the unstretched glyphs on the box before stretching (fixed in imagery.py).
+- **A big flat sticker or tape lifted with `--key` comes out patchy** → the key's ground estimate (a morphological opening) eats any flat area larger than its kernel → lift it by silhouette (colour mask, close, outer contour) and fill the old words with its own colour.

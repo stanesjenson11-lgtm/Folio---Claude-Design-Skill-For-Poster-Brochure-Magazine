@@ -9,7 +9,7 @@ folio imagery — make visuals from the project's own context.
   motif   generate the direction's motif as print-ready vector SVG (textures, opener
           backgrounds, dividers), chosen from the brief's context when --type is omitted
             python imagery.py motif --context "football turf academy" --brand "#0e1210" --accent "#b6f23a" --out img/motif.svg
-            types: arcs rings halftone slabs grid pitch contour track · liquid blob pencil (Flow style) · dots flecks glow (layered grounds)
+            types: arcs rings halftone slabs grid pitch contour track · liquid blob pencil (Flow style) · dots flecks scratches glow (layered grounds)
   sketch  photo -> coloured-pencil sketch on transparent paper, soft irregular edge, palette wash
             python imagery.py sketch img/raw/laptop.jpg --out img/laptop-sketch.png --palette "#3B2A20,#7D8B6A,#C9A96E,#F6F1E7"
   texture paper or grain overlay PNG for a tactile, printed ground
@@ -320,6 +320,12 @@ def motif(a):
                 s = sx * rnd.uniform(.22, .42); pts = [(x + s * math.cos(t_) * rnd.uniform(.55, 1.15), y + s * .8 * math.sin(t_) * rnd.uniform(.55, 1.15))
                                                      for t_ in sorted(rnd.uniform(0, math.tau) for _ in range(5))]
                 el.append(f'<polygon points="{" ".join(f"{px:.2f},{py:.2f}" for px, py in pts)}" fill="{A}" fill-opacity="{0.12 + 0.3 * near:.2f}"/>')
+    elif t == "scratches":   # grunge scratches and scuffs over a whole poster: thin light strokes, a few long, many short
+        for _ in range(int(W * H / 75)):
+            x, y = rnd.uniform(0, W), rnd.uniform(0, H); ang = rnd.choice((rnd.uniform(-1.4, -1.0), rnd.uniform(0.2, 0.6), rnd.uniform(-3.1, 3.1)))
+            ln = rnd.choices((rnd.uniform(.6, 3), rnd.uniform(3, 9), rnd.uniform(9, 22)), (6, 3, 1))[0]; bend = rnd.uniform(-.1, .1) * ln   # mostly short scuffs, a few long scratches
+            x2, y2 = x + ln * math.cos(ang), y + ln * math.sin(ang); mx, my = (x + x2) / 2 - bend * math.sin(ang), (y + y2) / 2 + bend * math.cos(ang)
+            el.append(f'<path d="M{x:.1f} {y:.1f}Q{mx:.1f} {my:.1f} {x2:.1f} {y2:.1f}" fill="none" stroke="{A}" stroke-width="{sw * rnd.uniform(.25, .7):.2f}" stroke-opacity="{rnd.uniform(.1, .45):.2f}" stroke-linecap="round"/>')
     elif t == "glow":     # soft light blooms: radial gradients (vector, so Canva keeps them; CSS blur would be lost)
         cols = a.colors.split(",") if a.colors else [A]
         defs = []
@@ -621,6 +627,22 @@ def device(a):
             pts = [(W * x + rnd.uniform(-1, 1) * W * .012 * r, H * y + off + rnd.uniform(-1, 1) * H * .03 * r) for x, y in zig]
             lines.append(f'<path d="M{" L".join(f"{x:.1f} {y:.1f}" for x, y in pts)}" stroke-width="{H * rnd.uniform(.05, .08):.2f}" opacity="{op}"/>')
         body = f'<g fill="none" stroke="{c}" stroke-linecap="round" stroke-linejoin="round">{"".join(lines)}</g>'
+    elif a.kind == "heart":   # sketchy doodle heart: two loose outline passes and a few hatch strokes inside
+        sw = min(W, H) * .035; heart = lambda k: (f'M{W * .5:.1f} {H * (.92 + .02 * k):.1f}C{W * (.1 - .03 * k):.1f} {H * .6:.1f} {W * -.02:.1f} {H * .25:.1f} {W * .24:.1f} {H * (.12 + .03 * k):.1f}'
+                                                  f'C{W * .4:.1f} {H * .05:.1f} {W * .5:.1f} {H * .25:.1f} {W * .5:.1f} {H * .3:.1f}C{W * .52:.1f} {H * .2:.1f} {W * .66:.1f} {H * .02:.1f} {W * (.82 + .02 * k):.1f} {H * .14:.1f}'
+                                                  f'C{W * 1.02:.1f} {H * .3:.1f} {W * (.86 + .04 * k):.1f} {H * .62:.1f} {W * .5:.1f} {H * .92:.1f}')
+        hatch = "".join(f'<path d="M{W * (.28 + .1 * i + rnd.uniform(-.02, .02)):.1f} {H * (.3 + .02 * i):.1f}L{W * (.44 + .07 * i):.1f} {H * (.72 - .03 * i):.1f}"/>' for i in range(4))
+        body = f'<g fill="none" stroke="{c}" stroke-width="{sw:.2f}" stroke-linecap="round" stroke-linejoin="round"><path d="{heart(0)}"/><path d="{heart(1)}" opacity=".7"/>{hatch}</g>'
+    elif a.kind == "ticket":   # paper ticket / wristband sticker: rounded card, two lines of tiny caps, a barcode and a corner letter
+        rx = H * .14; bars = []; x = W * .06
+        while x < W * .82:
+            w = rnd.choice((.6, .9, 1.4, 2.2)) * W / 220; bars.append(f'<rect x="{x:.2f}" y="{H * .46:.2f}" width="{w:.2f}" height="{H * .36:.2f}"/>'); x += w + rnd.choice((.8, 1.2, 1.8)) * W / 220
+        t1, t2 = (html.escape(v) for v in ((a.text or "YOUR CHURCH|YOUTH 2026").upper().split("|") + [""])[:2])
+        body = (f'<rect x="1" y="1" width="{W - 2}" height="{H - 2}" rx="{rx:.2f}" fill="{a.fill or "#F4F4F1"}"/>'
+                f'<g font-family="Montserrat, Arial, sans-serif" fill="#161616"><text x="{W * .06:.2f}" y="{H * .22:.2f}" font-size="{H * .12:.2f}" font-weight="800">{t1}</text>'
+                f'<text x="{W * .06:.2f}" y="{H * .36:.2f}" font-size="{H * .08:.2f}" opacity=".7">{t2}</text>'
+                f'<text x="{W * .9:.2f}" y="{H * .34:.2f}" font-size="{H * .22:.2f}" font-weight="800" text-anchor="middle" opacity=".55">{html.escape(t1[:1])}</text></g>'
+                f'<g fill="#161616">{"".join(bars)}</g>')
     elif a.kind == "badge":   # round badge: circular text around a centre left free for the client's logo (Canva: drop the logo on top)
         R = min(W, H) / 2; txt = html.escape((a.text or "YOUR CHURCH · YOUTH MINISTRY · ").upper())
         fs = R * .17; rr = R * .8
@@ -863,12 +885,15 @@ PLACE_JS = r"""([k, sel]) => {   // size, tracking and position of each live tex
     const tw = w * k * PX, th = h * k * PX, X0 = x0 * k * PX, Y0 = y0 * k * PX;
     const byW = el.dataset.fit === 'w';   // irregular hands: size by width, no tracking, centred in the box
     const fs = byW ? 100 * tw / inkW : 100 * th / inkH, s = fs / 100, n = [...tt].length;
-    const ls = byW ? 0 : n > 1 ? (tw - inkW * s) / (n - 1) : 0;
+    const ls = byW || el.dataset.fit === 'box' ? 0 : n > 1 ? (tw - inkW * s) / (n - 1) : 0;   // box: the width comes from the stretch, not tracking
     const fA = m.fontBoundingBoxAscent * s, fD = m.fontBoundingBoxDescent * s, lh = parseFloat(el.dataset.lh || '1') * fs, half = (lh - (fA + fD)) / 2;
-    const left = X0 + m.actualBoundingBoxLeft * s, top = Y0 + (byW ? (th - inkH * s) / 2 : 0) + m.actualBoundingBoxAscent * s - half - fA;
+    const Xg = el.dataset.fit === 'box' && rot ? X0 + tw / 2 - inkW * s / 2 : X0;   // a tilted box-fit line is stretched about its centre: centre the unstretched glyphs there
+    const left = Xg + m.actualBoundingBoxLeft * s, top = Y0 + (byW ? (th - inkH * s) / 2 : 0) + m.actualBoundingBoxAscent * s - half - fA;
     Object.assign(el.style, {fontSize: (fs / PX).toFixed(3) + 'mm', letterSpacing: (ls / PX).toFixed(3) + 'mm', lineHeight: el.dataset.lh || '1',
                              left: (left / PX).toFixed(3) + 'mm', top: (top / PX).toFixed(3) + 'mm'});
-    if (rot) { el.style.transformOrigin = `${((X0 + tw / 2 - left) / PX).toFixed(3)}mm ${((Y0 + th / 2 - top) / PX).toFixed(3)}mm`; el.style.transform = `rotate(${rot}deg)`; }
+    const sx = el.dataset.fit === 'box' ? tw / (inkW * s) : 1;   // a perspective-stretched letter: height sets the size, its own width a horizontal scale
+    if (rot || sx !== 1) { el.style.transformOrigin = `${((X0 + (sx !== 1 && !rot ? 0 : tw / 2) - left) / PX).toFixed(3)}mm ${((Y0 + th / 2 - top) / PX).toFixed(3)}mm`;
+      el.style.transform = (rot ? `rotate(${rot}deg)` : '') + (sx !== 1 ? ` scaleX(${sx.toFixed(4)})` : ''); }
     out.push([text.slice(0, 24), (fs / PX).toFixed(2), (ls / PX).toFixed(3)]); }
   for (const tw of document.querySelectorAll('[data-twin]')) { const src = document.getElementById(tw.dataset.twin); if (!src) continue;
     for (const p of ['left', 'top', 'fontSize', 'letterSpacing', 'lineHeight', 'transform', 'transformOrigin']) tw.style[p] = src.style[p]; }
@@ -879,7 +904,8 @@ def place(a):
     """First draft of a 1:1 replica: every text block carries its ink box measured on the reference (reference px),
     data-ink="x0,y0,x1,y1", or for a tilted line data-inkc="cx,cy,w,h,deg" (centre, unrotated ink size, CSS rotation).
     Writes font-size, letter-spacing, left/top (mm) and the rotation about the ink centre; data-fit="w" sizes a bouncy
-    hand-lettered line by its width; data-twin="<id>" keeps an outline copy on its front text. Then run `fit --apply`."""
+    hand-lettered line by its width, data-fit="box" sizes by height and stretches to the box width (perspective letters);
+    data-twin="<id>" keeps an outline copy on its front text. Then run `fit --apply`."""
     from playwright.sync_api import sync_playwright
     page = Path(a.html).resolve()
     with sync_playwright() as p:
@@ -890,8 +916,8 @@ def place(a):
 
 
 def shadow(a):
-    """Bake a soft drop shadow for a group of live elements (a die-cut sticker headline, a cut-out, a card) into a page-size
-    PNG layer: CSS filter: drop-shadow() renders in the PNG but is dropped by the Canva export. Re-run after the words change."""
+    """Bake a soft drop shadow (or, with --dx 0 --dy 0 --color "#FFFFFF", a glow) for a group of live elements (a die-cut sticker
+    headline, a cut-out, outline letters: hollow type glows along its stroke) into a page-size PNG layer: CSS filter: drop-shadow() renders in the PNG but is dropped by the Canva export. Re-run after the words change."""
     from PIL import Image, ImageChops, ImageFilter
     from playwright.sync_api import sync_playwright
     page = Path(a.html).resolve(); K = a.scale
@@ -900,6 +926,8 @@ def shadow(a):
         pg.goto(page.as_uri()); pg.wait_for_load_state("networkidle"); pg.evaluate("document.fonts.ready")
         n = pg.evaluate(r"""([sel, idx]) => { const pages = [...document.querySelectorAll('.page')]; const pgEl = pages[idx];
             const keep = [...pgEl.querySelectorAll(sel)]; if (!keep.length) return 0;
+            const hollow = [...keep, ...keep.flatMap(k => [...k.querySelectorAll('*')])].filter(el => { const cs = getComputedStyle(el);   // outline type: the glow follows the stroke
+              return parseFloat(cs.webkitTextStrokeWidth) > 0 && /rgba\(\d+, \d+, \d+, 0\)|transparent/.test(cs.webkitTextFillColor) && cs.backgroundClip !== 'text' && cs.webkitBackgroundClip !== 'text'; });
             for (const el of pgEl.querySelectorAll('*')) if (!keep.some(k => k === el || k.contains(el) || el.contains(k))) el.style.setProperty('visibility', 'hidden', 'important');
             for (const pp of pages) if (pp !== pgEl) pp.style.display = 'none';
             const st = document.createElement('style'); st.textContent = `html, body, .page { background: transparent !important; box-shadow: none !important; }
@@ -909,6 +937,7 @@ def shadow(a):
               if (cs.backgroundImage !== 'none' || !/rgba\(\d+, \d+, \d+, 0\)|transparent/.test(cs.backgroundColor)) el.style.setProperty('background', '#000', 'important');
               el.style.setProperty('-webkit-background-clip', 'border-box', 'important'); el.style.setProperty('background-clip', 'border-box', 'important');
               if (cs.backgroundClip === 'text' || cs.webkitBackgroundClip === 'text') el.style.setProperty('background', 'none', 'important'); }
+            for (const el of hollow) el.style.setProperty('-webkit-text-fill-color', 'transparent', 'important');
             return keep.length; }""", [a.select, a.page - 1])
         if not n: sys.exit(f"nothing matches {a.select!r} on page {a.page}")
         m = Image.open(io.BytesIO(pg.locator(".page").nth(a.page - 1).screenshot(omit_background=True))).getchannel("A")
@@ -1005,7 +1034,7 @@ def main():
     g = sub.add_parser("grade"); g.add_argument("src"); g.add_argument("--out", default="img/graded")
     g.add_argument("--treatment", choices=["natural", "duotone", "bw", "tint"], default="natural")
     g.add_argument("--brand"); g.add_argument("--ink"); g.add_argument("--paper"); g.add_argument("--match", action="store_true")
-    m = sub.add_parser("motif"); m.add_argument("--type", choices=["arcs", "rings", "halftone", "slabs", "grid", "pitch", "contour", "track", "liquid", "blob", "pencil", "dots", "flecks", "glow"])
+    m = sub.add_parser("motif"); m.add_argument("--type", choices=["arcs", "rings", "halftone", "slabs", "grid", "pitch", "contour", "track", "liquid", "blob", "pencil", "dots", "flecks", "scratches", "glow"])
     m.add_argument("--context"); m.add_argument("--brand", default="#1f3fb0"); m.add_argument("--accent"); m.add_argument("--bg")
     m.add_argument("--w", type=float, default=210); m.add_argument("--h", type=float, default=297); m.add_argument("--stroke", type=float, default=0.6)
     m.add_argument("--seed", type=int, default=7); m.add_argument("--out", default="img/motif.svg")
@@ -1038,7 +1067,7 @@ def main():
     dv = sub.add_parser("divide"); dv.add_argument("--w", type=float, default=420); dv.add_argument("--h", type=float, default=90)
     dv.add_argument("--color", required=True); dv.add_argument("--edge", choices=["top", "bottom", "both"], default="top")
     dv.add_argument("--amp", type=float, default=.07); dv.add_argument("--waves", type=float, default=1.2); dv.add_argument("--seed", type=int, default=7); dv.add_argument("--out", required=True)
-    de = sub.add_parser("device"); de.add_argument("--kind", choices=["torn", "tape", "brush", "ribbon", "stamp", "rays", "arrow", "scribble", "badge"], required=True)
+    de = sub.add_parser("device"); de.add_argument("--kind", choices=["torn", "tape", "brush", "ribbon", "stamp", "rays", "arrow", "scribble", "badge", "heart", "ticket"], required=True)
     de.add_argument("--w", type=float, default=120, help="mm"); de.add_argument("--h", type=float, default=30, help="mm"); de.add_argument("--color", default="#F4A64C")
     de.add_argument("--rough", type=float, default=1.0, help="torn / brush / arrow / scribble roughness"); de.add_argument("--seed", type=int, default=7); de.add_argument("--out", required=True)
     de.add_argument("--text", help="badge: the words around the ring"); de.add_argument("--fill", help="badge: disc colour (default none)")

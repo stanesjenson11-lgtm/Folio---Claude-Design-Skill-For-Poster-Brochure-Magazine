@@ -10,6 +10,10 @@
   --accent: #B12A1B;     /* red: sticker headline, label-box words (t02) */
   --accent-hi: #CA4529;  /* accent-2: sticker gradient end */
   --paper: #FFFFFF;
+  --pink: #CE72A8;       /* brand-8: date numerals, time (t04) */
+  --blush: #FCAEBF;      /* brand-9: the front word (t04) */
+  --mauve-t: #DDA1D3;    /* brand-10: back word, top */
+  --mauve-b: #B37AA9;    /* brand-11: back word, bottom */
 }
 .page { color: #fff; }
 .t { position: absolute; margin: 0; white-space: nowrap; line-height: 1; }
@@ -71,3 +75,16 @@
                 border: .61mm solid #333333; border-radius: .95mm; transform: rotate(6.5deg); }
 .t03 .and { font-family: 'Alfa Slab One', serif; color: #fff; -webkit-text-stroke: .5mm #333333; paint-order: stroke fill; transform: rotate(6.5deg); }
 .t03 .person { position: absolute; object-fit: cover; }
+
+/* ---- t04 · layered stack (pink) ------------------------------------------------------------- */
+.t04 { background: #4A2A3E; }
+.t04 .tone { background: linear-gradient(180deg, #5A2F49B3 0%, #4A2A3ECC 45%, #3B2233E6 100%); }
+.t04 .edge { background: radial-gradient(30% 45% at 102% 30%, #2FA3A066, #2FA3A000 70%), radial-gradient(25% 30% at -4% 92%, #5FA07A40, #5FA07A00 70%); }
+.t04 .ws { font-family: 'Work Sans', sans-serif; color: #F6DBEC; }
+.t04 .big { font-family: 'Anton', sans-serif; color: transparent; -webkit-text-fill-color: transparent; opacity: .95; letter-spacing: -.01em;
+            background-image: linear-gradient(180deg, var(--mauve-t) 20%, var(--mauve-b) 85%); -webkit-background-clip: text; background-clip: text; }
+.t04 .front { font-family: 'League Gothic', sans-serif; font-stretch: 78%; color: var(--blush); }
+.t04 .sig { font-family: 'Herr Von Muellerhoff', cursive; color: #fff; }
+.t04 .hand { font-family: 'Just Another Hand', cursive; color: #fff; }
+.t04 .lgc { font-family: 'League Gothic', sans-serif; font-stretch: 75%; }
+.t04 .mont { font-family: 'Montserrat', sans-serif; }

@@ -1,7 +1,7 @@
 ---
 name: folio
 description: Design print-grade magazines, brochures, company profiles, annual reports, catalogs, newsletters, e-books, posters, flyers, trifolds and trade-show panels as paged HTML rendered to PDF, plus a Canva-editable version, that do not look AI-generated or templated. Use it whenever the user wants to create, redesign or restyle any multi-page print or PDF piece, especially "make a magazine / brochure / poster from this PDF, text or website": folio then guides them step by step (logo, colour palettes suggested from the logo, one of its signed-off styles such as sports, editorial, pop or business, their photos and where each goes, contacts, a page plan to approve, a first look). Also use it when they hand over raw content, photos, a logo, reference images to copy 1:1, pencil layout sketches or an old PDF to redesign; to critique or preflight a layout; to pick a palette; to grade or source imagery; or to write and humanize brochure copy. Not for websites, app UI or slide decks.
-version: 0.11.0
+version: 0.12.0
 user-invocable: true
 argument-hint: "[new|poster|brief|sketch|direction|craft|copy|critique|polish|preflight|refs|learn|taste|extract|export|imagery|promo] [target]"
 license: Apache-2.0

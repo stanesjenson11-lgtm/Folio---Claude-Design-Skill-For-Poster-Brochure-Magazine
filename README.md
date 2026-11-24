@@ -85,7 +85,7 @@ folio's poster language (`skills/folio/reference/posters.md`) was learned from a
 | `/folio:poster-verse` | Bible-verse and theme posters: emotive full-bleed photo, bilingual lockup, the verse quoted exactly |
 | `/folio:poster-sports` | Leagues, matches and tournaments: marker titles, player cut-outs, rules ribbons, entry and prize badges |
 | `/folio:poster-event` | National days, greetings, fellowships, launches and school events |
-| `/folio:poster-youth` | Youth nights, connect groups, youth services and takeovers as 9:16 stories: caution tapes and blackletter letter swaps, die-cut sticker headlines on a glow, condensed stacks with marker notes |
+| `/folio:poster-youth` | Youth nights, connect groups, youth services, takeovers, monthly theme posts and youth conventions: 9:16 stories (caution tapes and blackletter swaps, die-cut sticker headlines, condensed stacks with marker notes, layered pink stacks with tape and doodles) and letter-ratio posts (rainbow month word, film-outline flyer) |
 
 Every request gives four unique variants (from different poster-kit templates where the topic has a kit) (portrait, landscape or both), as PNG plus a Canva-editable HTML where the photo, the cut-out and every word are separate layers. Hand it an old flat poster and `/folio:replicate` makes it editable: `imagery.py fontmatch` names the fonts, `fit` snaps live text onto the original, `plate` paints the old words out of a clean background and cuts the person out, `compare` shows the original, the rebuild and the difference side by side.
 
