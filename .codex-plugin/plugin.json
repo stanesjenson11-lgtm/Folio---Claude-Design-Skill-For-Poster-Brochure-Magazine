@@ -1,0 +1,31 @@
+{
+  "name": "folio",
+  "version": "0.11.0",
+  "description": "Claude skill and Claude Code plugin for brochure, magazine and poster design, guided step by step: logo, colour palettes suggested from your logo, 11 ready magazine and brochure styles ranked for your content, your photos placed where you want, a page plan to approve and a first look. Print-ready PDFs plus a Canva-editable file for every page, 1:1 replicas of reference designs, humanized copy, automated print preflight, and a taste memory that learns from every verdict.",
+  "author": {
+    "name": "stanesjenson11-lgtm",
+    "url": "https://github.com/stanesjenson11-lgtm"
+  },
+  "homepage": "https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine",
+  "repository": "https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine.git",
+  "license": "Apache-2.0",
+  "keywords": [
+    "claude-skill",
+    "claude-code-plugin",
+    "brochure",
+    "magazine",
+    "poster",
+    "canva",
+    "print-design",
+    "pdf",
+    "layout",
+    "editorial-design",
+    "annual-report",
+    "catalog",
+    "company-profile",
+    "humanizer",
+    "ai-design",
+    "graphic-design"
+  ],
+  "skills": "./skills/"
+}
