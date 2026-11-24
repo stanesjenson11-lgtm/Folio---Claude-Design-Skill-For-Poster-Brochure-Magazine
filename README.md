@@ -85,6 +85,7 @@ folio's poster language (`skills/folio/reference/posters.md`) was learned from a
 | `/folio:poster-verse` | Bible-verse and theme posters: emotive full-bleed photo, bilingual lockup, the verse quoted exactly |
 | `/folio:poster-sports` | Leagues, matches and tournaments: marker titles, player cut-outs, rules ribbons, entry and prize badges |
 | `/folio:poster-event` | National days, greetings, fellowships, launches and school events |
+| `/folio:poster-youth` | Youth nights, connect groups, youth services and takeovers as 9:16 stories: caution tapes and blackletter letter swaps, die-cut sticker headlines on a glow, condensed stacks with marker notes |
 
 Every request gives four unique variants (from different poster-kit templates where the topic has a kit) (portrait, landscape or both), as PNG plus a Canva-editable HTML where the photo, the cut-out and every word are separate layers. Hand it an old flat poster and `/folio:replicate` makes it editable: `imagery.py fontmatch` names the fonts, `fit` snaps live text onto the original, `plate` paints the old words out of a clean background and cuts the person out, `compare` shows the original, the rebuild and the difference side by side.
 
@@ -209,7 +210,7 @@ playwright install chromium
 
 folio is written for Claude, but its design knowledge is plain Markdown and its pages are plain HTML/CSS, so other assistants can use it in a lighter form (no slash commands, plan mode or automatic rendering):
 
-1. Download `folio-for-chatgpt-gemini-v0.10.0.zip` from the [latest release](https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine/releases/latest) and unzip it: 10 knowledge files and a `HOW-TO.txt`.
+1. Download `folio-for-chatgpt-gemini-v0.11.0.zip` from the [latest release](https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine/releases/latest) and unzip it: 10 knowledge files and a `HOW-TO.txt`.
 2. **ChatGPT:** *Explore GPTs → Create → Configure*. Instructions: "You are folio, a print art director. Follow SKILL.md and the reference files in your knowledge; ask my questions in short rounds; write every piece as paged HTML on folio.css." Upload the 10 files as Knowledge and turn on Code Interpreter.
    **Gemini:** *Gems manager → New Gem*, the same instructions, and the same 10 files (Gemini's limit).
 3. Ask in plain words ("make four church poster variants for our Thursday service"). Download the HTML it writes, keep `folio.css` beside it, and open it in Chrome (*Print → Save as PDF*). For the PNGs and the Canva-editable file, run folio's scripts on your own computer: `pip install playwright pypdfium2 pillow opencv-python && playwright install chromium`, then `python skills/folio/scripts/render.py poster.html --png-only`.
@@ -252,7 +253,7 @@ docs/                             README images
 | `/folio:styles` | Show the style gallery and pick, then the guided flow |
 | `/folio:ivory` `/folio:night` `/folio:sports` `/folio:football` `/folio:skate` `/folio:winter` `/folio:ebook` `/folio:newsletter` `/folio:profile` `/folio:popart` `/folio:portfolio` | Build a piece in that style from any content (the other questions still come) |
 | `/folio:replicate` | Copy reference pages 1:1 with your content; saved as a new style only if it beats the closest one |
-| `/folio:poster` `/folio:poster-church` `/folio:poster-verse` `/folio:poster-sports` `/folio:poster-event` | The guided poster flow: topic, portrait or 16:9, four unique variants from the poster templates (PNG + Canva file) |
+| `/folio:poster` `/folio:poster-church` `/folio:poster-verse` `/folio:poster-sports` `/folio:poster-event` `/folio:poster-youth` | The guided poster flow: topic, portrait or 16:9, four unique variants from the poster templates (PNG + Canva file) |
 | `/folio:stock` | Find free, on-topic stock photos for a subject, with a contact sheet and credits |
 | `/folio:taste` | Record what you liked or rejected |
 | `/folio:learn` | Study professional references in the lanes you like and fold the best moves into the library |

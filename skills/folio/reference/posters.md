@@ -1,6 +1,6 @@
 # posters: the design language for church, verse, sports and event posters
 
-Learned from the studio's own body of work: 246 posters (30 Bible-verse posters, 59 portrait event posters, 157 landscape stream thumbnails), studied one by one and rebuilt 1:1 as editable replicas. Read this for every poster or flyer, after `library/TASTE.md` and before `formats.md`. Templates live in the poster kits (`kits/poster-*`, `kit.py list`) once they are installed; this page is the grammar behind them, and until a topic has a kit, folio designs from it directly.
+Learned from the studio's own body of work: 246 posters (30 Bible-verse posters, 59 portrait event posters, 157 landscape stream thumbnails), studied one by one and rebuilt 1:1 as editable replicas, and from three youth story posters the user chose as the bar for church youth work (a tape-and-blackletter connect-group story, a sticker-headline youth service, a youth-and-young-adult takeover), each rebuilt 1:1 in the same fonts, colours and devices (§6 Youth). Read this for every poster or flyer, after `library/TASTE.md` and before `formats.md`. Templates live in the poster kits (`kits/poster-*`, `kit.py list`; shipped: `poster-youth`); this page is the grammar behind them, and until a topic has a kit, folio designs from it directly.
 
 ## 1. What a poster has to do
 Three reads, in this order, from across a room or a phone feed:
@@ -34,6 +34,10 @@ Everything else (rails, logos, sponsor, signature, slogans) is small and lives i
 | 8 | **Bilingual lockup** | the Tamil theme word as the hero in a heavy display face (Baloo Thambi / Coiny / Catamaran 900, bevelled or clean) with the English as a spaced-caps gloss, or the reverse | weekly theme-word series, Tamil series titles |
 | 9 | **Torn-strip title** | caps stamped on a torn paper strip or a tape label, slightly tilted | speaker credits, CRICKET LEAGUE |
 | 10 | **Distressed marker caps** | brush or marker caps with a grunge texture, tilted up to the right, for sport | CRICKET LEAGUE, FOOTBALL MATCH |
+| 11 | **Blackletter letter swap** | heavy condensed grotesque caps (Anton) in two lines, one letter per line swapped for a blackletter *lowercase* about 1.4× the cap size on the same baseline (Fruktur u, w, n); each line filled with a left-to-right gradient of two warm neighbours (coral #EB5A49 → peach #F39C66); a two-tone mono eyebrow above it | YOuTH / nIGHT 24 (connect-group story) |
+| 12 | **Die-cut sticker** | condensed caps (League Gothic, width 80–88%) in a deep red with a faint left-to-right gradient, two lines of different size sitting on one white die-cut outline (about 1.5 mm outward on a 74 mm story, ~2% of the width, gaps between letters filled white) with a soft shadow, the whole sticker tilted −6 to −8° | ONLY / GRACE (youth service) |
+| 13 | **Stack with a nested sticker word** | ultra-condensed white caps (League Gothic Condensed) stacked tight, the small joining word ("AND", "&", "x") on a little white sticker with a dark outline and a slab face, tilted +6°, bridging the two lines; a marker-hand word in the accent colour under the stack | YOUTH / AND / YOUNG ADULT / *Takeover* |
+| 14 | **Marker note with a plus** | small marker-hand caps in two lines ("+ YOU'RE / INVITED", "+ BRING / A FRIEND") in opposite corners of the headline, a hand "+" as the bullet, the I drawn as a dotted lowercase i, tilted −3 to −7° | takeover post |
 
 Headlines read horizontally (TASTE.md). Vertical text is only for small rails and tabs; tilts are for labels, strips and sport titles, at most 10°.
 
@@ -46,7 +50,21 @@ Headlines read horizontally (TASTE.md). Vertical text is only for small rails an
 - **Pills / chips:** venue, time, entry in rounded pills.
 - **Stamp badge:** a round rubber-stamp "FREE ENTRY" or a circle "Entry fee per team ₹600".
 - **Venue line:** a pin icon + the venue in caps, the address smaller under it.
+- **Tilted time block (youth):** ">FRIDAY" in a regular grotesque, "21AUG" under it in the accent (day regular, month bold), and a huge heavy "07:00" beside both with "P" and "M" stacked small in the accent at its top right; the whole block tilted +5 to +6° (clockwise), a hand-drawn arrow curling from above into the date, a dry-brush scribble under the time.
+- **Date stack with a boxed numeral:** "WED" in a heavy grotesque, the day number in condensed caps in the accent colour inside a white box the width of the weekday, "JUL '26" under it; top right, opposite the badge.
+- **Label boxes:** the time and the place each as condensed caps in the accent colour on a tight white box (padding ≈ 0.1 of the cap height), the detail under each box in a bold grotesque (white), a lighter line for the address.
+- **One-line date and times:** "MAY18" in a heavy geometric sans, the times in its medium weight joined with " + " ("11AM + 4:30PM"); then a pin icon alone, centred, and the address in widely tracked semibold caps, the credits in tiny bold tracked caps under it.
+- **Venue line with a brush underline:** pin + place in bold caps + area in the accent colour (regular), a thin dry-brush stroke under the whole line.
 - One date format across a series ("Thursday 9 October 2025 · 6:30 pm" or "16.07.2026 | 7PM"), never two on one sheet.
+
+## 4b. Devices (youth and street looks; all live or vector, so Canva keeps them)
+- **Caution tapes:** strips 3.9 mm thick on a 74 mm story (≈5% of the width) running off both edges, crossing in pairs (an accent strip over a white one, −1.5 to −13°), top and bottom; the text repeats "– SHORT NAME – GROUP NAME" in a regular grotesque with the short name bold, cap height ≈ 36% of the strip. Build each as a rotated `div` with one long `<p>`; shift the text so a name, not a dash, sits under the page centre.
+- **Pixel-stripe blocks:** rectangles of 4.1 mm stripes (≈5.5% of the width), each stripe a gradient from a deeper red-orange at its left edge to a lighter orange at its right, `repeating-linear-gradient(90deg, lo 0, hi 4.1mm)` plus a soft light from above; two or three blocks around the headline, one bleeding off the top, one off the foot, a pair stepping diagonally. Grain over them, never over the type.
+- **Soft glow mesh:** an espresso ground (#2A1F1C) with three to five large orange blooms (radial gradients) at the edges, never behind the face of the headline, and film grain (white and black grain layers at 20–30%).
+- **Grunge fleck ground:** charcoal (#2C2C2C), a grid of small torn chips that fades from one side (`imagery.py motif --type flecks`), paper specks, two or three red-orange glows, translucent rounded bars (white at 9%) crossed like X and > marks, and the series initials enormous in outline (accent stroke, 40% opacity) bleeding off the top left.
+- **Dashed route:** a hand-drawn path of round-capped dashes (dash ≈ 6% of the width, gap ≈ 3.5%, stroke ≈ 1.2%) crossing behind the headline from one edge and looping out at the top right; SVG `stroke-dasharray`.
+- **Hand marks:** a curling arrow (`imagery.py device --kind arrow`), a dry-brush zigzag under the time (`--kind scribble`), a long dry-brush underline (`--kind brush`), a round badge with ring text and the logo in the middle (`--kind badge --text "…"`).
+- **Die-cut sticker:** words on a white outline with a soft shadow: a white twin of the words behind them (`data-twin`, `-webkit-text-stroke` ≈ 2× the outline), a white box filling the gaps inside the outline, the shadow baked with `imagery.py shadow` (CSS filters do not reach Canva).
 
 ## 5. Series identity (weekly services, session thumbnails)
 Fix the rails, vary the body. A series keeps:
@@ -66,6 +84,20 @@ Speaker on the left or right half, eyes about a third down, the title lockup in 
 One full-bleed emotive photo (silhouette at sunrise, hands raised, a cross on a hill, an open Bible, light through fog); the theme lockup in the photo's quiet third (bilingual, script over caps, or the refrain word); the verse itself only when the series quotes it, with the reference; the series tag (the children's ministry name) in one fixed slot. Colour comes from the photo. **Scripture rules in §8.**
 ### Sports (leagues, matches, tournaments)
 Navy or royal blue with grunge (cricket), turf green with lime splashes (football); distressed marker title tilted up; action cut-outs of players; the chief guest portrait in a corner with designation; numbered rules on ribbons; entry-fee stamp; trophy; prizes ribbon; venue · date · time bar; "Register before …" with a phone number. Dense and loud on purpose.
+### Youth nights, connect groups, youth services, takeovers (9:16 stories first, 4:5 posts)
+Kit: `poster-youth` (`/folio:poster-youth`). Youth posters are read on a phone in a second: **one loud word stack, one warm accent, one dark ground, the facts in one block.** What the three references share:
+- **Dark grounds, never flat:** charcoal grunge, espresso glow or dark twill, always with grain, flecks or weave, plus two or three warm blooms at the edges. The only colours are the ground, white, and one warm accent family (orange → coral → peach, or red → vermilion); the accent carries the headline or the key facts, never both plus decorations in a third hue.
+- **The headline is 45–60% of the width and 25–35% of the height,** centred, in condensed caps (Anton, League Gothic) with one twist that makes it theirs: a blackletter letter swap (treatment 11), a die-cut sticker (12), a nested sticker word plus a marker word (13). Words stay short (4–8 letters a line).
+- **Street devices at the edges:** caution tapes, pixel-stripe blocks, a dashed route, translucent bars, outline initials, a round badge, marker notes with "+". They frame the headline; none crosses the face of a letter.
+- **The facts sit under the headline in one block:** tilted time block (t01), label boxes (t02) or one date-and-times line + pin + address (t03). Weekday and date agree; the time keeps the client's own style.
+- **A person is optional:** black and white, cut by the edge of the sheet, below the headline's level (t03). Without a photo the type is the hero.
+- **9:16 safe zones:** keep words out of the top 12% and the bottom 16% (Instagram and WhatsApp overlays); tapes, blocks and glows may fill them.
+- **Copy:** the group's own words and handle ("Connect Group", its short name such as "YN 24", "@yourgroup"); invitations in the second person ("You're invited", "Bring a friend"); no taglines folio invents.
+Variants for a set of four: t01, t02, t03 and one of them in the other accent family (orange ↔ red), or with the Arc family; never two with the same headline treatment.
+
+### Ads (product, offer, opening, service, admission)
+The same three reads, retuned: **what** = the offer or product name (or the price when the price is the news), **who/what** = the product itself (a cut-out on a glow, a device mockup, the place), **how** = one block with the price or offer terms, the call to action and one contact (phone, handle or QR with a label). One accent colour carries the offer; a badge or sticker (die-cut, treatment 12) holds the single most persuasive number ("₹499", "20% OFF", "Admissions open"). Real product photos only; the client's own terms and prices exactly as given; no "best", "unbeatable" or invented claims (`reference/copy.md`). The youth devices (tapes, stickers, pixel blocks, marker notes) suit youth-facing brands; corporate ads keep the poster grammar with calmer grounds (`formats.md` → Poster, One-page flyer).
+
 ### National days, greetings and fellowships
 Republic / Independence Day: white paper, tricolour brush swooshes, a monument illustration over the map, a big numeral with a serif lockup ("77 · The Indian Republic Day"), ceremony time and place, chief guest at the foot. Christmas / New Year: a large script greeting (antlers, stars, fireworks, gold numerals) on a dark ground. Women's or youth fellowship: one colour field, serif italic title, the special speaker under it, date and time in a script line along the foot.
 
@@ -74,7 +106,8 @@ Republic / Independence Day: white paper, tricolour brush swooshes, a monument i
 - **Script accents:** Courgette, Satisfy, Yellowtail, Kaushan Script, Yesteryear, Great Vibes, Allura, Alex Brush, Sacramento, Mrs Saint Delafield, Monsieur La Doulaise.
 - **Support:** Montserrat / Poppins / Lexend for venue lines, tracked caps for names, Teko / Barlow Condensed for credits, a hand face (Shadows Into Light, Kalam, Caveat) for the call to action.
 - **Tamil:** Baloo Thambi 2 800, Coiny, Catamaran 900 and Anek Tamil 800 for heroes; Hind Madurai, Mukta Malar, Noto Sans Tamil for lines; Arima or Kavivanar for a softer verse. Unicode only (never legacy Bamini).
-- One display family + one script + one support face per poster; the script is an accent of 1–3 words, never a paragraph.
+- **Youth (matched to the references with `imagery.py fontmatch`, all in Canva's library):** Anton (gradient condensed headline) + Fruktur (the blackletter swap letters) + JetBrains Mono (two-tone eyebrow) + Hanken Grotesk (time block, venue) + Inter (tapes); League Gothic at 80–88% width (sticker headline, label boxes; fetch the variable font: `fonts.py "League Gothic:400,wdth75-100"`, set `font-stretch`) + Inter (date, details); League Gothic Condensed 75% (stack) + Delicious Handrawn (marker notes and the marker word) + Alfa Slab One (the sticker AND) + Montserrat (date line, address, credits).
+- One display family + one script + one support face per poster; the script is an accent of 1–3 words, never a paragraph. Youth posters may add one blackletter or marker face as the twist, used for 1–3 letters or one short word.
 
 ## 8. Words
 - **Humanize everything folio writes** (`reference/copy.md`): short, concrete, warm; the client's own register and honorifics ("God's Word by", "Come and Be Blessed !", "All are welcome"); no AI tells ("join us for an unforgettable evening of…", triads, "-ing" tails).
@@ -83,7 +116,15 @@ Republic / Independence Day: white paper, tricolour brush swooshes, a monument i
 - Tamil and English say the same thing; when only one is supplied, ask before translating, and mark folio's translation for the user to check.
 
 ## 9. Making old posters editable
-A flat poster (PNG/JPG from Canva or a phone) becomes an editable folio poster with the replica pipeline: `imagery.py fontmatch` (identify each type style) → live HTML text and shapes over the poster → `imagery.py fit --apply` (snap position, size and tracking onto the original) → `imagery.py plate --person --key logo:…` (clean background plate, person cut-out, logo and signature as transparent layers) → `render.py --png-only` → `imagery.py compare` (reference | rebuild | difference). Follow `/folio:replicate`.
+A flat poster (PNG/JPG from Canva or a phone) becomes an editable folio poster with the replica pipeline: `imagery.py fontmatch` (identify each type style) → live HTML text and shapes over the poster → `imagery.py place` (first draft from each block's ink box) → `imagery.py fit --apply` (snap position, size and tracking onto the original) → `imagery.py plate --person --key logo:…` (clean background plate, person cut-out, logo and signature as transparent layers) → `render.py --png-only` → `imagery.py compare` (reference | rebuild | difference). Follow `/folio:replicate`.
+
+What the youth replicas taught (each step cost a round when skipped):
+- **Measure before you type.** Crop every line of type, auto-tighten the crop by ink colour, and run `fontmatch` per line against a wide candidate set; score whole families across all of a poster's support lines and keep one family per role. A line that needs big negative tracking (more than −0.06 em) is set in a face that is too wide: try a narrower width (`font-stretch` on a variable font) or the next family; never squeeze letters until they touch.
+- **Tilted lines:** find the angle by deskewing the crop (maximise the row-profile contrast), measure the ink box in the straightened frame, and give `place` the centre, the unrotated size and the angle (`data-inkc`). Check `fit`'s moves on tilted or stickered words by eye: it can lock onto a neighbouring letter (a 2 mm jump is a red flag).
+- **Letters on a coloured block** (red words on pixel blocks of the same hue) defeat colour masks; isolate them by what surrounds them (inside the white sticker), or detect letter components in the straightened image.
+- **Plates of small JPEG references** (700 px wide) need `--grow` 0.9–1.2 or the anti-aliased rims of the old letters stay as ghosts; blurry grounds (glow meshes) are cleaner rebuilt: paint out, blur hard, upscale, and lay fresh grain on top. Paint the original's own shadows out with the twin's halo widened.
+- **Hand marks** (arrows, brush scribbles, underlines) are lifted with `--key`; recolour a lifted coloured mark to its flat colour, and keep only its own hue (a chroma key) so a digit beside it does not come along.
+- **What Canva drops:** CSS filters (drop-shadow → `imagery.py shadow`), `paint-order` (the stroke draws over the fill; keep strokes thin or use a twin). What it keeps since 0.11: gradient-filled type without a stray box, bold runs inside a long line, the period and phase of tiled gradients, the line-height of a bigger letter inside a line.
 
 ## 10. Checks before delivery
 - The three reads work at thumbnail size (shrink the PNG to 25%).
@@ -91,4 +132,5 @@ A flat poster (PNG/JPG from Canva or a phone) becomes an editable folio poster w
 - One info block; one date format; the weekday matches the date.
 - Rails, logo, signature and sponsor sit in the series' fixed slots.
 - Contrast: every line of text readable on its ground (add a glow, a bar or a gradient behind it rather than shrinking it).
-- Canva file ≤ 8 MB and fidelity ≥ 97%; photos and cut-outs are separate layers; words are live.
+- Canva file ≤ 8 MB and fidelity ≥ 97%; photos and cut-outs are separate layers; words are live. Fine grain, fleck and weave grounds alias a little differently in the copy and can hold a page at 96%: look at `editable-diff.png`; if only texture edges light up, say so rather than flattening the texture.
+- 9:16 stories: no words in the top 12% or bottom 16%; the headline still reads at 25% size; the poster survives a 1080 × 1920 render (`--dpi 373` on a 73.6 mm page).

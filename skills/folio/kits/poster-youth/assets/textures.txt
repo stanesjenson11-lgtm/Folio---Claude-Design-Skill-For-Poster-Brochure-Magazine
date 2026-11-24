@@ -1,0 +1,4 @@
+paper-t01.png paper #FFFFFF
+grain-w.png grain #FFFFFF
+grain-k.png grain #000000
+paper-t03.png paper #FFFFFF

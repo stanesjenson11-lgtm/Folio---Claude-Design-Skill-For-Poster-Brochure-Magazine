@@ -50,6 +50,9 @@ JS = r"""
   const TEXT_PROPS = ['font-family','font-size','font-weight','font-style','font-stretch','color','letter-spacing',
                       'text-transform','text-decoration-line','font-variant-caps','font-variant-numeric','font-feature-settings',
                       '-webkit-text-stroke-width','-webkit-text-stroke-color','text-shadow'];
+  // a run inside a line (a bigger blackletter letter, a raised note) keeps its own line-height, margins and vertical-align,
+  // or the whole line shifts in the editable file
+  const RUN_PROPS = [...TEXT_PROPS, 'line-height', 'margin-left', 'margin-right', 'vertical-align'];
   // poster effects travel with the text: outlines, shadows and glows, and gradient-filled type (background-clip: text)
   const styleOf = (el, props) => { const cs = getComputedStyle(el);
     let s = props.map(p => `${p}:${cs.getPropertyValue(p).replace(/"/g, "'")}`).join(';');
@@ -66,7 +69,7 @@ JS = r"""
         if (t === 'br') { html += '<br>'; continue; }
         const inner = serial(n);
         if (!inner.trim()) continue;
-        html += `<span style="${styleOf(n, TEXT_PROPS)}">${inner}</span>`;
+        html += `<span style="${styleOf(n, RUN_PROPS)}">${inner}</span>`;
       }
     }
     return html;
@@ -88,8 +91,16 @@ JS = r"""
     }
     return null;
   };
-  const lineRects = el => { const r = document.createRange(); r.selectNodeContents(el);
-    return [...r.getClientRects()].filter(q => q.width > .5 && q.height > .5); };
+  // one rect per visual line: the runs of a line (a <b> inside it, separate text nodes) are merged first, so only
+  // lines that restart at the top of a new column count as columns (a long styled line is not split into plain pieces)
+  const lineRects = el => { const r = document.createRange(); r.selectNodeContents(el); const out = [];
+    for (const q of [...r.getClientRects()].filter(q => q.width > .5 && q.height > .5)) {
+      const l = out.find(l => Math.min(l.bottom, q.bottom) - Math.max(l.top, q.top) > .5 * Math.min(l.bottom - l.top, q.height)
+                              && q.left <= l.right + .5 * q.height && q.right >= l.left - .5 * q.height);
+      if (l) { l.left = Math.min(l.left, q.left); l.right = Math.max(l.right, q.right); l.top = Math.min(l.top, q.top); l.bottom = Math.max(l.bottom, q.bottom); }
+      else out.push({left: q.left, right: q.right, top: q.top, bottom: q.bottom, width: q.width, height: q.height}); }
+    for (const l of out) { l.width = l.right - l.left; l.height = l.bottom - l.top; }
+    return out; };
 
   // --- clip-path parsing is done in python; here we only report it ------------------
   return pages.map((pg, pi) => {
@@ -170,13 +181,16 @@ JS = r"""
         return;
       }
       // shape: painted background / border / gradient
-      const bgImg = cs.backgroundImage !== 'none' ? cs.backgroundImage : null;
+      // gradient-filled type (background-clip: text) paints its background inside the glyphs only: the text export carries it, no box
+      const textClip = (cs.webkitBackgroundClip || cs.backgroundClip) === 'text';
+      const bgImg = cs.backgroundImage !== 'none' && !textClip ? cs.backgroundImage : null;
       const sides = ['Top','Right','Bottom','Left'].map(s => ({w: px(cs[`border${s}Width`]), s: cs[`border${s}Style`], c: cs[`border${s}Color`]}));
       const hasBorder = sides.some(b => b.w > 0 && b.s !== 'none');
-      if ((painted(cs.backgroundColor) || bgImg || hasBorder) && el !== pg && el !== trim && r.width > 0 && r.height > 0) {
+      if (((painted(cs.backgroundColor) && !textClip) || bgImg || hasBorder) && el !== pg && el !== trim && r.width > 0 && r.height > 0) {
         if (cs.clipPath !== 'none') warn.push(`p${pi + 1}: ${el.tagName.toLowerCase()}.${[...el.classList].join('.')} is a colour field with a clip-path — Canva imports it as a rectangle; draw curved fields as SVG (imagery.py motif)`);
         out.push({z: zNow, kind: 'shape', ...rel(r), bg: painted(cs.backgroundColor) ? cs.backgroundColor : null,
                   bgImg: bgImg && /gradient/.test(bgImg) ? bgImg : null,
+                  bgSize: cs.backgroundSize, bgPos: cs.backgroundPosition, bgRepeat: cs.backgroundRepeat,   // tiled stripes keep their period and phase
                   borders: sides.map(b => b.w > 0 && b.s !== 'none' ? `${b.w}px ${b.s} ${b.c}` : 'none'),
                   radius: cs.borderRadius, clipPath: cs.clipPath !== 'none' ? cs.clipPath : null,
                   opacity: op, blend: cs.mixBlendMode, transform: cs.transform !== 'none' ? cs.transform : null});
@@ -547,6 +561,9 @@ def build(pages, html_path, fonts_mode="both", q=None):
                 st = [pos]
                 if e["bg"]: st.append(f'background-color:{e["bg"]}')
                 if e["bgImg"]: st.append(f'background-image:{e["bgImg"]}')
+                if e["bgImg"] and e.get("bgSize", "auto") not in ("auto", "auto auto"): st.append(f'background-size:{e["bgSize"]}')
+                if e["bgImg"] and e.get("bgPos", "0% 0%") not in ("0% 0%", "0px 0px"): st.append(f'background-position:{e["bgPos"]}')
+                if e["bgImg"] and e.get("bgRepeat", "repeat") != "repeat": st.append(f'background-repeat:{e["bgRepeat"]}')
                 t, r_, b, l = e["borders"]
                 for side, v in zip(("top", "right", "bottom", "left"), (t, r_, b, l)):
                     if v != "none": st.append(f"border-{side}:{v}")

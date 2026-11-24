@@ -1,0 +1,73 @@
+/* folio kit · poster-youth: youth nights, connect groups, youth services and takeovers as 9:16 stories (1080 × 1920)
+   Three templates rebuilt from 1:1 replicas of three reference posters: t01 tape & blackletter, t02 sticker on glow, t03 takeover.
+   Page = 73.6 × 130.8 mm; render: render.py poster.html --png-only --dpi 373 (1080 × 1920). Colours are the kit theme (KIT.md). */
+:root {
+  --brand: #F47A2E;      /* orange: eyebrow accent, date, venue, scribbles */
+  --tape: #FB7A2F;       /* brand-2: caution tape */
+  --deep: #D9682B;       /* brand-3: marker title, pin (t03) */
+  --coral: #EB5A49;      /* brand-4: headline gradient start */
+  --peach: #F39C66;      /* brand-5: headline gradient end */
+  --accent: #B12A1B;     /* red: sticker headline, label-box words (t02) */
+  --accent-hi: #CA4529;  /* accent-2: sticker gradient end */
+  --paper: #FFFFFF;
+}
+.page { color: #fff; }
+.t { position: absolute; margin: 0; white-space: nowrap; line-height: 1; }
+.fill img { width: 100%; height: 100%; object-fit: cover; }
+.ctr { left: 0; width: 73.6mm; text-align: center; }
+
+/* ---- t01 · tape & blackletter -------------------------------------------------------------- */
+.t01 { background: #2C2C2C; }
+.t01 .glow { background:
+    radial-gradient(42% 16% at 6% 64%, #CC3A2A99, #CC3A2A00 70%),
+    radial-gradient(36% 18% at 96% 24%, #F07A2A80, #F07A2A00 70%),
+    radial-gradient(30% 10% at 100% 0%, #C8202E99, #C8202E00 75%),
+    radial-gradient(40% 20% at 100% 96%, #F07A2A8C, #F07A2A00 70%); }
+.t01 .ghost { font-family: 'Anton', sans-serif; font-size: 64mm; line-height: 1; color: transparent; -webkit-text-fill-color: transparent;
+              -webkit-text-stroke: .3mm var(--brand); opacity: .42; letter-spacing: 1mm; }
+.t01 .bar { position: absolute; height: 4.2mm; border-radius: 2.1mm; background: #FFFFFF17; }
+.t01 .tape { position: absolute; left: -12mm; width: 97.6mm; height: 3.9mm; overflow: hidden; display: flex; align-items: center; }
+.t01 .tape p { margin: 0; white-space: nowrap; font: 400 1.93mm/1 'Inter', sans-serif; }
+.t01 .tape b { font-weight: 700; }
+.t01 .tape.o { background: var(--tape); color: #fff; z-index: 3; }
+.t01 .tape.w { background: #FEFDFA; color: var(--tape); z-index: 2; }
+.t01 .eyebrow { font-family: 'JetBrains Mono', monospace; font-size: 2.65mm; top: 30.7mm; }
+.t01 .hl { font-family: 'Anton', sans-serif; font-size: 17.6mm; letter-spacing: -.02em; color: transparent; -webkit-text-fill-color: transparent;
+           background-image: linear-gradient(90deg, var(--coral), var(--peach)); -webkit-background-clip: text; background-clip: text; }
+.t01 .hl .bl { font-family: 'Fruktur', serif; font-size: 1.38em; line-height: 0; letter-spacing: 0; margin: 0 .05em 0 .01em; }
+.t01 .tm { font-family: 'Hanken Grotesk', sans-serif; transform: rotate(5.75deg); }
+.t01 .venue { position: absolute; top: 97.6mm; display: flex; justify-content: center; align-items: center; gap: 1.2mm; }
+.t01 .venue p { margin: 0; font: 700 2.12mm/1 'Hanken Grotesk', sans-serif; letter-spacing: .06em; white-space: nowrap; }
+.t01 .venue p span { font-weight: 500; color: var(--brand); letter-spacing: 0; }
+
+/* ---- t02 · sticker on glow ---------------------------------------------------------------- */
+.t02 { background: #2A1F1C; }
+.t02 .mesh { background:
+    radial-gradient(48% 22% at 98% 16%, #F07A2AF2, #F07A2A00 72%),
+    radial-gradient(34% 18% at 104% 52%, #E8692CCC, #E8692C00 70%),
+    radial-gradient(40% 16% at -4% 58%, #E0702ECC, #E0702E00 72%),
+    radial-gradient(60% 18% at 46% 104%, #E3622AF2, #E3622A00 72%),
+    radial-gradient(30% 12% at 30% 2%, #D9764099, #D9764000 72%); }
+.t02 .px { position: absolute; background-size: 4.1mm 100%, 100% 100%; }
+.t02 .sans { font-family: 'Inter', sans-serif; }
+.t02 .cond { font-family: 'League Gothic', sans-serif; font-stretch: 87.5%; color: var(--accent); }
+.t02 .box { position: absolute; background: var(--paper); }
+.t02 .stk { font-family: 'League Gothic', sans-serif; font-stretch: 87.5%; transform: rotate(-7deg); }
+.t02 .stk.front { background-image: linear-gradient(100deg, var(--accent) 15%, var(--accent-hi) 90%); -webkit-background-clip: text; background-clip: text;
+                  -webkit-text-fill-color: transparent; color: transparent; -webkit-text-stroke: .5mm #BE3622; }
+.t02 .stk.back { color: #fff; -webkit-text-stroke: 3mm #fff; }
+.t02 .stk-shadow { position: absolute; inset: 0; filter: drop-shadow(.45mm .7mm .9mm #19080380); }   /* bake with imagery.py shadow before export */
+
+/* ---- t03 · takeover ----------------------------------------------------------------------- */
+.t03 { background: #232323; }
+.t03 .twill { background: repeating-linear-gradient(135deg, #FFFFFF09 0 .45mm, #FFFFFF00 .45mm 1.1mm); }
+.t03 .glow { background:
+    radial-gradient(70% 26% at 70% 102%, #C46E1EA6, #C46E1E00 72%),
+    radial-gradient(40% 16% at 88% 0%, #C88A2A80, #C88A2A00 72%); }
+.t03 .cond { font-family: 'League Gothic', sans-serif; font-stretch: 75%; }
+.t03 .hand { font-family: 'Delicious Handrawn', cursive; -webkit-text-stroke: .05mm currentColor; }
+.t03 .mont { font-family: 'Montserrat', sans-serif; }
+.t03 .sticker { position: absolute; background: linear-gradient(160deg, #FFFFFF 0%, #E8E8E8 38%, #FBFBFB 55%, #E2E2E2 80%, #F4F4F4 100%);
+                border: .61mm solid #333333; border-radius: .95mm; transform: rotate(6.5deg); }
+.t03 .and { font-family: 'Alfa Slab One', serif; color: #fff; -webkit-text-stroke: .5mm #333333; paint-order: stroke fill; transform: rotate(6.5deg); }
+.t03 .person { position: absolute; object-fit: cover; }

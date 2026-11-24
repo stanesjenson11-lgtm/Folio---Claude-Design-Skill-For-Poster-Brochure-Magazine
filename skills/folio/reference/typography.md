@@ -64,6 +64,8 @@ Free aesthetic display faces folio can fetch and use on their own (the Arc Stage
 | Sofia Sans Extra Condensed 900 | Commissioner | Anek Tamil 800 | condensed: big words, tight spaces |
 Rotate them; add a pair only after checking its figures (1 vs I), Tamil companion, and weights.
 
+**Youth story sets** (matched 1:1 to the user's youth references; `posters.md` §7): Anton + Fruktur swap letters + JetBrains Mono eyebrow + Hanken Grotesk; League Gothic at 80–88% width + Inter; League Gothic Condensed + Delicious Handrawn + Alfa Slab One + Montserrat. Anton and Montserrat are allowed here because the references use them; elsewhere the reflex list still applies.
+
 ## Details
 - **Light type on dark pages** (after impeccable): compensate on three axes, not one: leading +0.05–0.1, tracking +0.01–0.02em, and one weight step up for body (regular → medium). Drenched and night pages need all three.
 - **Paragraphs:** space between paragraphs *or* a first-line indent, never both. Use the body leading as the unit for vertical spacing so columns share a baseline rhythm.
