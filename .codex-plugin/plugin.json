@@ -27,5 +27,17 @@
     "ai-design",
     "graphic-design"
   ],
-  "skills": "./skills/"
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Folio",
+    "shortDescription": "Design posters, brochures and magazines that don't look AI-made",
+    "longDescription": "Guided design for posters, youth and church story posters, brochures, magazines and reports: colour palettes from your logo, ready styles, your photos placed where you want, a page plan to approve, print-ready output and a Canva-editable HTML file, 1:1 replicas of reference designs, humanized copy and print preflight.",
+    "developerName": "stanesjenson11-lgtm",
+    "category": "Design",
+    "capabilities": [
+      "Read",
+      "Write"
+    ],
+    "websiteURL": "https://github.com/stanesjenson11-lgtm/Folio---Claude-Design-Skill-For-Poster-Brochure-Magazine"
+  }
 }
